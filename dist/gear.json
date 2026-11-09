@@ -809,7 +809,7 @@
     "sourceCategory": "Clothing & Footwear",
     "itemType": "Fleece jacket",
     "brand": "Patagonia",
-    "name": "Women's R1 Air Jacket",
+    "name": "Patagonia Women's R1 Air Jacket, Ellwood Green S",
     "quantity": 1,
     "unitWeightG": 295,
     "totalWeightG": 295,
@@ -831,7 +831,10 @@
     ],
     "imagePath": "/images/clothing-footwear-25.webp",
     "imageSourceUrl": "https://www.outdoorlife.com.sg/patagonia-womens-r1-air-fleece-jacket.html",
-    "imageMatchQuality": "model"
+    "imageMatchQuality": "model",
+    "invoiceEvidence": [
+      "Order #103780"
+    ]
   },
   {
     "id": "clothing-footwear-26",

@@ -171,6 +171,32 @@ const elements = {
   productModal: document.querySelector("#product-modal"),
   modalProductClose: document.querySelector("#modal-product-close"),
   productModalContent: document.querySelector("#product-modal-content"),
+
+  // Inventory Management & Gear Modal
+  btnAddGear: document.querySelector("#btn-add-gear"),
+  btnToolbarAddGear: document.querySelector("#btn-toolbar-add-gear"),
+  btnResetInventory: document.querySelector("#btn-reset-inventory"),
+  gearModal: document.querySelector("#gear-modal"),
+  modalGearClose: document.querySelector("#modal-gear-close"),
+  modalGearCancel: document.querySelector("#modal-gear-cancel"),
+  gearForm: document.querySelector("#gear-form"),
+  modalGearTitle: document.querySelector("#modal-gear-title"),
+  formGearId: document.querySelector("#form-gear-id"),
+  formGearName: document.querySelector("#form-gear-name"),
+  formGearBrand: document.querySelector("#form-gear-brand"),
+  formGearCategory: document.querySelector("#form-gear-category"),
+  formGearType: document.querySelector("#form-gear-type"),
+  formGearWeight: document.querySelector("#form-gear-weight"),
+  formGearPrice: document.querySelector("#form-gear-price"),
+  formGearCurrency: document.querySelector("#form-gear-currency"),
+  formGearStatus: document.querySelector("#form-gear-status"),
+  formGearWebsite: document.querySelector("#form-gear-website"),
+  formGearImage: document.querySelector("#form-gear-image"),
+  formGearSummary: document.querySelector("#form-gear-summary"),
+  formGearSpecs: document.querySelector("#form-gear-specs"),
+  formGearFeatures: document.querySelector("#form-gear-features"),
+  formGearNotes: document.querySelector("#form-gear-notes"),
+  btnSubmitGear: document.querySelector("#btn-submit-gear"),
 };
 
 const escapeHtml = (value) => String(value ?? "").replace(/[&<>"']/g, (character) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[character]);
@@ -215,10 +241,49 @@ function isConsumable(item) {
   return consumableTypes.has(type);
 }
 
+const INVENTORY_STORAGE_KEY = "trail_gear_atlas_inventory_v2";
+let defaultInventory = [];
 let gear = [];
 let trails = [];
 let activeTrailId = "milford-track";
 let currentLogFilter = "all";
+
+function loadInventory(defaultData) {
+  try {
+    const raw = localStorage.getItem(INVENTORY_STORAGE_KEY);
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        gear = parsed.map((item) => ({ ...item, statusKey: normalizeStatus(item.status) }));
+        return;
+      }
+    }
+  } catch (error) {
+    console.warn("Failed to parse inventory from localStorage", error);
+  }
+  gear = JSON.parse(JSON.stringify(defaultData));
+  saveInventory();
+}
+
+function saveInventory() {
+  try {
+    localStorage.setItem(INVENTORY_STORAGE_KEY, JSON.stringify(gear));
+  } catch (error) {
+    console.error("Failed to save inventory to localStorage", error);
+  }
+}
+
+function updateInventoryStats() {
+  const weighted = gear.filter((item) => Number.isFinite(item.unitWeightG)).length;
+  if (elements.stats) {
+    elements.stats.innerHTML = `
+      <div class="stat"><strong>${gear.length}</strong><span>Logged items</span></div>
+      <div class="stat"><strong>${trails.length}</strong><span>Trails in log</span></div>
+      <div class="stat"><strong>${categories.length}</strong><span>Gear systems</span></div>
+      <div class="stat"><strong>${weighted}</strong><span>Weights recorded</span></div>
+    `;
+  }
+}
 
 function loadTrails() {
   try {
@@ -716,6 +781,15 @@ function openProductModal(item) {
               ${renderModalPackControls(item, activeTrail)}
             </div>
           </div>
+
+          <div class="modal-item-manage-bar">
+            <button class="btn-manage-edit" data-edit-id="${escapeHtml(item.id)}" type="button" title="Edit gear name, weight, price, and specs">
+              <span class="manage-btn-icon">✏️</span> Edit Gear Item
+            </button>
+            <button class="btn-manage-delete" data-delete-id="${escapeHtml(item.id)}" type="button" title="Remove this item from your inventory">
+              <span class="manage-btn-icon">🗑️</span> Delete Item
+            </button>
+          </div>
         </div>
 
         <div class="product-modal-main">
@@ -795,7 +869,14 @@ function renderCard(item, category) {
   return `<article class="gear-card ${isPacked ? "is-packed" : ""}" id="item-${escapeHtml(item.id)}" style="--section-color:${category.color}">
     ${packedBadge}
     ${mediaMarkup(item)}
-    <div class="card-top"><span class="item-type">${escapeHtml(item.itemType || "Gear")}</span><span class="status ${statusClass(item)}">${escapeHtml(item.status || "Needs details")}</span></div>
+    <div class="card-top">
+      <span class="item-type">${escapeHtml(item.itemType || "Gear")}</span>
+      <div class="card-top-actions">
+        <span class="status ${statusClass(item)}">${escapeHtml(item.status || "Needs details")}</span>
+        <button class="card-mini-action btn-card-edit" data-edit-id="${escapeHtml(item.id)}" type="button" title="Edit this gear item" aria-label="Edit item">✏️</button>
+        <button class="card-mini-action btn-card-delete" data-delete-id="${escapeHtml(item.id)}" type="button" title="Delete this gear item from inventory" aria-label="Delete item">🗑️</button>
+      </div>
+    </div>
     <div class="card-brand">${escapeHtml(item.brand || "Brand not recorded")}</div>
     <h4 class="card-title clickable-title" data-detail-id="${escapeHtml(item.id)}" title="Click to view specs &amp; official website">${escapeHtml(item.name || item.itemType || "Unnamed item")}</h4>
     ${specBadge}
@@ -1195,23 +1276,109 @@ function closeExportModal() {
   elements.exportModal?.classList.remove("open");
 }
 
+function openGearModal(item = null) {
+  if (!elements.gearModal || !elements.gearForm) return;
+  elements.gearForm.reset();
+  if (item) {
+    elements.modalGearTitle.textContent = "Edit Gear Item (编辑装备)";
+    elements.formGearId.value = item.id;
+    elements.formGearName.value = item.name || item.itemType || "";
+    elements.formGearBrand.value = item.brand || "";
+    elements.formGearCategory.value = item.category || "Sleep & Shelter";
+    elements.formGearType.value = item.itemType || "";
+    elements.formGearWeight.value = Number.isFinite(item.unitWeightG) ? item.unitWeightG : "";
+    if (Number.isFinite(item.unitPriceAud)) {
+      elements.formGearPrice.value = item.unitPriceAud;
+      elements.formGearCurrency.value = "AUD";
+    } else if (Number.isFinite(item.unitPriceCny)) {
+      elements.formGearPrice.value = item.unitPriceCny;
+      elements.formGearCurrency.value = "CNY";
+    } else {
+      elements.formGearPrice.value = "";
+      elements.formGearCurrency.value = "AUD";
+    }
+    elements.formGearStatus.value = item.status || "Owned";
+    elements.formGearWebsite.value = item.websiteUrl || "";
+    elements.formGearImage.value = item.imagePath || "";
+    elements.formGearSummary.value = item.summary || "";
+    
+    const specsLines = Object.entries(item.specs || {}).map(([k, v]) => `${k}: ${v}`).join("\n");
+    elements.formGearSpecs.value = specsLines;
+
+    elements.formGearFeatures.value = (item.features || []).join("\n");
+    elements.formGearNotes.value = item.notes || "";
+    elements.btnSubmitGear.textContent = "Save Changes (保存修改)";
+  } else {
+    elements.modalGearTitle.textContent = "Add New Gear Item (新增装备到清单)";
+    elements.formGearId.value = "";
+    elements.formGearCurrency.value = "AUD";
+    elements.formGearStatus.value = "Owned";
+    elements.formGearCategory.value = "Sleep & Shelter";
+    elements.btnSubmitGear.textContent = "Add to Inventory (添加至清单)";
+  }
+  elements.gearModal.classList.add("open");
+  elements.formGearName.focus();
+}
+
+function closeGearModal() {
+  elements.gearModal?.classList.remove("open");
+}
+
+function deleteGearItem(itemId) {
+  const item = gear.find((g) => g.id === itemId);
+  if (!item) return;
+
+  const itemDisplay = `${item.brand ? `${item.brand} ` : ""}${item.name || item.itemType || "this item"}`;
+  const confirmed = confirm(
+    `Are you sure you want to remove "${itemDisplay}" from your gear inventory?\n\n` +
+    `• It will be deleted from your catalog.\n` +
+    `• It will be removed from any active expedition packs.\n\n` +
+    `You can restore original items at any time via "Reset Kit".`
+  );
+  if (!confirmed) return;
+
+  const index = gear.findIndex((g) => g.id === itemId);
+  if (index !== -1) {
+    gear.splice(index, 1);
+  }
+
+  let removedFromTrails = 0;
+  for (const t of trails) {
+    if (t.pack && t.pack[itemId]) {
+      delete t.pack[itemId];
+      removedFromTrails++;
+    }
+  }
+  if (removedFromTrails > 0) saveTrails();
+
+  saveInventory();
+  closeProductModal();
+  render();
+  updateInventoryStats();
+  showToast(`Deleted <strong>${escapeHtml(itemDisplay)}</strong> from your inventory.`);
+}
+
+function resetInventory() {
+  if (confirm("Reset gear inventory to the original 77 default items?\n\nAny custom added items will be discarded and default items restored.")) {
+    gear = JSON.parse(JSON.stringify(defaultInventory));
+    saveInventory();
+    render();
+    updateInventoryStats();
+    showToast("Inventory restored to original 77 items.");
+  }
+}
+
 async function init() {
   try {
     const response = await fetch("./gear.json", { cache: "no-store" });
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
     const data = await response.json();
     if (!Array.isArray(data)) throw new Error("Invalid gear data");
-    gear = data.map((item) => ({ ...item, statusKey: normalizeStatus(item.status) }));
+    defaultInventory = data.map((item) => ({ ...item, statusKey: normalizeStatus(item.status) }));
+    loadInventory(defaultInventory);
     loadTrails();
 
-    const weighted = gear.filter((item) => Number.isFinite(item.unitWeightG)).length;
-    elements.stats.innerHTML = `
-      <div class="stat"><strong>${gear.length}</strong><span>Logged items</span></div>
-      <div class="stat"><strong>${trails.length}</strong><span>Trails in log</span></div>
-      <div class="stat"><strong>${categories.length}</strong><span>Gear systems</span></div>
-      <div class="stat"><strong>${weighted}</strong><span>Weights recorded</span></div>
-    `;
-
+    updateInventoryStats();
     render();
   } catch (error) {
     elements.stats.innerHTML = "<div class='loading'><strong>Inventory unavailable</strong><p>The gear data could not be loaded.</p></div>";
@@ -1231,10 +1398,28 @@ document.addEventListener("click", (e) => {
     closeTrailModal();
     closeExportModal();
     closeProductModal();
+    closeGearModal();
     return;
   }
 
-  // 0b. Open product detail modal
+  // 0b. Edit gear trigger (from card or modal)
+  const editTrigger = e.target.closest("[data-edit-id]");
+  if (editTrigger) {
+    const itemId = editTrigger.dataset.editId;
+    const item = gear.find((g) => g.id === itemId);
+    if (item) openGearModal(item);
+    return;
+  }
+
+  // 0c. Delete gear trigger (from card or modal)
+  const deleteTrigger = e.target.closest("[data-delete-id]");
+  if (deleteTrigger) {
+    const itemId = deleteTrigger.dataset.deleteId;
+    deleteGearItem(itemId);
+    return;
+  }
+
+  // 0d. Open product detail modal
   const detailTrigger = e.target.closest("[data-detail-id]");
   if (detailTrigger) {
     if (e.target.closest(".photo-source") || e.target.closest(".modal-photo-source")) return;
@@ -1541,6 +1726,13 @@ elements.modalTrailCancel?.addEventListener("click", closeTrailModal);
 elements.modalExportClose?.addEventListener("click", closeExportModal);
 elements.modalExportCloseBtn?.addEventListener("click", closeExportModal);
 elements.modalProductClose?.addEventListener("click", closeProductModal);
+elements.modalGearClose?.addEventListener("click", closeGearModal);
+elements.modalGearCancel?.addEventListener("click", closeGearModal);
+
+// Add Gear & Reset buttons
+elements.btnAddGear?.addEventListener("click", () => openGearModal());
+elements.btnToolbarAddGear?.addEventListener("click", () => openGearModal());
+elements.btnResetInventory?.addEventListener("click", resetInventory);
 
 // Close modals on Escape key
 document.addEventListener("keydown", (e) => {
@@ -1548,6 +1740,120 @@ document.addEventListener("keydown", (e) => {
     closeTrailModal();
     closeExportModal();
     closeProductModal();
+    closeGearModal();
+  }
+});
+
+elements.gearForm?.addEventListener("submit", (e) => {
+  e.preventDefault();
+  const id = elements.formGearId.value.trim();
+  const name = elements.formGearName.value.trim();
+  if (!name) return;
+
+  const brand = elements.formGearBrand.value.trim();
+  const category = elements.formGearCategory.value;
+  const itemType = elements.formGearType.value.trim() || "Gear";
+  const rawWeight = elements.formGearWeight.value.trim();
+  const unitWeightG = rawWeight !== "" && !isNaN(rawWeight) ? parseFloat(rawWeight) : null;
+
+  const rawPrice = elements.formGearPrice.value.trim();
+  const priceVal = rawPrice !== "" && !isNaN(rawPrice) ? parseFloat(rawPrice) : null;
+  const currency = elements.formGearCurrency.value;
+
+  const status = elements.formGearStatus.value;
+  const websiteUrl = elements.formGearWebsite.value.trim();
+  const imagePath = elements.formGearImage.value.trim() || null;
+  const summary = elements.formGearSummary.value.trim();
+  const notes = elements.formGearNotes.value.trim();
+
+  // Parse specs
+  const specs = {};
+  for (const line of elements.formGearSpecs.value.split("\n")) {
+    const colonIdx = line.indexOf(":");
+    if (colonIdx > 0) {
+      const k = line.slice(0, colonIdx).trim();
+      const v = line.slice(colonIdx + 1).trim();
+      if (k && v) specs[k] = v;
+    }
+  }
+
+  // Parse features
+  const features = elements.formGearFeatures.value
+    .split("\n")
+    .map((s) => s.replace(/^[-*•✓]\s*/, "").trim())
+    .filter(Boolean);
+
+  let targetItem = null;
+  if (id) {
+    targetItem = gear.find((g) => g.id === id);
+    if (targetItem) {
+      targetItem.name = name;
+      targetItem.brand = brand;
+      targetItem.category = category;
+      targetItem.itemType = itemType;
+      targetItem.unitWeightG = unitWeightG;
+      targetItem.totalWeightG = unitWeightG;
+      if (currency === "CNY") {
+        targetItem.unitPriceCny = priceVal;
+        targetItem.totalPriceCny = priceVal;
+        delete targetItem.unitPriceAud;
+        delete targetItem.totalPriceAud;
+      } else {
+        targetItem.unitPriceAud = priceVal;
+        targetItem.totalPriceAud = priceVal;
+        delete targetItem.unitPriceCny;
+        delete targetItem.totalPriceCny;
+      }
+      targetItem.status = status;
+      targetItem.statusKey = normalizeStatus(status);
+      targetItem.websiteUrl = websiteUrl || null;
+      if (imagePath) targetItem.imagePath = imagePath;
+      targetItem.summary = summary || null;
+      targetItem.specs = Object.keys(specs).length ? specs : targetItem.specs || {};
+      targetItem.features = features.length ? features : targetItem.features || [];
+      targetItem.notes = notes || null;
+      showToast(`Updated <strong>${escapeHtml(name)}</strong> in inventory.`);
+    }
+  } else {
+    const newId = `custom-gear-${Date.now()}`;
+    targetItem = {
+      id: newId,
+      name,
+      brand,
+      category,
+      itemType,
+      unitWeightG,
+      totalWeightG: unitWeightG,
+      quantity: 1,
+      status,
+      statusKey: normalizeStatus(status),
+      websiteUrl: websiteUrl || null,
+      imagePath: imagePath || null,
+      summary: summary || null,
+      specs,
+      features,
+      notes: notes || null,
+      provenance: "Added by user",
+      invoiceEvidence: ["User entry"]
+    };
+    if (currency === "CNY") {
+      targetItem.unitPriceCny = priceVal;
+      targetItem.totalPriceCny = priceVal;
+    } else {
+      targetItem.unitPriceAud = priceVal;
+      targetItem.totalPriceAud = priceVal;
+    }
+    gear.unshift(targetItem);
+    showToast(`Added <strong>${escapeHtml(name)}</strong> to inventory.`);
+  }
+
+  saveInventory();
+  closeGearModal();
+  render();
+  updateInventoryStats();
+
+  if (targetItem && elements.productModal?.classList.contains("open")) {
+    openProductModal(targetItem);
   }
 });
 

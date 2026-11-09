@@ -193,8 +193,15 @@
       <section class="collection" id="collection" aria-labelledby="collection-title">
         <div class="shell">
           <div class="collection-heading">
-            <div><span class="section-kicker">EXPLORE THE KIT</span><h2 id="collection-title">Built for the trail.</h2></div>
-            <p>Browse by system, search for a specific piece, or compare the recorded weight and price across the kit.</p>
+            <div class="collection-heading-main">
+              <span class="section-kicker">EXPLORE THE KIT</span>
+              <h2 id="collection-title">Built for the trail.</h2>
+              <p>Browse by system, search for a specific piece, or compare the recorded weight and price across the kit.</p>
+            </div>
+            <div class="collection-heading-actions">
+              <button class="btn-primary btn-add-gear" id="btn-add-gear" type="button" title="Add a new gear item to your inventory">+ Add Gear Item</button>
+              <button class="btn-secondary" id="btn-reset-inventory" type="button" title="Reset gear inventory to original 77 items">↺ Reset Kit</button>
+            </div>
           </div>
 
           <div class="toolbar" role="search">
@@ -204,6 +211,7 @@
             </label>
             <label class="select-field" for="status-filter"><span>Status</span><select id="status-filter"><option value="all">All items</option><option value="owned">Owned</option><option value="purchased">Purchased</option><option value="gift">Gift</option><option value="older">Older gear</option><option value="lost">Lost</option><option value="review">Needs details</option></select></label>
             <label class="select-field" for="sort-order"><span>Sort</span><select id="sort-order"><option value="original">Grouped by gear type</option><option value="weight-asc">Lightest first</option><option value="weight-desc">Heaviest first</option><option value="price-asc">Lowest price by currency</option><option value="price-desc">Highest price by currency</option></select></label>
+            <button class="toolbar-add-btn" id="btn-toolbar-add-gear" type="button" title="Add a new gear item to inventory">+ Add Item</button>
           </div>
 
           <nav class="category-nav" id="category-nav" aria-label="Gear categories"></nav>
@@ -336,6 +344,110 @@
       <div class="modal-box product-modal-box">
         <button class="modal-close-btn" id="modal-product-close" type="button" aria-label="Close dialog">✕</button>
         <div id="product-modal-content"></div>
+      </div>
+    </div>
+
+    <!-- Modal: Add / Edit Gear Item in Master Inventory -->
+    <div class="modal-overlay" id="gear-modal" role="dialog" aria-modal="true" aria-labelledby="modal-gear-title">
+      <div class="modal-box gear-modal-box">
+        <button class="modal-close-btn" id="modal-gear-close" type="button" aria-label="Close dialog">✕</button>
+        <h3 id="modal-gear-title">Add Gear Item</h3>
+        <p class="modal-desc">Add a piece of gear to your master inventory with weight, price, specs, and brand link.</p>
+
+        <form id="gear-form">
+          <input type="hidden" id="form-gear-id" value="" />
+          <div class="form-grid">
+            <div class="form-field full">
+              <label for="form-gear-name">Product / Item Name *</label>
+              <input type="text" id="form-gear-name" required placeholder="e.g. Aeros Ultralight Pillow, WindMaster Stove, Beta LT Jacket" />
+            </div>
+
+            <div class="form-field">
+              <label for="form-gear-brand">Brand / Manufacturer</label>
+              <input type="text" id="form-gear-brand" placeholder="e.g. Sea to Summit, Patagonia, Mont, Soto, Black Diamond" />
+            </div>
+
+            <div class="form-field">
+              <label for="form-gear-category">Gear System / Category *</label>
+              <select id="form-gear-category" required>
+                <option value="Sleep & Shelter">Sleep &amp; Shelter</option>
+                <option value="Packs & Essentials">Packs &amp; Essentials</option>
+                <option value="Clothing & Footwear">Clothing &amp; Footwear</option>
+                <option value="Cooking & Hydration">Cooking &amp; Hydration</option>
+                <option value="Personal Items">Personal Items</option>
+              </select>
+            </div>
+
+            <div class="form-field">
+              <label for="form-gear-type">Item Type</label>
+              <input type="text" id="form-gear-type" placeholder="e.g. pillow, sleep bag, tent, stove, hard shell, socks" />
+            </div>
+
+            <div class="form-field">
+              <label for="form-gear-weight">Unit Weight (Grams)</label>
+              <input type="number" id="form-gear-weight" step="0.1" min="0" placeholder="e.g. 60, 1270, 86" />
+            </div>
+
+            <div class="form-field">
+              <label for="form-gear-price">Recorded Price</label>
+              <input type="number" id="form-gear-price" step="0.01" min="0" placeholder="e.g. 49.95" />
+            </div>
+
+            <div class="form-field">
+              <label for="form-gear-currency">Currency</label>
+              <select id="form-gear-currency">
+                <option value="AUD">AUD ($)</option>
+                <option value="CNY">CNY (¥)</option>
+              </select>
+            </div>
+
+            <div class="form-field">
+              <label for="form-gear-status">Ownership Status</label>
+              <select id="form-gear-status">
+                <option value="Owned">Owned (已拥有)</option>
+                <option value="Purchased · in inventory">Purchased (已购入)</option>
+                <option value="Gift">Gift (礼品)</option>
+                <option value="Older gear · ownership to confirm">Older gear (旧款/待确认)</option>
+                <option value="Needs details">Needs details (需补充信息)</option>
+              </select>
+            </div>
+
+            <div class="form-field full">
+              <label for="form-gear-website">Official Brand Product URL</label>
+              <input type="url" id="form-gear-website" placeholder="https://www.brand.com/products/your-gear" />
+            </div>
+
+            <div class="form-field full">
+              <label for="form-gear-image">Product Image URL / Relative Path</label>
+              <input type="text" id="form-gear-image" placeholder="e.g. /images/your-photo.webp or https://image-url..." />
+            </div>
+
+            <div class="form-field full">
+              <label for="form-gear-summary">Technical Summary</label>
+              <input type="text" id="form-gear-summary" placeholder="One-sentence technical overview of materials and purpose" />
+            </div>
+
+            <div class="form-field full">
+              <label for="form-gear-specs">Technical Specifications &amp; Parameters (One per line: Key: Value)</label>
+              <textarea id="form-gear-specs" rows="4" placeholder="Temperature Rating: Comfort -5°C | Limit -10°C&#10;Insulation: 850+ Loft Down&#10;Dimensions: 183 x 51 cm&#10;Material: 20D Ripstop Nylon"></textarea>
+            </div>
+
+            <div class="form-field full">
+              <label for="form-gear-features">Alpine &amp; Trail Features (One feature per line)</label>
+              <textarea id="form-gear-features" rows="3" placeholder="Ultralight compact pack size&#10;Multi-function valve for rapid deflation&#10;Pillow Lock compatible"></textarea>
+            </div>
+
+            <div class="form-field full">
+              <label for="form-gear-notes">Personal Field Notes</label>
+              <textarea id="form-gear-notes" rows="2" placeholder="Sizing observations, performance in cold weather, etc."></textarea>
+            </div>
+          </div>
+
+          <div class="modal-actions">
+            <button class="btn-secondary" type="button" id="modal-gear-cancel">Cancel</button>
+            <button class="btn-primary" type="submit" id="btn-submit-gear">Save to Inventory</button>
+          </div>
+        </form>
       </div>
     </div>
 

@@ -737,7 +737,7 @@
     "sourceCategory": "Clothing & Footwear",
     "itemType": "Fleece jacket",
     "brand": "Patagonia",
-    "name": "Women's R1 Air Jacket",
+    "name": "Patagonia Women's R1 Air Jacket, Ellwood Green S",
     "quantity": 1,
     "unitWeightG": 295,
     "totalWeightG": 295,
@@ -756,6 +756,9 @@
       "Unique zigzag channel pattern dumps body heat quickly while hiking uphill and insulates when paused",
       "Off-shoulder seams sit smoothly underneath loaded backpack straps without hot-spots",
       "HeiQ Pure odor control finish keeps technical fleece fresh across multiple hut nights"
+    ],
+    "invoiceEvidence": [
+      "Order #103780"
     ]
   },
   {
@@ -2164,8 +2167,8 @@
     "quantity": 1,
     "unitWeightG": 27.3,
     "totalWeightG": 27.3,
-    "unitPriceAud": 249.0,
-    "totalPriceAud": 249.0,
+    "unitPriceAud": 249,
+    "totalPriceAud": 249,
     "status": "Purchased · ownership to confirm",
     "notes": "Purchased from 99 Bikes Brisbane CBD (Invoice #INV8649424). Model S710-ST-GY.",
     "provenance": "99 Bikes tax invoice INV8649424",
