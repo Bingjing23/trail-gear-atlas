@@ -5,15 +5,18 @@
     "sourceCategory": "Sleep & Shelter",
     "itemType": "sleep bag",
     "brand": "Mont",
-    "name": "Warmlite 750 XT-R Down Left Hand Sleeping Bag -12ºC, -7ºC for women",
+    "name": "Warmlite 750 XT-R Women's Sleeping Bag, Left Hand Regular",
     "quantity": 1,
     "unitWeightG": 1270,
     "totalWeightG": 1270,
-    "unitPriceAud": 684,
-    "totalPriceAud": 684,
+    "unitPriceAud": 683.96,
+    "totalPriceAud": 683.96,
     "status": "Older gear · ownership to confirm",
     "notes": "I felt cold camping",
     "provenance": "Original workbook · Sheet1 row 2",
+    "invoiceEvidence": [
+      "3046774"
+    ],
     "imagePath": "/images/sleep-shelter-01.webp",
     "imageSourceUrl": "https://www.mont.com.au/products/warmlite-xt-r-750-down-sleeping-bag",
     "imageMatchQuality": "model"
@@ -24,18 +27,18 @@
     "sourceCategory": "Sleep & Shelter",
     "itemType": "tent",
     "brand": "Mont",
-    "name": "Moondance 1FN 1 Person Tent",
+    "name": "Moondance 1P Tent 2021, Bracken",
     "quantity": 1,
     "unitWeightG": 1525,
     "totalWeightG": 1525,
-    "unitPriceAud": 711,
-    "totalPriceAud": 711,
+    "unitPriceAud": 710.96,
+    "totalPriceAud": 710.96,
     "status": "Owned",
-    "notes": "too heavy but quite strong",
+    "notes": "Workbook called this Moondance 1FN; confirm whether that refers to the same tent. Too heavy but strong.",
     "provenance": "Original workbook · Sheet1 row 3",
-    "imagePath": "/images/sleep-shelter-02.webp",
-    "imageSourceUrl": "https://www.mont.com.au/products/moondance-1-full-nylon-1-person-tent",
-    "imageMatchQuality": "model"
+    "invoiceEvidence": [
+      "2935544"
+    ]
   },
   {
     "id": "sleep-shelter-03",
@@ -43,15 +46,18 @@
     "sourceCategory": "Sleep & Shelter",
     "itemType": "sleep pad",
     "brand": "Therm-a-rest",
-    "name": "Z Lite SOL Mattress",
+    "name": "Z Lite SOL Sleeping Pad, Limon Regular",
     "quantity": 1,
     "unitWeightG": 410,
     "totalWeightG": 410,
-    "unitPriceAud": 126,
-    "totalPriceAud": 126,
+    "unitPriceAud": 125.96,
+    "totalPriceAud": 125.96,
     "status": "Owned",
     "notes": "R-Value: 2",
     "provenance": "Original workbook · Sheet1 row 4",
+    "invoiceEvidence": [
+      "3046774"
+    ],
     "imagePath": "/images/sleep-shelter-03.webp",
     "imageSourceUrl": "https://www.hyperlitemountaingear.com/products/thermarest-z-lite-sol-foam-sleep-pad",
     "imageMatchQuality": "model"
@@ -125,12 +131,9 @@
     "totalWeightG": null,
     "unitPriceAud": null,
     "totalPriceAud": null,
-    "status": "Owned",
-    "notes": "Specification, weight and price to be added",
-    "provenance": "Chat · Hiking & Camping Gear Upgrade",
-    "imagePath": "/images/sleep-shelter-07.webp",
-    "imageSourceUrl": "https://www.adventurecampingandfishing.com.au/products/mont-moondance-1-1fn-footprint",
-    "imageMatchQuality": "model"
+    "status": "Needs details · footprint model to confirm",
+    "notes": "Previously listed as Moondance 1FN footprint; the tent invoice says Moondance 1P 2021. Match not verified.",
+    "provenance": "Chat · Hiking & Camping Gear Upgrade"
   },
   {
     "id": "packs-essentials-08",
@@ -138,15 +141,18 @@
     "sourceCategory": "Packs & Essentials",
     "itemType": "head light",
     "brand": "Petzl",
-    "name": "Swift RL 1100 Lumen Headlamp",
+    "name": "Swift RL Headlamp 1100 lm, Orange",
     "quantity": 1,
     "unitWeightG": 100,
     "totalWeightG": 100,
-    "unitPriceAud": 224,
-    "totalPriceAud": 224,
+    "unitPriceAud": 223.96,
+    "totalPriceAud": 223.96,
     "status": "Owned",
     "notes": "barely used but good to have",
     "provenance": "Original workbook · Sheet1 row 6",
+    "invoiceEvidence": [
+      "3046774"
+    ],
     "imagePath": "/images/packs-essentials-08.webp",
     "imageSourceUrl": "https://www.biwak.com/Ausruestung/Beleuchtung/Stirnlampen/Petzl-Swift-RL-Stirnlampe-1100-Lumen-E095BB02.html",
     "imageMatchQuality": "model"
@@ -166,6 +172,9 @@
     "status": "Owned",
     "notes": "the most supersingly useful small thing",
     "provenance": "Original workbook · Sheet1 row 7",
+    "invoiceEvidence": [
+      "3046774"
+    ],
     "imagePath": "/images/packs-essentials-09.webp",
     "imageSourceUrl": "https://www.evertrek.pl/pl/p/Zatyczka-ustnika-Osprey-Hydraulics-Bite-Valve-Cover/21787",
     "imageMatchQuality": "model"
@@ -176,7 +185,7 @@
     "sourceCategory": "Packs & Essentials",
     "itemType": "water system",
     "brand": "Osprey",
-    "name": "Hydraulics 3L Reservoir",
+    "name": "Hydraulics 3L Reservoir, Blue",
     "quantity": 1,
     "unitWeightG": 236,
     "totalWeightG": 236,
@@ -185,6 +194,9 @@
     "status": "Owned",
     "notes": "3L is too much tbh",
     "provenance": "Original workbook · Sheet1 row 8",
+    "invoiceEvidence": [
+      "3046774"
+    ],
     "imagePath": "/images/packs-essentials-10.webp",
     "imageSourceUrl": "https://www.sportchek.ca/en/pdp/osprey-hydraulics-3l-reservoir-78097672f.html",
     "imageMatchQuality": "model"
@@ -233,7 +245,7 @@
     "sourceCategory": "Packs & Essentials",
     "itemType": "Dry bag",
     "brand": "Sea To Summit",
-    "name": "Ultra-Sil Dry Bag 20L",
+    "name": "Ultra-Sil Dry Bag 20L, Tarragon",
     "quantity": 1,
     "unitWeightG": 58,
     "totalWeightG": 58,
@@ -242,6 +254,9 @@
     "status": "Owned",
     "notes": "Useful fro clothes",
     "provenance": "Original workbook · Sheet1 row 11",
+    "invoiceEvidence": [
+      "3337184"
+    ],
     "imagePath": "/images/packs-essentials-13.webp",
     "imageSourceUrl": "https://basecamp-shop.com/en/product/sea-to-summit-ultra-sil-dry-bag-20l",
     "imageMatchQuality": "model"
@@ -347,15 +362,18 @@
     "sourceCategory": "Clothing & Footwear",
     "itemType": "Hard shell pants",
     "brand": "Patagonia",
-    "name": "Torrentshell 3L Waterproof Pants Women's",
+    "name": "Torrentshell 3L Pants Women's, 30 in, Black S",
     "quantity": 1,
     "unitWeightG": 301,
     "totalWeightG": 301,
-    "unitPriceAud": 171,
-    "totalPriceAud": 171,
+    "unitPriceAud": 170.96,
+    "totalPriceAud": 170.96,
     "status": "Owned",
     "notes": "Useful, have zips all the way up",
     "provenance": "Original workbook · Sheet1 row 17",
+    "invoiceEvidence": [
+      "3046774"
+    ],
     "imagePath": "/images/clothing-footwear-19.webp",
     "imageSourceUrl": "https://www.greenland-outdoor.de/patagonia-womens-torrentshell-3l-pants-black.html",
     "imageMatchQuality": "model"
@@ -366,15 +384,18 @@
     "sourceCategory": "Clothing & Footwear",
     "itemType": "Hard shell",
     "brand": "Patagonia",
-    "name": "Triolet GORE-TEX Waterproof Jacket Women's",
+    "name": "Triolet GORE-TEX Jacket Women's, Current Blue M",
     "quantity": 1,
     "unitWeightG": 500,
     "totalWeightG": 500,
-    "unitPriceAud": 630,
-    "totalPriceAud": 630,
+    "unitPriceAud": 629.96,
+    "totalPriceAud": 629.96,
     "status": "Owned",
     "notes": "Enough, but room to improve (if rain got heavier)",
     "provenance": "Original workbook · Sheet1 row 18",
+    "invoiceEvidence": [
+      "3337240"
+    ],
     "imagePath": "/images/clothing-footwear-20.webp",
     "imageSourceUrl": "https://mtwaddingtons.com/products/pa-triolet-jkt-w",
     "imageMatchQuality": "model"
@@ -385,15 +406,18 @@
     "sourceCategory": "Clothing & Footwear",
     "itemType": "Underwear",
     "brand": "Icebreaker",
-    "name": "siren bikini hudro",
-    "quantity": 5,
+    "name": "Siren Bikini, Hydro S",
+    "quantity": 2,
     "unitWeightG": 32,
-    "totalWeightG": 160,
-    "unitPriceAud": 44,
-    "totalPriceAud": 220,
+    "totalWeightG": 64,
+    "unitPriceAud": 43.99,
+    "totalPriceAud": 87.98,
     "status": "Owned",
-    "notes": "Good, I like them",
+    "notes": "Two units on invoice; the earlier workbook listed five. Additional units have not been verified.",
     "provenance": "Original workbook · Sheet1 row 19",
+    "invoiceEvidence": [
+      "3337184"
+    ],
     "imagePath": "/images/clothing-footwear-21.webp",
     "imageSourceUrl": "https://eu.icebreaker.com/en-dk/products/merino-150-siren-bikini-ib103164451",
     "imageMatchQuality": "model"
@@ -531,15 +555,18 @@
     "sourceCategory": "Clothing & Footwear",
     "itemType": "Base layer",
     "brand": "Icebreaker",
-    "name": "Merino 260 Tech Long Sleeve Crew Women's XS",
+    "name": "Merino 260 Tech Long Sleeve Crew Women's, Black XS",
     "quantity": 1,
     "unitWeightG": 250,
     "totalWeightG": 250,
-    "unitPriceAud": 162,
-    "totalPriceAud": 162,
+    "unitPriceAud": 161.99,
+    "totalPriceAud": 161.99,
     "status": "Owned",
     "notes": "Useful but hard to get dry!",
     "provenance": "Original workbook · Sheet1 row 27",
+    "invoiceEvidence": [
+      "3046774"
+    ],
     "imagePath": "/images/clothing-footwear-29.webp",
     "imageSourceUrl": "https://allgoods.com.au/products/icebreaker-womens-260-tech-long-sleeve-crew",
     "imageMatchQuality": "model"
@@ -550,15 +577,18 @@
     "sourceCategory": "Clothing & Footwear",
     "itemType": "Base layer",
     "brand": "Icebreaker",
-    "name": "Merino 260 Tech Leggings Women's",
+    "name": "Merino 260 Tech Leggings Women's, Black XS",
     "quantity": 1,
     "unitWeightG": 220,
     "totalWeightG": 220,
-    "unitPriceAud": 162,
-    "totalPriceAud": 162,
+    "unitPriceAud": 161.99,
+    "totalPriceAud": 161.99,
     "status": "Owned",
     "notes": "better than the top for me",
     "provenance": "Original workbook · Sheet1 row 28",
+    "invoiceEvidence": [
+      "3046774"
+    ],
     "imagePath": "/images/clothing-footwear-30.webp",
     "imageSourceUrl": "https://paulreader.com.au/products/icebreaker-260-tech-womens-leggings",
     "imageMatchQuality": "model"
@@ -569,15 +599,18 @@
     "sourceCategory": "Clothing & Footwear",
     "itemType": "Socks",
     "brand": "Smartwool",
-    "name": "Hike Full Cushion Saturnsphere Crew Socks Women's M",
+    "name": "Hike Full Cushion Saturnsphere Crew Socks Women's, Frosty Green M",
     "quantity": 1,
     "unitWeightG": 75,
     "totalWeightG": 75,
-    "unitPriceAud": 45,
-    "totalPriceAud": 45,
+    "unitPriceAud": 44.96,
+    "totalPriceAud": 44.96,
     "status": "Owned",
     "notes": null,
     "provenance": "Original workbook · Sheet1 row 29",
+    "invoiceEvidence": [
+      "3046774"
+    ],
     "imagePath": "/images/clothing-footwear-31.webp",
     "imageSourceUrl": "https://www.kayakcentre.com/ws-hike-full-cushion-saturnsphere-crew-socks.html",
     "imageMatchQuality": "model"
@@ -588,15 +621,18 @@
     "sourceCategory": "Clothing & Footwear",
     "itemType": "Socks",
     "brand": "Smartwool",
-    "name": "Hike Light Cushion Crew Socks",
+    "name": "Hike Light Cushion Crew Socks, Twilight-Pewter Blue M",
     "quantity": 1,
     "unitWeightG": 75,
     "totalWeightG": 75,
-    "unitPriceAud": 42.3,
-    "totalPriceAud": 42.3,
+    "unitPriceAud": 42.26,
+    "totalPriceAud": 42.26,
     "status": "Owned",
     "notes": null,
     "provenance": "Original workbook · Sheet1 row 30",
+    "invoiceEvidence": [
+      "3046774"
+    ],
     "imagePath": "/images/clothing-footwear-32.webp",
     "imageSourceUrl": "https://www.snowleader.com/w-hike-light-cushion-crew-socks-light-gray-SMAR00093.html",
     "imageMatchQuality": "model"
@@ -607,15 +643,18 @@
     "sourceCategory": "Clothing & Footwear",
     "itemType": "Socks",
     "brand": "Smartwool",
-    "name": "SMA HIKE FC CRW SOCK LIGHT GRAY M",
+    "name": "Hike Full Cushion Crew Socks, Light Gray M",
     "quantity": 1,
     "unitWeightG": 75,
     "totalWeightG": 75,
-    "unitPriceAud": 45,
-    "totalPriceAud": 45,
+    "unitPriceAud": 44.96,
+    "totalPriceAud": 44.96,
     "status": "Owned",
     "notes": null,
     "provenance": "Original workbook · Sheet1 row 31",
+    "invoiceEvidence": [
+      "3046774"
+    ],
     "imagePath": "/images/clothing-footwear-33.webp",
     "imageSourceUrl": "https://en.zalando.de/smartwool-hike-classic-edition-full-cushion-crew-sports-socks-medium-gray-wo944d016-c11.html",
     "imageMatchQuality": "model"
@@ -680,15 +719,18 @@
     "sourceCategory": "Clothing & Footwear",
     "itemType": "gaiters",
     "brand": "Kahtoola",
-    "name": "NAVAgaiter Tall GORE-TEX Gaiters small",
+    "name": "NAVAgaiter Tall GTX, Grey/Black S",
     "quantity": 1,
     "unitWeightG": 152,
     "totalWeightG": 152,
-    "unitPriceAud": 112.87,
-    "totalPriceAud": 112.87,
+    "unitPriceAud": 124.16,
+    "totalPriceAud": 124.16,
     "status": "Owned",
     "notes": "Useful? Boots got wet anyway",
     "provenance": "Original workbook · Sheet1 row 35",
+    "invoiceEvidence": [
+      "3337205"
+    ],
     "imagePath": "/images/clothing-footwear-37.webp",
     "imageSourceUrl": "https://spryactive.ca/products/kahtoola-navagaiter-gtx",
     "imageMatchQuality": "model"
@@ -699,15 +741,18 @@
     "sourceCategory": "Clothing & Footwear",
     "itemType": "Camp boots",
     "brand": "Rab",
-    "name": "Cirrus Hut Boots",
+    "name": "Cirrus Hut Boots, Black S",
     "quantity": 1,
     "unitWeightG": 206,
     "totalWeightG": 206,
-    "unitPriceAud": 70,
-    "totalPriceAud": 70,
+    "unitPriceAud": 69.97,
+    "totalPriceAud": 69.97,
     "status": "Lost",
     "notes": "Warm but not good for going to toliet. And I lost it at Kia Ora hut",
     "provenance": "Original workbook · Sheet1 row 36",
+    "invoiceEvidence": [
+      "3343538"
+    ],
     "imagePath": "/images/clothing-footwear-38.webp",
     "imageSourceUrl": "https://www.basecampgear.co.uk/equipment-c392/head-hands-feet-c990/hut-tent-booties-c1197/rab-cirrus-hut-boot-p15637",
     "imageMatchQuality": "model"
@@ -773,9 +818,9 @@
     "id": "cooking-hydration-42",
     "category": "Cooking & Hydration",
     "sourceCategory": "Cooking & Hydration",
-    "itemType": null,
-    "brand": null,
-    "name": "Victorinox Huntsman Swiss Army Knife",
+    "itemType": "knife",
+    "brand": "Victorinox",
+    "name": "Huntsman Swiss Army Knife",
     "quantity": 1,
     "unitWeightG": 97,
     "totalWeightG": 97,
@@ -794,7 +839,7 @@
     "sourceCategory": "Cooking & Hydration",
     "itemType": "Stove",
     "brand": "Soto",
-    "name": "Soto Windmaster Stove",
+    "name": "WindMaster Stove",
     "quantity": 1,
     "unitWeightG": 86,
     "totalWeightG": 86,
@@ -829,15 +874,18 @@
     "sourceCategory": "Cooking & Hydration",
     "itemType": "filter",
     "brand": "Sawyer",
-    "name": "Squeeze Water Filtration System w/ Cnoc Premium 2L Bladder × 1",
+    "name": "Sawyer Squeeze Water Filtration System w/ Cnoc Premium 2L Bladder",
     "quantity": 1,
     "unitWeightG": 167,
     "totalWeightG": 167,
-    "unitPriceAud": 110,
-    "totalPriceAud": 110,
+    "unitPriceAud": 109.95,
+    "totalPriceAud": 109.95,
     "status": "Owned",
     "notes": "Good!",
     "provenance": "Original workbook · Sheet1 row 44",
+    "invoiceEvidence": [
+      "Ultralight Gear invoice #58006"
+    ],
     "imagePath": "/images/cooking-hydration-45.webp",
     "imageSourceUrl": "https://ultralightoutdoorgear.co.uk/sawyer-squeeze-filter-with-cnoc-premium-2l-bladder/",
     "imageMatchQuality": "model"
@@ -848,7 +896,7 @@
     "sourceCategory": "Cooking & Hydration",
     "itemType": "Thermo Bottle",
     "brand": "Montbell",
-    "name": "Montbell Alpine Thermo Bottle 0.75L",
+    "name": "Alpine Thermo Bottle 0.75L",
     "quantity": 1,
     "unitWeightG": 360,
     "totalWeightG": 360,
@@ -924,5 +972,453 @@
     "status": "Details to add",
     "notes": null,
     "provenance": "Original workbook · Sheet1 row 52"
+  },
+  {
+    "id": "sleep-shelter-51",
+    "category": "Sleep & Shelter",
+    "sourceCategory": "Sleep & Shelter",
+    "itemType": "sleep pad",
+    "brand": "NEMO",
+    "name": "Tensor All Season Mat, Blade/Spicy Orange Regular Mummy",
+    "quantity": 1,
+    "unitWeightG": null,
+    "totalWeightG": null,
+    "unitPriceAud": 323.96,
+    "totalPriceAud": 323.96,
+    "status": "Purchased · ownership to confirm",
+    "notes": "",
+    "provenance": "Paddy Pallin tax invoice 2935544",
+    "invoiceEvidence": [
+      "Paddy Pallin tax invoice 2935544"
+    ]
+  },
+  {
+    "id": "sleep-shelter-52",
+    "category": "Sleep & Shelter",
+    "sourceCategory": "Sleep & Shelter",
+    "itemType": "sleep pad",
+    "brand": "Therm-a-Rest",
+    "name": "NeoAir XLite NXT Mat, Solar Flare Regular Wide",
+    "quantity": 1,
+    "unitWeightG": null,
+    "totalWeightG": null,
+    "unitPriceAud": 363.97,
+    "totalPriceAud": 363.97,
+    "status": "Purchased · ownership to confirm",
+    "notes": "",
+    "provenance": "Paddy Pallin tax invoice 2943418",
+    "invoiceEvidence": [
+      "Paddy Pallin tax invoice 2943418"
+    ]
+  },
+  {
+    "id": "clothing-footwear-53",
+    "category": "Clothing & Footwear",
+    "sourceCategory": "Clothing & Footwear",
+    "itemType": "fleece cardigan",
+    "brand": "Arc'teryx",
+    "name": "Covert Cardigan Women's, Atmos Heather S",
+    "quantity": 1,
+    "unitWeightG": null,
+    "totalWeightG": null,
+    "unitPriceAud": 269.96,
+    "totalPriceAud": 269.96,
+    "status": "Purchased · ownership to confirm",
+    "notes": "",
+    "provenance": "Paddy Pallin tax invoice 2861654",
+    "invoiceEvidence": [
+      "Paddy Pallin tax invoice 2861654"
+    ]
+  },
+  {
+    "id": "clothing-footwear-54",
+    "category": "Clothing & Footwear",
+    "sourceCategory": "Clothing & Footwear",
+    "itemType": "waterproof jacket",
+    "brand": "Patagonia",
+    "name": "Torrentshell 3L Jacket Women's, Wool White S",
+    "quantity": 1,
+    "unitWeightG": null,
+    "totalWeightG": null,
+    "unitPriceAud": 224.96,
+    "totalPriceAud": 224.96,
+    "status": "Purchased · ownership to confirm",
+    "notes": "Separate from the Triolet jacket and Torrentshell pants.",
+    "provenance": "Paddy Pallin tax invoice 2861654",
+    "invoiceEvidence": [
+      "Paddy Pallin tax invoice 2861654"
+    ]
+  },
+  {
+    "id": "cooking-hydration-55",
+    "category": "Cooking & Hydration",
+    "sourceCategory": "Cooking & Hydration",
+    "itemType": "hydration tablets",
+    "brand": "GU",
+    "name": "Hydration Drink Tabs, Tri Berry",
+    "quantity": 1,
+    "unitWeightG": null,
+    "totalWeightG": null,
+    "unitPriceAud": 12.56,
+    "totalPriceAud": 12.56,
+    "status": "Purchased · ownership to confirm",
+    "notes": "Consumable; current stock unknown.",
+    "provenance": "Paddy Pallin tax invoice 2935558",
+    "invoiceEvidence": [
+      "Paddy Pallin tax invoice 2935558"
+    ]
+  },
+  {
+    "id": "cooking-hydration-56",
+    "category": "Cooking & Hydration",
+    "sourceCategory": "Cooking & Hydration",
+    "itemType": "energy gel",
+    "brand": "GU",
+    "name": "Energy Gel 32 g, Lemon/Sublime",
+    "quantity": 2,
+    "unitWeightG": null,
+    "totalWeightG": null,
+    "unitPriceAud": 3.56,
+    "totalPriceAud": 7.12,
+    "status": "Purchased · ownership to confirm",
+    "notes": "Two packets on the invoice; current stock unknown.",
+    "provenance": "Paddy Pallin tax invoice 2935558",
+    "invoiceEvidence": [
+      "Paddy Pallin tax invoice 2935558"
+    ]
+  },
+  {
+    "id": "packs-essentials-57",
+    "category": "Packs & Essentials",
+    "sourceCategory": "Packs & Essentials",
+    "itemType": "umbrella",
+    "brand": "KOR",
+    "name": "Travel Umbrella",
+    "quantity": 1,
+    "unitWeightG": null,
+    "totalWeightG": null,
+    "unitPriceAud": 26.96,
+    "totalPriceAud": 26.96,
+    "status": "Purchased · ownership to confirm",
+    "notes": "",
+    "provenance": "Paddy Pallin tax invoice 3046774",
+    "invoiceEvidence": [
+      "Paddy Pallin tax invoice 3046774"
+    ]
+  },
+  {
+    "id": "packs-essentials-58",
+    "category": "Packs & Essentials",
+    "sourceCategory": "Packs & Essentials",
+    "itemType": "fire starter",
+    "brand": "Lifeventure",
+    "name": "Fire Starter S24",
+    "quantity": 1,
+    "unitWeightG": null,
+    "totalWeightG": null,
+    "unitPriceAud": 17.96,
+    "totalPriceAud": 17.96,
+    "status": "Purchased · ownership to confirm",
+    "notes": "",
+    "provenance": "Paddy Pallin tax invoice 3320716",
+    "invoiceEvidence": [
+      "Paddy Pallin tax invoice 3320716"
+    ]
+  },
+  {
+    "id": "cooking-hydration-59",
+    "category": "Cooking & Hydration",
+    "sourceCategory": "Cooking & Hydration",
+    "itemType": "stove fuel",
+    "brand": "Jetboil",
+    "name": "Jetpower Fuel 100 g",
+    "quantity": 1,
+    "unitWeightG": null,
+    "totalWeightG": null,
+    "unitPriceAud": 12.56,
+    "totalPriceAud": 12.56,
+    "status": "Purchased · ownership to confirm",
+    "notes": "Consumable; current stock unknown.",
+    "provenance": "Paddy Pallin tax invoice 3320716",
+    "invoiceEvidence": [
+      "Paddy Pallin tax invoice 3320716"
+    ]
+  },
+  {
+    "id": "clothing-footwear-60",
+    "category": "Clothing & Footwear",
+    "sourceCategory": "Clothing & Footwear",
+    "itemType": "gaiters",
+    "brand": "Kahtoola",
+    "name": "NAVAgaiter Tall GTX, Grey/Black L",
+    "quantity": 1,
+    "unitWeightG": null,
+    "totalWeightG": null,
+    "unitPriceAud": 124.16,
+    "totalPriceAud": 124.16,
+    "status": "Purchased · ownership to confirm",
+    "notes": "Separate from the S-size pair.",
+    "provenance": "Paddy Pallin tax invoice 3337184",
+    "invoiceEvidence": [
+      "Paddy Pallin tax invoice 3337184"
+    ]
+  },
+  {
+    "id": "cooking-hydration-61",
+    "category": "Cooking & Hydration",
+    "sourceCategory": "Cooking & Hydration",
+    "itemType": "trail meal",
+    "brand": null,
+    "name": "Bircher Muesli",
+    "quantity": 1,
+    "unitWeightG": null,
+    "totalWeightG": null,
+    "unitPriceAud": 17.96,
+    "totalPriceAud": 17.96,
+    "status": "Purchased · ownership to confirm",
+    "notes": "Invoice brand code: RM. Consumable; current stock unknown.",
+    "provenance": "Paddy Pallin tax invoice 3337184",
+    "invoiceEvidence": [
+      "Paddy Pallin tax invoice 3337184"
+    ]
+  },
+  {
+    "id": "cooking-hydration-62",
+    "category": "Cooking & Hydration",
+    "sourceCategory": "Cooking & Hydration",
+    "itemType": "trail meal",
+    "brand": null,
+    "name": "Chocolate Brownie Pudding",
+    "quantity": 1,
+    "unitWeightG": null,
+    "totalWeightG": null,
+    "unitPriceAud": 14.36,
+    "totalPriceAud": 14.36,
+    "status": "Purchased · ownership to confirm",
+    "notes": "Invoice brand code: BAC. Consumable; current stock unknown.",
+    "provenance": "Paddy Pallin tax invoice 3337184",
+    "invoiceEvidence": [
+      "Paddy Pallin tax invoice 3337184"
+    ]
+  },
+  {
+    "id": "cooking-hydration-63",
+    "category": "Cooking & Hydration",
+    "sourceCategory": "Cooking & Hydration",
+    "itemType": "trail meal",
+    "brand": null,
+    "name": "Beef Mince 160 g",
+    "quantity": 1,
+    "unitWeightG": null,
+    "totalWeightG": null,
+    "unitPriceAud": 17.56,
+    "totalPriceAud": 17.56,
+    "status": "Purchased · ownership to confirm",
+    "notes": "Invoice brand code: BAC. Consumable; current stock unknown.",
+    "provenance": "Paddy Pallin tax invoice 3337184",
+    "invoiceEvidence": [
+      "Paddy Pallin tax invoice 3337184"
+    ]
+  },
+  {
+    "id": "cooking-hydration-64",
+    "category": "Cooking & Hydration",
+    "sourceCategory": "Cooking & Hydration",
+    "itemType": "trail meal",
+    "brand": null,
+    "name": "Apple and Berry Crumble",
+    "quantity": 1,
+    "unitWeightG": null,
+    "totalWeightG": null,
+    "unitPriceAud": 14.36,
+    "totalPriceAud": 14.36,
+    "status": "Purchased · ownership to confirm",
+    "notes": "Invoice brand code: BAC. Consumable; current stock unknown.",
+    "provenance": "Paddy Pallin tax invoice 3337184",
+    "invoiceEvidence": [
+      "Paddy Pallin tax invoice 3337184"
+    ]
+  },
+  {
+    "id": "cooking-hydration-65",
+    "category": "Cooking & Hydration",
+    "sourceCategory": "Cooking & Hydration",
+    "itemType": "trail meal",
+    "brand": null,
+    "name": "Roast Chicken, Double Serve",
+    "quantity": 1,
+    "unitWeightG": null,
+    "totalWeightG": null,
+    "unitPriceAud": 17.56,
+    "totalPriceAud": 17.56,
+    "status": "Purchased · ownership to confirm",
+    "notes": "Invoice brand code: BAC. Consumable; current stock unknown.",
+    "provenance": "Paddy Pallin tax invoice 3337184",
+    "invoiceEvidence": [
+      "Paddy Pallin tax invoice 3337184"
+    ]
+  },
+  {
+    "id": "clothing-footwear-66",
+    "category": "Clothing & Footwear",
+    "sourceCategory": "Clothing & Footwear",
+    "itemType": "underwear",
+    "brand": null,
+    "name": "ReadyDry Bikini Women's, Jet Black S",
+    "quantity": 1,
+    "unitWeightG": null,
+    "totalWeightG": null,
+    "unitPriceAud": 26.96,
+    "totalPriceAud": 26.96,
+    "status": "Purchased · ownership to confirm",
+    "notes": "Invoice brand code: RR.",
+    "provenance": "Paddy Pallin tax invoice 3337194",
+    "invoiceEvidence": [
+      "Paddy Pallin tax invoice 3337194"
+    ]
+  },
+  {
+    "id": "clothing-footwear-67",
+    "category": "Clothing & Footwear",
+    "sourceCategory": "Clothing & Footwear",
+    "itemType": "shoe care",
+    "brand": "Nikwax",
+    "name": "Nubuck & Suede Proof Footwear Waterproofing, 125 ml",
+    "quantity": 1,
+    "unitWeightG": null,
+    "totalWeightG": null,
+    "unitPriceAud": 20.66,
+    "totalPriceAud": 20.66,
+    "status": "Purchased · ownership to confirm",
+    "notes": "",
+    "provenance": "Paddy Pallin tax invoice 3373606",
+    "invoiceEvidence": [
+      "Paddy Pallin tax invoice 3373606"
+    ]
+  },
+  {
+    "id": "clothing-footwear-68",
+    "category": "Clothing & Footwear",
+    "sourceCategory": "Clothing & Footwear",
+    "itemType": "shoe care",
+    "brand": "Gear Aid",
+    "name": "Revivex Boot + Shoe Cleaner",
+    "quantity": 1,
+    "unitWeightG": null,
+    "totalWeightG": null,
+    "unitPriceAud": 20.66,
+    "totalPriceAud": 20.66,
+    "status": "Purchased · ownership to confirm",
+    "notes": "",
+    "provenance": "Paddy Pallin tax invoice 3373606",
+    "invoiceEvidence": [
+      "Paddy Pallin tax invoice 3373606"
+    ]
+  },
+  {
+    "id": "cooking-hydration-69",
+    "category": "Cooking & Hydration",
+    "sourceCategory": "Cooking & Hydration",
+    "itemType": "stove",
+    "brand": "SOTO",
+    "name": "ST-310MT Spider Stove, Black",
+    "quantity": 1,
+    "unitWeightG": null,
+    "totalWeightG": null,
+    "unitPriceAud": null,
+    "totalPriceAud": null,
+    "status": "Purchased · ownership to confirm",
+    "notes": "Distinct from the WindMaster stove already in the workbook.",
+    "provenance": "Purchase screenshot IMG_5407.jpg",
+    "invoiceEvidence": [
+      "Purchase screenshot IMG_5407.jpg"
+    ],
+    "unitPriceCny": 310.72,
+    "totalPriceCny": 310.72
+  },
+  {
+    "id": "cooking-hydration-70",
+    "category": "Cooking & Hydration",
+    "sourceCategory": "Cooking & Hydration",
+    "itemType": "stove accessory",
+    "brand": "Campingmoon",
+    "name": "Z37 Canister Extension Tube",
+    "quantity": 1,
+    "unitWeightG": null,
+    "totalWeightG": null,
+    "unitPriceAud": null,
+    "totalPriceAud": null,
+    "status": "Purchased · ownership to confirm",
+    "notes": "The screenshot lists this separately from the SOTO stove.",
+    "provenance": "Purchase screenshot IMG_5407.jpg",
+    "invoiceEvidence": [
+      "Purchase screenshot IMG_5407.jpg"
+    ],
+    "unitPriceCny": 102.42,
+    "totalPriceCny": 102.42
+  },
+  {
+    "id": "cooking-hydration-71",
+    "category": "Cooking & Hydration",
+    "sourceCategory": "Cooking & Hydration",
+    "itemType": "titanium pot",
+    "brand": "Evernew",
+    "name": "ECA539 Ti Mug Pot 900 (950 ml capacity)",
+    "quantity": 1,
+    "unitWeightG": 99,
+    "totalWeightG": 99,
+    "unitPriceAud": null,
+    "totalPriceAud": null,
+    "status": "Purchased · ownership to confirm",
+    "notes": "The model is called Ti Mug Pot 900; EVERNEW specifies 950 ml capacity and 99 g weight.",
+    "provenance": "Purchase screenshot IMG_5408.jpg",
+    "invoiceEvidence": [
+      "Purchase screenshot IMG_5408.jpg"
+    ],
+    "unitPriceCny": 367.49,
+    "totalPriceCny": 367.49
+  },
+  {
+    "id": "cooking-hydration-72",
+    "category": "Cooking & Hydration",
+    "sourceCategory": "Cooking & Hydration",
+    "itemType": "titanium cup",
+    "brand": "Evernew",
+    "name": "ECA530 Titanium Handled Cup 400 ml",
+    "quantity": 1,
+    "unitWeightG": null,
+    "totalWeightG": null,
+    "unitPriceAud": null,
+    "totalPriceAud": null,
+    "status": "Purchased · ownership to confirm",
+    "notes": "Distinct from the Alton 600 ml cup already in the workbook.",
+    "provenance": "Purchase screenshot IMG_5409.jpg",
+    "invoiceEvidence": [
+      "Purchase screenshot IMG_5409.jpg"
+    ],
+    "unitPriceCny": 119.51,
+    "totalPriceCny": 119.51
+  },
+  {
+    "id": "packs-essentials-73",
+    "category": "Packs & Essentials",
+    "sourceCategory": "Packs & Essentials",
+    "itemType": "backpack",
+    "brand": "Osprey",
+    "name": "Hikelite 26L Day Pack, Pine Leaf Green",
+    "quantity": 1,
+    "unitWeightG": 740,
+    "totalWeightG": 740,
+    "unitPriceAud": 219.95,
+    "totalPriceAud": 219.95,
+    "status": "Purchased · ownership to confirm",
+    "notes": "Purchased from Backpacking Light Australia (Invoice ORD177646).",
+    "provenance": "Backpacking Light invoice ORD177646",
+    "invoiceEvidence": [
+      "Backpacking Light invoice ORD177646"
+    ],
+    "imagePath": "/images/packs-essentials-73.webp",
+    "imageSourceUrl": "https://store.adaptoutdoors.com/products/osprey-hikelite-26-pine-leaf-green",
+    "imageMatchQuality": "exact"
   }
 ]
