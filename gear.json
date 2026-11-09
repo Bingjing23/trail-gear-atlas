@@ -1420,5 +1420,27 @@
     "imagePath": "/images/packs-essentials-73.webp",
     "imageSourceUrl": "https://store.adaptoutdoors.com/products/osprey-hikelite-26-pine-leaf-green",
     "imageMatchQuality": "exact"
+  },
+  {
+    "id": "personal-items-74",
+    "category": "Personal Items",
+    "sourceCategory": "Personal Items",
+    "itemType": "headphones",
+    "brand": "Shokz",
+    "name": "OpenSwim Pro Bone Conduction Headphones, Grey",
+    "quantity": 1,
+    "unitWeightG": 27.3,
+    "totalWeightG": 27.3,
+    "unitPriceAud": 249,
+    "totalPriceAud": 249,
+    "status": "Purchased · ownership to confirm",
+    "notes": "Purchased from 99 Bikes Brisbane CBD (Invoice #INV8649424). Model S710-ST-GY.",
+    "provenance": "99 Bikes tax invoice INV8649424",
+    "invoiceEvidence": [
+      "99 Bikes tax invoice INV8649424"
+    ],
+    "imagePath": "/images/personal-items-74.webp",
+    "imageSourceUrl": "https://shokz.com.au/products/openswim-pro",
+    "imageMatchQuality": "exact"
   }
 ]
