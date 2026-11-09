@@ -40,6 +40,7 @@ const formatEvidence = (entry) => {
   if (entry.startsWith("Backpacking Light invoice ")) return `Backpacking Light #${entry.replace(/^Backpacking Light invoice /, "")}`;
   if (entry.startsWith("Ultralight Gear invoice ")) return `Ultralight Gear #${entry.replace(/^Ultralight Gear invoice #?/, "")}`;
   if (entry.startsWith("99 Bikes tax invoice ")) return `99 Bikes #${entry.replace(/^99 Bikes tax invoice (INV)?/i, "INV")}`;
+  if (entry.startsWith("K2 Base Camp tax invoice ")) return `K2 Base Camp #${entry.replace(/^K2 Base Camp tax invoice /, "")}`;
   if (/^\d{7}$/.test(entry)) return `Paddy Pallin #${entry}`;
   if (entry.startsWith("#")) return `Invoice ${entry}`;
   return `Invoice #${entry}`;

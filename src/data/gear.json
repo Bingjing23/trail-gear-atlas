@@ -595,14 +595,17 @@
     "itemType": "Socks",
     "brand": "DexShell",
     "name": "Waterproof Trekking Socks",
-    "quantity": 1,
+    "quantity": 2,
     "unitWeightG": 142,
-    "totalWeightG": 142,
-    "unitPriceAud": 79,
-    "totalPriceAud": 79,
+    "totalWeightG": 284,
+    "unitPriceAud": 71.96,
+    "totalPriceAud": 143.92,
     "status": "Owned",
-    "notes": "super recommanded!",
-    "provenance": "Original workbook · Sheet1 row 33"
+    "notes": "Super recommended! Two pairs purchased from K2 Base Camp (Invoice 25-00028990).",
+    "provenance": "Original workbook · Sheet1 row 33",
+    "invoiceEvidence": [
+      "K2 Base Camp tax invoice 25-00028990"
+    ]
   },
   {
     "id": "clothing-footwear-36",
@@ -1315,6 +1318,25 @@
     "provenance": "99 Bikes tax invoice INV8649424",
     "invoiceEvidence": [
       "99 Bikes tax invoice INV8649424"
+    ]
+  },
+  {
+    "id": "clothing-footwear-75",
+    "category": "Clothing & Footwear",
+    "sourceCategory": "Clothing & Footwear",
+    "itemType": "waterproof jacket",
+    "brand": "Outdoor Research",
+    "name": "MicroGravity AscentShell Women's Waterproof Hooded Jacket, Arctic S",
+    "quantity": 1,
+    "unitWeightG": 337,
+    "totalWeightG": 337,
+    "unitPriceAud": 407.96,
+    "totalPriceAud": 407.96,
+    "status": "Purchased · ownership to confirm",
+    "notes": "Purchased from K2 Base Camp (Invoice 24-00021940). Colour: Arctic, Size: W S.",
+    "provenance": "K2 Base Camp tax invoice 24-00021940",
+    "invoiceEvidence": [
+      "K2 Base Camp tax invoice 24-00021940"
     ]
   }
 ]

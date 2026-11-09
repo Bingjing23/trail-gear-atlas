@@ -86,6 +86,7 @@ reconcile("clothing-footwear-32", "3046774", name="Hike Light Cushion Crew Socks
 reconcile("clothing-footwear-33", "3046774", name="Hike Full Cushion Crew Socks, Light Gray M", unitPriceAud=44.96, totalPriceAud=44.96)
 reconcile("clothing-footwear-37", "3337205", name="NAVAgaiter Tall GTX, Grey/Black S", unitPriceAud=124.16, totalPriceAud=124.16)
 reconcile("clothing-footwear-38", "3343538", name="Cirrus Hut Boots, Black S", unitPriceAud=69.97, totalPriceAud=69.97)
+reconcile("clothing-footwear-35", "K2 Base Camp tax invoice 25-00028990", quantity=2, unitPriceAud=71.96, totalPriceAud=143.92, totalWeightG=284, notes="Super recommended! Two pairs purchased from K2 Base Camp (Invoice 25-00028990).")
 reconcile("cooking-hydration-45", "Ultralight Gear invoice #58006", name="Sawyer Squeeze Water Filtration System w/ Cnoc Premium 2L Bladder", unitPriceAud=109.95, totalPriceAud=109.95)
 
 
@@ -159,7 +160,22 @@ add_item(
 )
 by_id["personal-items-74"].update(unitWeightG=27.3, totalWeightG=27.3)
 
+# K2 Base Camp purchase
+add_item(
+    "clothing-footwear-75",
+    "Clothing & Footwear",
+    "waterproof jacket",
+    "Outdoor Research",
+    "MicroGravity AscentShell Women's Waterproof Hooded Jacket, Arctic S",
+    1,
+    407.96,
+    "K2 Base Camp tax invoice 24-00021940",
+    "Purchased from K2 Base Camp (Invoice 24-00021940). Colour: Arctic, Size: W S.",
+    currency="AUD",
+)
+by_id["clothing-footwear-75"].update(unitWeightG=337, totalWeightG=337)
 
-assert len(items) == 74, f"Expected 74 records after reconciliation, got {len(items)}"
+
+assert len(items) == 75, f"Expected 75 records after reconciliation, got {len(items)}"
 DATA_PATH.write_text(json.dumps(items, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 print(f"Reconciled {len(items)} gear records")

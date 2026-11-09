@@ -292,5 +292,12 @@
     "sourceUrl": "https://shokz.com.au/products/openswim-pro",
     "downloadUrl": "https://shokz.com.au/cdn/shop/files/OpenSwimPro-Grey.webp?v=1719321983&width=700",
     "matchQuality": "exact"
+  },
+  {
+    "id": "clothing-footwear-75",
+    "imagePath": "/images/clothing-footwear-75.webp",
+    "sourceUrl": "https://k2.com.au/products/outdoor-research-microgravity-ascentshell-womens-hooded-jacket",
+    "downloadUrl": "https://k2.com.au/cdn/shop/products/Outdoor-Research_MicroGravity-AscentShell-Womens-Hooded-Jacket_Sunset_01.jpg",
+    "matchQuality": "model"
   }
 ]
