@@ -1,0 +1,296 @@
+[
+  {
+    "id": "sleep-shelter-01",
+    "imagePath": "/images/sleep-shelter-01.webp",
+    "sourceUrl": "https://www.mont.com.au/products/warmlite-xt-r-750-down-sleeping-bag",
+    "downloadUrl": "https://www.mont.com.au/cdn/shop/products/mont-warmlite-xt-r-750-7-to-12-c-down-sleeping-bag-camp-sleeping-sleeping-bag-down-buy-warmlite-xt-r-750-7-to-12-c-down-sleeping-bag-online-at-mont-515329451_400x.jpg?v=1768000477",
+    "matchQuality": "model"
+  },
+  {
+    "id": "sleep-shelter-02",
+    "imagePath": "/images/sleep-shelter-02.webp",
+    "sourceUrl": "https://www.mont.com.au/products/moondance-1-full-nylon-1-person-tent",
+    "downloadUrl": "https://www.mont.com.au/cdn/shop/products/mont-moondance-1fn-tent-camp-shelter-tent-1-person-moondance-1fn-one-person-hiking-tent-519066393_2000x.jpg?v=1768498927",
+    "matchQuality": "model"
+  },
+  {
+    "id": "sleep-shelter-03",
+    "imagePath": "/images/sleep-shelter-03.webp",
+    "sourceUrl": "https://www.hyperlitemountaingear.com/products/thermarest-z-lite-sol-foam-sleep-pad",
+    "downloadUrl": "https://www.hyperlitemountaingear.com/cdn/shop/products/hyperlite-mountain-gear-accessories-therm-a-rest-zlite-sol-foam-sleep-pad-31918713831469.jpg?v=1681843395",
+    "matchQuality": "model"
+  },
+  {
+    "id": "sleep-shelter-04",
+    "imagePath": "/images/sleep-shelter-04.webp",
+    "sourceUrl": "https://www.trekitt.co.uk/sleep-shelter/sleeping-bags/sea-to-summit-womens-spark-9c15f-regular-sleeping-bag-grey__55649",
+    "downloadUrl": "https://www.trekitt.co.uk/images/sparkdownsleepingbagwomens-9c-15fregular_asl041071-331705_primary.jpg?bgcolor=ffffff&format=webp&height=1998&mode=pad&quality=85&width=1998",
+    "matchQuality": "model"
+  },
+  {
+    "id": "sleep-shelter-05",
+    "imagePath": "/images/sleep-shelter-05.webp",
+    "sourceUrl": "https://www.nemoequipment.com/products/fillo-elite-backpacking-pillow",
+    "downloadUrl": "https://www.nemoequipment.com/cdn/shop/files/Fillo-Elite-Mango_811666033970_02-Front_2400x.jpg?v=1772661406",
+    "matchQuality": "model"
+  },
+  {
+    "id": "sleep-shelter-06",
+    "imagePath": "/images/sleep-shelter-06.webp",
+    "sourceUrl": "https://military.eu/p/sea-to-summit/sea-to-summit-reactor-midweight-regular-sleeping-bag-liner-beluga-2861657",
+    "downloadUrl": "https://cdn.military.eu/int/media/catalog/product/2/8/2861657_sea-to-summit-reactor-midweight-regular-sleeping-bag-liner-beluga-693909.jpg",
+    "matchQuality": "model"
+  },
+  {
+    "id": "sleep-shelter-07",
+    "imagePath": "/images/sleep-shelter-07.webp",
+    "sourceUrl": "https://www.adventurecampingandfishing.com.au/products/mont-moondance-1-1fn-footprint",
+    "downloadUrl": "https://www.adventurecampingandfishing.com.au/cdn/shop/files/mont-moondance-1-1fn-footprint-camp-shelter-accessories-footprints-moondance-1-1fn-footprint-61-10-24-521810521_5000x_516447c1-70de-48e7-b65d-e012d3d709d8.webp?v=1780641084&width=1214",
+    "matchQuality": "model"
+  },
+  {
+    "id": "packs-essentials-08",
+    "imagePath": "/images/packs-essentials-08.webp",
+    "sourceUrl": "https://www.biwak.com/Ausruestung/Beleuchtung/Stirnlampen/Petzl-Swift-RL-Stirnlampe-1100-Lumen-E095BB02.html",
+    "downloadUrl": "https://www.biwak.com/out/pictures/generated/product/1/1500_1500_75/petzl_swift_rl_stirnlampe_1100_lum_e095bb02__1520.jpg",
+    "matchQuality": "model"
+  },
+  {
+    "id": "packs-essentials-09",
+    "imagePath": "/images/packs-essentials-09.webp",
+    "sourceUrl": "https://www.evertrek.pl/pl/p/Zatyczka-ustnika-Osprey-Hydraulics-Bite-Valve-Cover/21787",
+    "downloadUrl": "https://www.evertrek.pl/environment/cache/images/1000_1000_productGfx_90092/Zatyczka-ustnika-Osprey-Hydraulics-Bite-Valve-Cover.webp",
+    "matchQuality": "model"
+  },
+  {
+    "id": "packs-essentials-10",
+    "imagePath": "/images/packs-essentials-10.webp",
+    "sourceUrl": "https://www.sportchek.ca/en/pdp/osprey-hydraulics-3l-reservoir-78097672f.html",
+    "downloadUrl": "https://media-www.sportchek.ca/product/div-01-hardgoods/dpt-56-bags/sdpt-14-packs/334141511/osprey-hydraulics-3l-reservoir-8930e34d-1728-4cb4-987d-ea71befe64a7-jpgrendition.jpg",
+    "matchQuality": "model"
+  },
+  {
+    "id": "packs-essentials-11",
+    "imagePath": "/images/packs-essentials-11.webp",
+    "sourceUrl": "https://www.modeherz.de/osprey-aura-ag-lt-65-m-l-koseret-darjeeling-spring-green_317004_219436",
+    "downloadUrl": "https://images.modeherz.de/item/images/317004/full/Osprey-Aura-AG-LT-65-M---L-Koseret---Darjeeling-Spring-Green-317004.jpg",
+    "matchQuality": "model"
+  },
+  {
+    "id": "packs-essentials-12",
+    "imagePath": "/images/packs-essentials-12.webp",
+    "sourceUrl": "https://www.compositedevelopments.co.nz/product/4795/black-diamond-alpine-carbon-cork-trekking-poles-womens",
+    "downloadUrl": "https://www.compositedevelopments.co.nz/cdn/images/products/large/BLACKDIAMONDAlpineCarbonCorkTrekkingPoles-Womens_638264878364221175.jpg",
+    "matchQuality": "model"
+  },
+  {
+    "id": "packs-essentials-13",
+    "imagePath": "/images/packs-essentials-13.webp",
+    "sourceUrl": "https://basecamp-shop.com/en/product/sea-to-summit-ultra-sil-dry-bag-20l",
+    "downloadUrl": "https://basecamp-shop.com/uploads/product-image/image/original/Ultra-SilDryBag20LZinnia.jpg",
+    "matchQuality": "model"
+  },
+  {
+    "id": "packs-essentials-14",
+    "imagePath": "/images/packs-essentials-14.webp",
+    "sourceUrl": "https://www.riversportsoutfitters.com/products/ultra-sil-dry-sack-35l",
+    "downloadUrl": "https://www.riversportsoutfitters.com/cdn/shop/products/64-248250-1916675-image-1189050.jpg?v=1691547202",
+    "matchQuality": "model"
+  },
+  {
+    "id": "packs-essentials-15",
+    "imagePath": "/images/packs-essentials-15.webp",
+    "sourceUrl": "https://www.lyst.com/bags/patagonia-terravia-14l-backpack-2/",
+    "downloadUrl": "https://cdna.lystit.com/1200/630/tr/photos/sevenstore/c7a5d16f/patagonia-Graze-Green-Terravia-14L-Backpack.jpeg",
+    "matchQuality": "model"
+  },
+  {
+    "id": "packs-essentials-16",
+    "imagePath": "/images/packs-essentials-16.webp",
+    "sourceUrl": "https://www.mec.ca/en/product/6004-478/sea-to-summit-first-aid-dry-sack-overnight-3l",
+    "downloadUrl": "https://cdn11.bigcommerce.com/s-xw5rh7060c/products/24940/images/107314/6004478_NOC02__09732.1652865009.1280.1280.jpg?c=1",
+    "matchQuality": "model"
+  },
+  {
+    "id": "packs-essentials-17",
+    "imagePath": "/images/packs-essentials-17.webp",
+    "sourceUrl": "https://ec.mic21.com/shop/g/g2108121001/",
+    "downloadUrl": "https://ec.mic21.com/img/goods/L/2021/2108121001_1.jpg",
+    "matchQuality": "model"
+  },
+  {
+    "id": "clothing-footwear-18",
+    "imagePath": "/images/clothing-footwear-18.webp",
+    "sourceUrl": "https://thenorthface.com.au/product/womens-exploration-convertible-regular-straight-pants/NF0A8EC8LK5.html",
+    "downloadUrl": "https://thenorthface.com.au/dw/image/v2/BDFS_PRD/on/demandware.static/-/Sites-northface-master-catalog/default/dw87dba3c4/images/NF0A8EC8/NF0A8EC8LK5_R_1.jpg?sh=800&sw=800",
+    "matchQuality": "model"
+  },
+  {
+    "id": "clothing-footwear-19",
+    "imagePath": "/images/clothing-footwear-19.webp",
+    "sourceUrl": "https://www.greenland-outdoor.de/patagonia-womens-torrentshell-3l-pants-black.html",
+    "downloadUrl": "https://cdn.webshopapp.com/shops/62391/files/369587150/patagonia-patagonia-womens-torrentshell-3l-pants-b.jpg",
+    "matchQuality": "model"
+  },
+  {
+    "id": "clothing-footwear-20",
+    "imagePath": "/images/clothing-footwear-20.webp",
+    "sourceUrl": "https://mtwaddingtons.com/products/pa-triolet-jkt-w",
+    "downloadUrl": "https://mtwaddingtons.com/cdn/shop/files/83408_ENLB_MW1_1200x1200.jpg?v=1731175083",
+    "matchQuality": "model"
+  },
+  {
+    "id": "clothing-footwear-21",
+    "imagePath": "/images/clothing-footwear-21.webp",
+    "sourceUrl": "https://eu.icebreaker.com/en-dk/products/merino-150-siren-bikini-ib103164451",
+    "downloadUrl": "https://eu.icebreaker.com/cdn/shop/files/IB103164451-3.jpg?v=1755521847",
+    "matchQuality": "model"
+  },
+  {
+    "id": "clothing-footwear-22",
+    "imagePath": "/images/clothing-footwear-22.webp",
+    "sourceUrl": "https://www.rei.com/product/249991/black-diamond-access-down-20-hoody-womens",
+    "downloadUrl": "https://www.rei.com/media/ee9835af-2b57-441b-97cb-7caa24039266.jpg?size=784x588",
+    "matchQuality": "model"
+  },
+  {
+    "id": "clothing-footwear-23",
+    "imagePath": "/images/clothing-footwear-23.webp",
+    "sourceUrl": "https://www.mec.ca/en/product/6013-104/black-diamond-lightweight-fleece-gloves-unisex",
+    "downloadUrl": "https://cdn11.bigcommerce.com/s-xw5rh7060c/products/2227/images/7364/6013104_BK000__78146.1652864928.1280.1280.jpg?c=1",
+    "matchQuality": "model"
+  },
+  {
+    "id": "clothing-footwear-24",
+    "imagePath": "/images/clothing-footwear-24.webp",
+    "sourceUrl": "https://www.onionriver.com/products/patagonia-fun-hog-beanie",
+    "downloadUrl": "https://www.onionriver.com/cdn/shop/files/33470_PBLG_1_2000x.jpg?v=1728490173",
+    "matchQuality": "model"
+  },
+  {
+    "id": "clothing-footwear-25",
+    "imagePath": "/images/clothing-footwear-25.webp",
+    "sourceUrl": "https://www.outdoorlife.com.sg/patagonia-womens-r1-air-fleece-jacket.html",
+    "downloadUrl": "https://cdn.webshopapp.com/shops/280398/files/493525524/patagonia-womens-r1-air-fleece-jacket.jpg",
+    "matchQuality": "model"
+  },
+  {
+    "id": "clothing-footwear-27",
+    "imagePath": "/images/clothing-footwear-27.webp",
+    "sourceUrl": "https://shop.lululemon.com/en-ca/p/womens-leggings/lululemon-Align-No-Line-High-Rise-Pant-25/_/prod11900027",
+    "downloadUrl": "https://images.lululemon.com/is/image/lululemon/LW5IVBS_074056_2",
+    "matchQuality": "model"
+  },
+  {
+    "id": "clothing-footwear-29",
+    "imagePath": "/images/clothing-footwear-29.webp",
+    "sourceUrl": "https://allgoods.com.au/products/icebreaker-womens-260-tech-long-sleeve-crew",
+    "downloadUrl": "https://allgoods.com.au/cdn/shop/files/icebreaker-104387001_fbb132d3-2b1f-47f1-8557-0a0bce358276.jpg?v=1690345939&width=2400",
+    "matchQuality": "model"
+  },
+  {
+    "id": "clothing-footwear-30",
+    "imagePath": "/images/clothing-footwear-30.webp",
+    "sourceUrl": "https://paulreader.com.au/products/icebreaker-260-tech-womens-leggings",
+    "downloadUrl": "https://paulreader.com.au/cdn/shop/files/Icebreaker260TechWomen_sLeggingsBlack-OnModelFront.jpg?v=1721090126",
+    "matchQuality": "model"
+  },
+  {
+    "id": "clothing-footwear-31",
+    "imagePath": "/images/clothing-footwear-31.webp",
+    "sourceUrl": "https://www.kayakcentre.com/ws-hike-full-cushion-saturnsphere-crew-socks.html",
+    "downloadUrl": "https://cdn.shoplightspeed.com/shops/634298/files/66322377/650x750x2/smartwool-ws-hike-full-cushion-saturnsphere-crew-s.jpg",
+    "matchQuality": "model"
+  },
+  {
+    "id": "clothing-footwear-34",
+    "imagePath": "/images/clothing-footwear-34.webp",
+    "sourceUrl": "https://www.rei.com/product/193034/smartwool-classic-hike-light-cushion-crew-socks-mens",
+    "downloadUrl": "https://www.rei.com/media/c6bedee0-5ca6-4f9a-8400-99057fef1a76.jpg?size=784x588",
+    "matchQuality": "model"
+  },
+  {
+    "id": "clothing-footwear-35",
+    "imagePath": "/images/clothing-footwear-35.webp",
+    "sourceUrl": "https://www.trekkersoutdoor.net/dexshell-waterproof-trekking-socks.html",
+    "downloadUrl": "https://cdn.shoplightspeed.com/shops/660773/files/62216056/image.jpg",
+    "matchQuality": "model"
+  },
+  {
+    "id": "clothing-footwear-37",
+    "imagePath": "/images/clothing-footwear-37.webp",
+    "sourceUrl": "https://spryactive.ca/products/kahtoola-navagaiter-gtx",
+    "downloadUrl": "https://spryactive.ca/cdn/shop/files/kahtoola-navagaiter-gtx-front.jpg?v=1750180731&width=640",
+    "matchQuality": "model"
+  },
+  {
+    "id": "clothing-footwear-38",
+    "imagePath": "/images/clothing-footwear-38.webp",
+    "sourceUrl": "https://www.basecampgear.co.uk/equipment-c392/head-hands-feet-c990/hut-tent-booties-c1197/rab-cirrus-hut-boot-p15637",
+    "downloadUrl": "https://cdn11.bigcommerce.com/s-v29r2wl21x/images/stencil/original/products/947/67102/AW25.TempestBlue.1__37888.1752572218.jpg",
+    "matchQuality": "model"
+  },
+  {
+    "id": "clothing-footwear-39",
+    "imagePath": "/images/clothing-footwear-39.webp",
+    "sourceUrl": "https://www.oakley.com/en-au/product/W0OO9513D?variant=888392672605",
+    "downloadUrl": "https://assets2.oakley.com/cdn-record-files-pi/00e46cd5-c0ac-430e-a07c-b2120180815a/63cbe4f4-6a79-4bc0-9d77-b21201808937/0OO9513D__951303__P21__shad__fr.png?impolicy=OO_ratio&width=3000",
+    "matchQuality": "model"
+  },
+  {
+    "id": "clothing-footwear-40",
+    "imagePath": "/images/clothing-footwear-40.webp",
+    "sourceUrl": "https://store.shopping.yahoo.co.jp/kandahar/la-sportiva-tx4-evo-mid-gtx-carbon-banbo-ms-90900735.html",
+    "downloadUrl": "https://item-shopping.c.yimg.jp/i/n/kandahar_la-sportiva-tx4-evo-mid-gtx-carbon-banbo-ms-90900735",
+    "matchQuality": "model"
+  },
+  {
+    "id": "cooking-hydration-41",
+    "imagePath": "/images/cooking-hydration-41.webp",
+    "sourceUrl": "https://altongoods.com/products/titanium-single-wall-cup-600ml",
+    "downloadUrl": "https://altongoods.com/cdn/shop/files/Alton_Web_Images_Single-wall_Cup2.jpg?v=1686875215",
+    "matchQuality": "model"
+  },
+  {
+    "id": "cooking-hydration-42",
+    "imagePath": "/images/cooking-hydration-42.webp",
+    "sourceUrl": "https://www.lyophilise.fr/9018-couteau-suisse-victorinox-huntsman-15-outils-rouge.html",
+    "downloadUrl": "https://cdn.lyophilise.fr/42336-large_default/couteau-suisse-victorinox-huntsman-15-outils-rouge.jpg",
+    "matchQuality": "model"
+  },
+  {
+    "id": "cooking-hydration-43",
+    "imagePath": "/images/cooking-hydration-43.webp",
+    "sourceUrl": "https://www.blackhawkoutdoor.com.au/products/soto-windmaster-stove",
+    "downloadUrl": "https://www.blackhawkoutdoor.com.au/cdn/shop/files/STOD-1RXN.jpg?v=1689559122",
+    "matchQuality": "model"
+  },
+  {
+    "id": "cooking-hydration-45",
+    "imagePath": "/images/cooking-hydration-45.webp",
+    "sourceUrl": "https://ultralightoutdoorgear.co.uk/sawyer-squeeze-filter-with-cnoc-premium-2l-bladder/",
+    "downloadUrl": "https://cdn11.bigcommerce.com/s-xhsipki9fu/images/stencil/original/products/12583/134584/SS25.1__54372.1739960647.jpg?c=1",
+    "matchQuality": "model"
+  },
+  {
+    "id": "cooking-hydration-46",
+    "imagePath": "/images/cooking-hydration-46.webp",
+    "sourceUrl": "https://ultralightoutdoorgear.co.uk/alpine-thermo-bottle-0-75l/",
+    "downloadUrl": "https://cdn11.bigcommerce.com/s-xhsipki9fu/images/stencil/original/products/9287/83749/Stainless__03032.1690546993.gif?c=1",
+    "matchQuality": "model"
+  },
+  {
+    "id": "clothing-footwear-32",
+    "imagePath": "/images/clothing-footwear-32.webp",
+    "sourceUrl": "https://www.snowleader.com/w-hike-light-cushion-crew-socks-light-gray-SMAR00093.html",
+    "downloadUrl": "https://images.snowleader.com/media/catalog/product/cache/1/image/0dc2d03fe217f8c83829496872af24a0/w/-/w-hike-light-cushion-crew-socks-light-gray-configurable-smartwool-smar00093_01.jpg",
+    "matchQuality": "model"
+  },
+  {
+    "id": "clothing-footwear-33",
+    "imagePath": "/images/clothing-footwear-33.webp",
+    "sourceUrl": "https://en.zalando.de/smartwool-hike-classic-edition-full-cushion-crew-sports-socks-medium-gray-wo944d016-c11.html",
+    "downloadUrl": "https://img01.ztat.net/article/spp-media-p1/5001547f865840e9ada564f4f46e4287/85d62b2f50754a7c98f8074bbd8e85a6.jpg?imwidth=500",
+    "matchQuality": "model"
+  }
+]
