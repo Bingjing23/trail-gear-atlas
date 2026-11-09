@@ -310,7 +310,7 @@ function isConsumable(item) {
   return consumableTypes.has(type);
 }
 
-const INVENTORY_STORAGE_KEY = "trail_gear_atlas_inventory_v3";
+const INVENTORY_STORAGE_KEY = "trail_gear_atlas_inventory_v4";
 let defaultInventory = [];
 let gear = [];
 let trails = [];
@@ -319,11 +319,26 @@ let currentLogFilter = "all";
 
 function loadInventory(defaultData) {
   try {
-    const raw = localStorage.getItem(INVENTORY_STORAGE_KEY);
+    const raw = localStorage.getItem(INVENTORY_STORAGE_KEY) || localStorage.getItem("trail_gear_atlas_inventory_v3");
     if (raw) {
       const parsed = JSON.parse(raw);
       if (Array.isArray(parsed) && parsed.length > 0) {
-        gear = parsed.map((item) => ({ ...item, statusKey: normalizeStatus(item.status) }));
+        const defaultMap = new Map(defaultData.map((d) => [d.id, d]));
+        gear = parsed.map((item) => {
+          const def = defaultMap.get(item.id);
+          if (def) {
+            return {
+              ...def,
+              ...item,
+              imagePath: def.imagePath,
+              imageSourceUrl: def.imageSourceUrl,
+              websiteUrl: def.websiteUrl || item.websiteUrl,
+              statusKey: normalizeStatus(item.status),
+            };
+          }
+          return { ...item, statusKey: normalizeStatus(item.status) };
+        });
+        saveInventory();
         return;
       }
     }
@@ -792,9 +807,10 @@ function openProductModal(item) {
   let mediaMarkup = "";
   if (item.imagePath) {
     const alt = `${item.brand || ""} ${item.name || item.itemType || "gear"} product photo`.trim();
-    const photoSource = item.imageSourceUrl ? `
-      <a class="modal-photo-source" href="${escapeHtml(item.imageSourceUrl)}" target="_blank" rel="noopener noreferrer">
-        Photo Source: ${escapeHtml(extractDomain(item.imageSourceUrl))} ↗
+    const officialUrl = item.websiteUrl || item.imageSourceUrl;
+    const photoSource = officialUrl ? `
+      <a class="modal-photo-source" href="${escapeHtml(officialUrl)}" target="_blank" rel="noopener noreferrer" title="Official Brand Website: ${escapeHtml(extractDomain(officialUrl))}">
+        Official Brand Source: ${escapeHtml(extractDomain(officialUrl))} ↗
       </a>
     ` : "";
     mediaMarkup = `
@@ -913,8 +929,10 @@ function mediaMarkup(item) {
     </div>`;
   }
   const alt = `${item.brand || ""} ${item.name || item.itemType || "gear"} product photo`.trim();
-  const credit = item.imageSourceUrl
-    ? `<a class="photo-source" href="${escapeHtml(item.imageSourceUrl)}" target="_blank" rel="noopener noreferrer" aria-label="View image source for ${escapeHtml(item.name || item.itemType)}">PHOTO SOURCE ↗</a>`
+  const officialUrl = item.websiteUrl || item.imageSourceUrl;
+  const domain = extractDomain(officialUrl);
+  const credit = officialUrl
+    ? `<a class="photo-source" href="${escapeHtml(officialUrl)}" target="_blank" rel="noopener noreferrer" aria-label="Official website for ${escapeHtml(item.name || item.itemType)}" title="Official Brand Website: ${escapeHtml(domain)}">OFFICIAL SITE ↗</a>`
     : "";
   return `<div class="card-media clickable-media" data-detail-id="${escapeHtml(item.id)}" title="Click to view specs &amp; official website"><img class="product-image" src="${escapeHtml(item.imagePath)}" alt="${escapeHtml(alt)}" loading="lazy" decoding="async" />${credit}<span class="card-media-hover-hint">Inspect Specs ↗</span></div>`;
 }

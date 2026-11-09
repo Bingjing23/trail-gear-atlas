@@ -34,7 +34,7 @@
       "Full-length YKK #5 dual-direction locking zipper with draft tube and anti-snag tape",
       "Hidden internal zippered security pocket for electronics and batteries"
     ],
-    "imagePath": "/images/sleep-shelter-01.webp",
+    "imagePath": "images/sleep-shelter-01.webp",
     "imageSourceUrl": "https://www.mont.com.au/products/warmlite-xt-r-750-down-sleeping-bag",
     "imageMatchQuality": "model",
     "size": "Women's Regular (Left Hand)"
@@ -75,7 +75,7 @@
       "Dual apex roof vents with stiffened kickstands facilitate continuous cross-flow ventilation",
       "Multipoint reflective guyline points with aluminum alloy line-runners pre-attached"
     ],
-    "imagePath": "/images/sleep-shelter-02.webp",
+    "imagePath": "images/sleep-shelter-02.webp",
     "imageSourceUrl": "https://www.mont.com.au/products/moondance-1-full-nylon-1-person-tent",
     "imageMatchQuality": "model",
     "size": "1-Person (1P)"
@@ -113,8 +113,8 @@
       "Puncture-proof closed-cell construction cannot pop, puncture or deflate on sharp thorns or rocks",
       "Instant deploy and pack-up accordion folding design—doubles as camp chair pad on breaks"
     ],
-    "imagePath": "/images/sleep-shelter-03.webp",
-    "imageSourceUrl": "https://www.hyperlitemountaingear.com/products/thermarest-z-lite-sol-foam-sleep-pad",
+    "imagePath": "images/sleep-shelter-03.webp",
+    "imageSourceUrl": "https://www.thermarest.com/products/sleeping-pads/fast-light/z-lite-sol/z-lite-sol.html",
     "imageMatchQuality": "model",
     "size": "Regular (183 × 51 cm)"
   },
@@ -148,8 +148,8 @@
       "Half-length YKK #3 zipper minimizes overall weight while allowing quick torso ventilation",
       "Technical contoured hood with soft drawcord seal locks in maximum radiant heat"
     ],
-    "imagePath": "/images/sleep-shelter-04.webp",
-    "imageSourceUrl": "https://www.trekitt.co.uk/sleep-shelter/sleeping-bags/sea-to-summit-womens-spark-9c15f-regular-sleeping-bag-grey__55649",
+    "imagePath": "images/sleep-shelter-04.webp",
+    "imageSourceUrl": "https://seatosummit.com.au/products/spark-womens-down-sleeping-bag",
     "imageMatchQuality": "model",
     "size": "Women's Regular (Max 170 cm)"
   },
@@ -182,7 +182,7 @@
       "PrimaLoft insulation top layer adds plush soft warmth and eliminates rubbery feel",
       "Ergonomic low-profile micro-adjustable valve allows precise firmness tuning with one finger"
     ],
-    "imagePath": "/images/sleep-shelter-05.webp",
+    "imagePath": "images/sleep-shelter-05.webp",
     "imageSourceUrl": "https://www.nemoequipment.com/products/fillo-elite-backpacking-pillow",
     "imageMatchQuality": "model",
     "size": "Regular (39 × 27 × 8 cm)"
@@ -216,8 +216,8 @@
       "Shields expensive down sleeping bags from skin oils, sweat, and trail dirt",
       "Super stretchy knit construction allows unrestrained leg and knee movements at night"
     ],
-    "imagePath": "/images/sleep-shelter-06.webp",
-    "imageSourceUrl": "https://military.eu/p/sea-to-summit/sea-to-summit-reactor-midweight-regular-sleeping-bag-liner-beluga-2861657",
+    "imagePath": "images/sleep-shelter-06.webp",
+    "imageSourceUrl": "https://seatosummit.com.au/products/reactor-sleeping-bag-liner",
     "imageMatchQuality": "model",
     "size": "Regular (198 × 82 cm)"
   },
@@ -248,8 +248,8 @@
       "Corner brass eyelets secure directly to DAC pole tips for unified pitch",
       "Prevents muddy groundwater and condensation from weeping against tent base"
     ],
-    "imagePath": "/images/sleep-shelter-07.webp",
-    "imageSourceUrl": "https://www.adventurecampingandfishing.com.au/products/mont-moondance-1-1fn-footprint",
+    "imagePath": "images/sleep-shelter-07.webp",
+    "imageSourceUrl": "https://www.mont.com.au/products/moondance-1-full-nylon-1-person-tent",
     "imageMatchQuality": "model",
     "size": "1-Person (1P)"
   },
@@ -287,8 +287,8 @@
       "Single top push-button controls brightness, locks against accidental pack turn-ons",
       "5-level battery charge indicator displays accurate remaining energy upon powering on/off"
     ],
-    "imagePath": "/images/packs-essentials-08.webp",
-    "imageSourceUrl": "https://www.biwak.com/Ausruestung/Beleuchtung/Stirnlampen/Petzl-Swift-RL-Stirnlampe-1100-Lumen-E095BB02.html",
+    "imagePath": "images/packs-essentials-08.webp",
+    "imageSourceUrl": "https://www.petzl.com/US/en/Sport/Headlamps/SWIFT-RL",
     "imageMatchQuality": "model",
     "size": "One Size"
   },
@@ -321,8 +321,8 @@
       "Keeps drinking valve hygienically clean when putting backpack down on dusty or muddy ground",
       "Integrated tether loop attaches securely around hose neck so cap won't be lost on trail"
     ],
-    "imagePath": "/images/packs-essentials-09.webp",
-    "imageSourceUrl": "https://www.evertrek.pl/pl/p/Zatyczka-ustnika-Osprey-Hydraulics-Bite-Valve-Cover/21787",
+    "imagePath": "images/packs-essentials-09.webp",
+    "imageSourceUrl": "https://www.osprey.com/au/en/product/hydraulics-bite-valve-cover-HYDRCVR.html",
     "imageMatchQuality": "model",
     "size": "Standard (Fits Hydraulics)"
   },
@@ -356,8 +356,8 @@
       "PourShield top slide opening opens fully for rapid cleaning, ice addition, and drying",
       "Quarter-turn on/off lever on bite valve prevents accidental leaking under gear pressure"
     ],
-    "imagePath": "/images/packs-essentials-10.webp",
-    "imageSourceUrl": "https://www.sportchek.ca/en/pdp/osprey-hydraulics-3l-reservoir-78097672f.html",
+    "imagePath": "images/packs-essentials-10.webp",
+    "imageSourceUrl": "https://www.osprey.com/au/en/product/hydraulics-3l-reservoir-HYDRLCS3L.html",
     "imageMatchQuality": "model",
     "size": "3 Litres"
   },
@@ -390,8 +390,8 @@
       "Integrated high-visibility raincover housed in dedicated bottom zippered pocket",
       "Dual zippered extra-large hipbelt pockets fit modern smartphones, snacks, and GPS units"
     ],
-    "imagePath": "/images/packs-essentials-11.webp",
-    "imageSourceUrl": "https://www.modeherz.de/osprey-aura-ag-lt-65-m-l-koseret-darjeeling-spring-green_317004_219436",
+    "imagePath": "images/packs-essentials-11.webp",
+    "imageSourceUrl": "https://www.osprey.com/au/en/product/aura-ag-lt-65-AURALT65W_789.html",
     "imageMatchQuality": "model",
     "size": "Women's M/L (65L)"
   },
@@ -425,8 +425,8 @@
       "Ergonomic natural cork grip wicks sweat and molds to your hands over hundreds of miles",
       "Includes interchangeable carbide tech tips, rubber tips, and low-profile trekking baskets"
     ],
-    "imagePath": "/images/packs-essentials-12.webp",
-    "imageSourceUrl": "https://www.compositedevelopments.co.nz/product/4795/black-diamond-alpine-carbon-cork-trekking-poles-womens",
+    "imagePath": "images/packs-essentials-12.webp",
+    "imageSourceUrl": "https://blackdiamondequipment.com.au/products/alpine-carbon-cork-trekking-poles",
     "imageMatchQuality": "model",
     "size": "Women's (100–125 cm)"
   },
@@ -460,8 +460,8 @@
       "Slippery siliconized finish allows effortless sliding and stuffing inside tight backpacks",
       "Translucent fabric enables easy visual identification of packed clothing and contents"
     ],
-    "imagePath": "/images/packs-essentials-13.webp",
-    "imageSourceUrl": "https://basecamp-shop.com/en/product/sea-to-summit-ultra-sil-dry-bag-20l",
+    "imagePath": "images/packs-essentials-13.webp",
+    "imageSourceUrl": "https://seatosummit.com.au/products/ultra-sil-dry-bag",
     "imageMatchQuality": "model",
     "size": "20 Litres"
   },
@@ -491,8 +491,8 @@
       "Ideal waterproof pack-liner volume for multi-day expeditions in Fiordland and Tasmania",
       "Reinforced stitching at all critical high-stress anchor points"
     ],
-    "imagePath": "/images/packs-essentials-14.webp",
-    "imageSourceUrl": "https://www.riversportsoutfitters.com/products/ultra-sil-dry-sack-35l",
+    "imagePath": "images/packs-essentials-14.webp",
+    "imageSourceUrl": "https://seatosummit.com.au/products/ultra-sil-dry-bag",
     "imageMatchQuality": "model",
     "size": "35 Litres"
   },
@@ -523,8 +523,8 @@
       "Internal hydration sleeve with dual routing ports",
       "Zippered top stash pocket with key clip for summit essentials"
     ],
-    "imagePath": "/images/packs-essentials-15.webp",
-    "imageSourceUrl": "https://www.lyst.com/bags/patagonia-terravia-14l-backpack-2/",
+    "imagePath": "images/packs-essentials-15.webp",
+    "imageSourceUrl": "https://www.patagonia.com.au/products/terravia-pack-14l-48905-blk",
     "imageMatchQuality": "model",
     "size": "Small (14L)"
   },
@@ -554,8 +554,8 @@
       "Transparent side window lets you pinpoint bandages and medication before unrolling",
       "Waterproof roll-top seal keeps adhesive tapes, tablets, and dressings clean and bone dry"
     ],
-    "imagePath": "/images/packs-essentials-16.webp",
-    "imageSourceUrl": "https://www.mec.ca/en/product/6004-478/sea-to-summit-first-aid-dry-sack-overnight-3l",
+    "imagePath": "images/packs-essentials-16.webp",
+    "imageSourceUrl": "https://seatosummit.com.au/products/first-aid-dry-bag",
     "imageMatchQuality": "model",
     "size": "3 Litres"
   },
@@ -588,8 +588,8 @@
       "Built-in strong magnetic base, rubberized hanging hook, and detachable metal desk stand",
       "Red light mode preserves night vision and avoids attracting insects at hut tables"
     ],
-    "imagePath": "/images/packs-essentials-17.webp",
-    "imageSourceUrl": "https://ec.mic21.com/shop/g/g2108121001/",
+    "imagePath": "images/packs-essentials-17.webp",
+    "imageSourceUrl": "https://ledlenser.com/en/ml6-connect-wl/502201",
     "imageMatchQuality": "model",
     "size": "Compact (178 mm)"
   },
@@ -618,8 +618,8 @@
       "Zips off into 10-inch shorts when sun warms up",
       "Stretchy nylon stands up to scrambles and trail brush"
     ],
-    "imagePath": "/images/clothing-footwear-18.webp",
-    "imageSourceUrl": "https://thenorthface.com.au/product/womens-exploration-convertible-regular-straight-pants/NF0A8EC8LK5.html",
+    "imagePath": "images/clothing-footwear-18.webp",
+    "imageSourceUrl": "https://www.thenorthface.com.au/product/womens-exploration-convertible-pants/NF0A4T8Q.html",
     "imageMatchQuality": "model",
     "size": "Women's S"
   },
@@ -653,8 +653,8 @@
       "Partially elasticized cuffs with snap-tab closures cinch securely over boots",
       "Elastic waistband with internal drawcord for dialed customized fit"
     ],
-    "imagePath": "/images/clothing-footwear-19.webp",
-    "imageSourceUrl": "https://www.greenland-outdoor.de/patagonia-womens-torrentshell-3l-pants-black.html",
+    "imagePath": "images/clothing-footwear-19.webp",
+    "imageSourceUrl": "https://www.patagonia.com.au/products/womens-torrentshell-3l-rain-pants-regular-85281-blk",
     "imageMatchQuality": "model",
     "size": "Women's S (30\" Inseam)"
   },
@@ -690,8 +690,8 @@
       "Concealed RECCO avalanche reflector integrated into upper back yoke",
       "Elasticized strap at low back connects to any Patagonia snow/rain pants to eliminate wind gaps"
     ],
-    "imagePath": "/images/clothing-footwear-20.webp",
-    "imageSourceUrl": "https://mtwaddingtons.com/products/pa-triolet-jkt-w",
+    "imagePath": "images/clothing-footwear-20.webp",
+    "imageSourceUrl": "https://www.patagonia.com.au/products/womens-triolet-jacket-83407-curb",
     "imageMatchQuality": "model",
     "size": "Women's M"
   },
@@ -723,8 +723,8 @@
       "Naturally odor-resistant for multi-day wear",
       "Corespun nylon core wrapped in soft merino wool for long-lasting durability"
     ],
-    "imagePath": "/images/clothing-footwear-21.webp",
-    "imageSourceUrl": "https://eu.icebreaker.com/en-dk/products/merino-150-siren-bikini-ib103164451",
+    "imagePath": "images/clothing-footwear-21.webp",
+    "imageSourceUrl": "https://www.icebreaker.com/en-au/womens-underwear/merino-siren-bikini-briefs/103158.html",
     "imageMatchQuality": "model",
     "size": "Women's S"
   },
@@ -759,8 +759,8 @@
       "Two zippered handwarmer pockets and single zippered chest pocket for phone / GPS",
       "Compresses into its own internal chest pocket with carabiner clip loop"
     ],
-    "imagePath": "/images/clothing-footwear-22.webp",
-    "imageSourceUrl": "https://www.rei.com/product/249991/black-diamond-access-down-20-hoody-womens",
+    "imagePath": "images/clothing-footwear-22.webp",
+    "imageSourceUrl": "https://blackdiamondequipment.com.au/products/access-down-hoody-womens",
     "imageMatchQuality": "model",
     "size": "Women's S"
   },
@@ -792,8 +792,8 @@
       "Conductive material on thumb and index finger for phone map navigation",
       "Ideal liner glove or standalone active cool-morning layer"
     ],
-    "imagePath": "/images/clothing-footwear-23.webp",
-    "imageSourceUrl": "https://www.mec.ca/en/product/6013-104/black-diamond-lightweight-fleece-gloves-unisex",
+    "imagePath": "images/clothing-footwear-23.webp",
+    "imageSourceUrl": "https://blackdiamondequipment.com.au/products/lightweight-fleece-gloves",
     "imageMatchQuality": "model",
     "size": "Size XS"
   },
@@ -822,8 +822,8 @@
       "Snug rib-knit cuff locks in head heat on windy ridges",
       "Fair Trade Certified sewn"
     ],
-    "imagePath": "/images/clothing-footwear-24.webp",
-    "imageSourceUrl": "https://www.onionriver.com/products/patagonia-fun-hog-beanie",
+    "imagePath": "images/clothing-footwear-24.webp",
+    "imageSourceUrl": "https://www.patagonia.com.au/products/fun-hog-beanie-29230-blk",
     "imageMatchQuality": "model",
     "size": "One Size"
   },
@@ -853,8 +853,8 @@
       "Off-shoulder seams sit smoothly underneath loaded backpack straps without hot-spots",
       "HeiQ Pure odor control finish keeps technical fleece fresh across multiple hut nights"
     ],
-    "imagePath": "/images/clothing-footwear-25.webp",
-    "imageSourceUrl": "https://www.outdoorlife.com.sg/patagonia-womens-r1-air-fleece-jacket.html",
+    "imagePath": "images/clothing-footwear-25.webp",
+    "imageSourceUrl": "https://www.patagonia.com.au/products/womens-r1-air-full-zip-hoody-40260-blk",
     "imageMatchQuality": "model",
     "invoiceEvidence": [
       "Order #103780"
@@ -867,7 +867,7 @@
     "sourceCategory": "Clothing & Footwear",
     "itemType": "Base layer",
     "brand": "Lululemon",
-    "name": "t-short",
+    "name": "Swiftly Tech Short-Sleeve Shirt 2.0",
     "quantity": 1,
     "unitWeightG": 120,
     "totalWeightG": 120,
@@ -876,7 +876,7 @@
     "status": "Owned",
     "notes": "Useful",
     "provenance": "Original workbook · Sheet1 row 24",
-    "websiteUrl": "https://www.lululemon.com.au/en-au/c/women/tops/t-shirts",
+    "websiteUrl": "https://www.lululemon.com.au/en-au/p/swiftly-tech-short-sleeve-shirt-2.0/prod9820343.html",
     "summary": "Moisture-wicking, anti-odor technical active tee for hot hiking days.",
     "specs": {
       "Material": "Quick-drying sweat-wicking technical fabric",
@@ -886,7 +886,9 @@
       "Four-way stretch for total mobility",
       "Flatlock anti-chafing seams under backpack straps"
     ],
-    "size": "Women's S"
+    "size": "Women's S",
+    "imagePath": "images/clothing-footwear-26.webp",
+    "imageSourceUrl": "https://www.lululemon.com.au/en-au/p/swiftly-tech-short-sleeve-shirt-2.0/prod9820343.html"
   },
   {
     "id": "clothing-footwear-27",
@@ -913,8 +915,8 @@
       "High-rise waist waistband lies flat under backpack hipbelts",
       "Four-way stretch and breathability for high agility"
     ],
-    "imagePath": "/images/clothing-footwear-27.webp",
-    "imageSourceUrl": "https://shop.lululemon.com/en-ca/p/womens-leggings/lululemon-Align-No-Line-High-Rise-Pant-25/_/prod11900027",
+    "imagePath": "images/clothing-footwear-27.webp",
+    "imageSourceUrl": "https://www.lululemon.com.au/en-au/p/lululemon-align%E2%84%A2-high-rise-pant-25%22/prod2020012.html",
     "imageMatchQuality": "model",
     "size": "Women's S"
   },
@@ -924,7 +926,7 @@
     "sourceCategory": "Clothing & Footwear",
     "itemType": "Base layer",
     "brand": "Icebreaker",
-    "name": 200,
+    "name": "Merino 200 Oasis Long Sleeve Crewe Thermal Top",
     "quantity": 2,
     "unitWeightG": 183,
     "totalWeightG": 366,
@@ -943,7 +945,9 @@
       "Natural temperature regulation across wide temperature swings",
       "Resists odor build-up over days of continuous trekking"
     ],
-    "size": "Women's S"
+    "size": "Women's S",
+    "imagePath": "images/clothing-footwear-28.webp",
+    "imageSourceUrl": "https://www.icebreaker.com/en-au/womens-baselayers/merino-200-oasis-long-sleeve-crewe-thermal-top/104387.html"
   },
   {
     "id": "clothing-footwear-29",
@@ -973,8 +977,8 @@
       "Maximum thermal warmth for freezing alpine nights and windy passes",
       "Offset shoulder seams eliminate pack strap pressure points"
     ],
-    "imagePath": "/images/clothing-footwear-29.webp",
-    "imageSourceUrl": "https://allgoods.com.au/products/icebreaker-womens-260-tech-long-sleeve-crew",
+    "imagePath": "images/clothing-footwear-29.webp",
+    "imageSourceUrl": "https://www.icebreaker.com/en-au/womens-baselayers/merino-260-tech-long-sleeve-crewe-thermal-top/104388.html",
     "imageMatchQuality": "model",
     "size": "Women's XS"
   },
@@ -1006,8 +1010,8 @@
       "Flatlock seams prevent inner-thigh chafing",
       "Brushed elastic waistband provides soft, secure fit"
     ],
-    "imagePath": "/images/clothing-footwear-30.webp",
-    "imageSourceUrl": "https://paulreader.com.au/products/icebreaker-260-tech-womens-leggings",
+    "imagePath": "images/clothing-footwear-30.webp",
+    "imageSourceUrl": "https://www.icebreaker.com/en-au/womens-baselayers/merino-260-tech-thermal-leggings/104389.html",
     "imageMatchQuality": "model",
     "size": "Women's XS"
   },
@@ -1039,8 +1043,8 @@
       "Indestructawool high-durability reinforcement",
       "Virtually Seamless toe eliminates blister friction"
     ],
-    "imagePath": "/images/clothing-footwear-31.webp",
-    "imageSourceUrl": "https://www.kayakcentre.com/ws-hike-full-cushion-saturnsphere-crew-socks.html",
+    "imagePath": "images/clothing-footwear-31.webp",
+    "imageSourceUrl": "https://www.smartwool.com/en-us/shop/womens-hike-full-cushion-crew-socks-sw001648",
     "imageMatchQuality": "model",
     "size": "Women's M"
   },
@@ -1072,8 +1076,8 @@
       "Mesh breathability zones keep feet cool on steep ascents",
       "4-Degree elite fit system locks sock onto foot"
     ],
-    "imagePath": "/images/clothing-footwear-32.webp",
-    "imageSourceUrl": "https://www.snowleader.com/w-hike-light-cushion-crew-socks-light-gray-SMAR00093.html",
+    "imagePath": "images/clothing-footwear-32.webp",
+    "imageSourceUrl": "https://www.smartwool.com/en-us/shop/womens-hike-light-cushion-crew-socks-sw001614",
     "imageMatchQuality": "model",
     "size": "Size M"
   },
@@ -1105,8 +1109,8 @@
       "Dense terry loops absorb impact shocks on rocky downhill trails",
       "Reinforced heel and toe zones for extended lifespan"
     ],
-    "imagePath": "/images/clothing-footwear-33.webp",
-    "imageSourceUrl": "https://en.zalando.de/smartwool-hike-classic-edition-full-cushion-crew-sports-socks-medium-gray-wo944d016-c11.html",
+    "imagePath": "images/clothing-footwear-33.webp",
+    "imageSourceUrl": "https://www.smartwool.com/en-us/shop/hike-full-cushion-crew-socks-sw001647",
     "imageMatchQuality": "model",
     "size": "Size M"
   },
@@ -1135,8 +1139,8 @@
       "Elasticized arch brace for all-day trail support",
       "Flat knit toe seam for in-boot comfort"
     ],
-    "imagePath": "/images/clothing-footwear-34.webp",
-    "imageSourceUrl": "https://www.rei.com/product/193034/smartwool-classic-hike-light-cushion-crew-socks-mens",
+    "imagePath": "images/clothing-footwear-34.webp",
+    "imageSourceUrl": "https://www.smartwool.com/en-us/shop/classic-hike-light-cushion-crew-socks-sw001613",
     "imageMatchQuality": "model",
     "size": "Size M"
   },
@@ -1168,8 +1172,8 @@
       "Keeps feet warm and completely dry during deep mud, bogs, and creek crossings",
       "Cushioned Merino wool interior buffers against blister-causing grit"
     ],
-    "imagePath": "/images/clothing-footwear-35.webp",
-    "imageSourceUrl": "https://www.trekkersoutdoor.net/dexshell-waterproof-trekking-socks.html",
+    "imagePath": "images/clothing-footwear-35.webp",
+    "imageSourceUrl": "https://www.dexshell.com/products/waterproof-trekking-socks",
     "imageMatchQuality": "model",
     "size": "Size M"
   },
@@ -1178,8 +1182,8 @@
     "category": "Clothing & Footwear",
     "sourceCategory": "Clothing & Footwear",
     "itemType": "neck gaiters",
-    "brand": null,
-    "name": "Merino",
+    "brand": "Icebreaker",
+    "name": "Merino Flexi Chute Neck Gaiter",
     "quantity": 2,
     "unitWeightG": 100,
     "totalWeightG": 200,
@@ -1198,7 +1202,9 @@
       "Protects neck and throat from freezing winds on alpine passes",
       "Multi-wear design functions as beanie, sun hood, or neck warmer"
     ],
-    "size": "One Size"
+    "size": "One Size",
+    "imagePath": "images/clothing-footwear-36.webp",
+    "imageSourceUrl": "https://www.icebreaker.com/en-au/accessories/merino-chute/100957.html"
   },
   {
     "id": "clothing-footwear-37",
@@ -1228,8 +1234,8 @@
       "Shields boots and socks from scree, snow, mud, and spinifex grass",
       "Front zipper with Velcro flap allows fast on/off without removing boots"
     ],
-    "imagePath": "/images/clothing-footwear-37.webp",
-    "imageSourceUrl": "https://spryactive.ca/products/kahtoola-navagaiter-gtx",
+    "imagePath": "images/clothing-footwear-37.webp",
+    "imageSourceUrl": "https://kahtoola.com/gaiters/navagaiter-tall-gtx/",
     "imageMatchQuality": "model",
     "size": "Size S"
   },
@@ -1261,8 +1267,8 @@
       "Warm, cozy refuge for feet after 8 hours in rigid hiking boots",
       "EVA cushioned footbed insulates against freezing hut floorboards"
     ],
-    "imagePath": "/images/clothing-footwear-38.webp",
-    "imageSourceUrl": "https://www.basecampgear.co.uk/equipment-c392/head-hands-feet-c990/hut-tent-booties-c1197/rab-cirrus-hut-boot-p15637",
+    "imagePath": "images/clothing-footwear-38.webp",
+    "imageSourceUrl": "https://rab.equipment/au/cirrus-hut-boots",
     "imageMatchQuality": "model",
     "size": "Size S (UK 4-5 / EU 37-38)"
   },
@@ -1291,8 +1297,8 @@
       "Shields eyes from blinding high-altitude alpine reflection and wind-blown dust",
       "Unobtainium nosepads increase grip with sweat"
     ],
-    "imagePath": "/images/clothing-footwear-39.webp",
-    "imageSourceUrl": "https://www.oakley.com/en-au/product/W0OO9513D?variant=888392672605",
+    "imagePath": "images/clothing-footwear-39.webp",
+    "imageSourceUrl": "https://www.oakley.com/en-au/product/W0OO9280",
     "imageMatchQuality": "model",
     "size": "Standard / Medium"
   },
@@ -1321,8 +1327,8 @@
       "Mythos lacing system extends down to toe for precise climbing adjustment",
       "Wide forefoot platform provides outstanding stability on rough rocky terrain"
     ],
-    "imagePath": "/images/clothing-footwear-40.webp",
-    "imageSourceUrl": "https://store.shopping.yahoo.co.jp/kandahar/la-sportiva-tx4-evo-mid-gtx-carbon-banbo-ms-90900735.html",
+    "imagePath": "images/clothing-footwear-40.webp",
+    "imageSourceUrl": "https://www.lasportiva.com/en/tx4-evo-mid-gtx-woman-black-27z999100",
     "imageMatchQuality": "model",
     "size": "EU 40.5 / US Men 8"
   },
@@ -1351,8 +1357,8 @@
       "Directly boil water over gas stoves or campfires",
       "Folding butterfly handles fold flat around curved cup body"
     ],
-    "imagePath": "/images/cooking-hydration-41.webp",
-    "imageSourceUrl": "https://altongoods.com/products/titanium-single-wall-cup-600ml",
+    "imagePath": "images/cooking-hydration-41.webp",
+    "imageSourceUrl": "https://altongoods.com/products/ultralight-titanium-cup-600ml",
     "imageMatchQuality": "model",
     "size": "600 ml"
   },
@@ -1381,8 +1387,8 @@
       "Sharp wood saw slices branches for shelter spars and emergency splints",
       "Spring-loaded scissors trim moleskin blister patches with precision"
     ],
-    "imagePath": "/images/cooking-hydration-42.webp",
-    "imageSourceUrl": "https://www.lyophilise.fr/9018-couteau-suisse-victorinox-huntsman-15-outils-rouge.html",
+    "imagePath": "images/cooking-hydration-42.webp",
+    "imageSourceUrl": "https://www.victorinox.com/en/Products/Swiss-Army-Knives/Medium-Pocket-Knives/Huntsman/p/1.3713",
     "imageMatchQuality": "model",
     "size": "91 mm (Pocket)"
   },
@@ -1416,8 +1422,8 @@
       "Piezo igniter wire is housed internally inside center post to protect against damage and rain",
       "Includes 4-Flex heavy-duty pot support folding flat around stove body for storage"
     ],
-    "imagePath": "/images/cooking-hydration-43.webp",
-    "imageSourceUrl": "https://www.blackhawkoutdoor.com.au/products/soto-windmaster-stove",
+    "imagePath": "images/cooking-hydration-43.webp",
+    "imageSourceUrl": "https://sotooutdoors.com/product/windmaster-new/",
     "imageMatchQuality": "model",
     "size": "Compact (4-Flex)"
   },
@@ -1490,8 +1496,8 @@
       "Tethered cap and durable TPU walls withstand heavy squeeze pressures without bursting",
       "Field backflushable in 30 seconds using clean filtered water to restore flow rate indefinitely"
     ],
-    "imagePath": "/images/cooking-hydration-45.webp",
-    "imageSourceUrl": "https://ultralightoutdoorgear.co.uk/sawyer-squeeze-filter-with-cnoc-premium-2l-bladder/",
+    "imagePath": "images/cooking-hydration-45.webp",
+    "imageSourceUrl": "https://sawyer.com/products/squeeze-water-filtration-system/",
     "imageMatchQuality": "model",
     "size": "2L Bladder (Filtration)"
   },
@@ -1521,8 +1527,8 @@
       "Hexagonal silicone bumper band on body and lid allows easy grip and opening with thick ski mittens",
       "Dual-thread pitch inner stopper pours smoothly without splashes and resists freezing shut"
     ],
-    "imagePath": "/images/cooking-hydration-46.webp",
-    "imageSourceUrl": "https://ultralightoutdoorgear.co.uk/alpine-thermo-bottle-0-75l/",
+    "imagePath": "images/cooking-hydration-46.webp",
+    "imageSourceUrl": "https://en.montbell.jp/products/goods/disp.php?product_id=1124618",
     "imageMatchQuality": "model",
     "size": "0.75 Litre"
   },
@@ -1531,8 +1537,8 @@
     "category": "Cooking & Hydration",
     "sourceCategory": "Cooking & Hydration",
     "itemType": "Spoons and chopsticks",
-    "brand": "amazon",
-    "name": "Pure Titanium Chopsticks Spoons Set",
+    "brand": "Boundless Voyage",
+    "name": "Boundless Voyage Titanium Chopsticks & Spoon Set",
     "quantity": 1,
     "unitWeightG": 32,
     "totalWeightG": 32,
@@ -1541,7 +1547,7 @@
     "status": "Owned",
     "notes": null,
     "provenance": "Original workbook · Sheet1 row 47",
-    "websiteUrl": "https://www.amazon.com/dp/B0753CVG9D",
+    "websiteUrl": "https://bvoutdoor.com/products/ti1068t",
     "summary": "High-strength featherweight titanium chopsticks and long-handled spoon kit.",
     "specs": {
       "Material": "100% Pure Titanium (Weight: 35 g combined)",
@@ -1551,7 +1557,9 @@
       "Long-handled spoon reaches bottom of deep freeze-dried meal pouches cleanly",
       "Non-corrosive, non-magnetic, and leaves zero metallic aftertaste"
     ],
-    "size": "Standard (195 mm)"
+    "size": "Standard (195 mm)",
+    "imagePath": "images/cooking-hydration-47.webp",
+    "imageSourceUrl": "https://bvoutdoor.com/products/ti1068t"
   },
   {
     "id": "personal-items-48",
@@ -1579,7 +1587,9 @@
       "No bulky contact lens cleaning solution or lens cases required—dispose cleanly daily",
       "UV-blocking class 2 protection shields corneas from high-altitude alpine glare"
     ],
-    "size": "Trail Pack (30-day)"
+    "size": "Trail Pack (30-day)",
+    "imagePath": "images/personal-items-48.webp",
+    "imageSourceUrl": "https://www.acuvue.com/en-au/products/1-day-acuvue-moist/"
   },
   {
     "id": "personal-items-49",
@@ -1596,7 +1606,7 @@
     "status": "Owned",
     "notes": "Biodegradable wilderness wet wipes travel pack (~50 wipes). Consumable.",
     "provenance": "Original workbook · Sheet1 row 51",
-    "websiteUrl": "https://seatosummit.com.au/products/pocket-wilderness-wipes",
+    "websiteUrl": "https://seatosummit.com.au/products/wilderness-wipes",
     "summary": "100% biodegradable outdoor wilderness body wipes formulated for Leave No Trace personal hygiene.",
     "specs": {
       "Quantity": "50 large embossed wipes per pack",
@@ -1608,7 +1618,9 @@
       "Soft, thick embossed texture removes trail dirt, sweat, and sunscreen effectively without stinging",
       "Resealable moisture-lock seal keeps remaining wipes moist over multi-week expeditions"
     ],
-    "size": "50 Sheets"
+    "size": "50 Sheets",
+    "imagePath": "images/personal-items-49.webp",
+    "imageSourceUrl": "https://seatosummit.com.au/products/wilderness-wipes"
   },
   {
     "id": "personal-items-50",
@@ -1625,7 +1637,7 @@
     "status": "Owned",
     "notes": "Ultralight carbon-fiber trail power bank (150 g).",
     "provenance": "Original workbook · Sheet1 row 52",
-    "websiteUrl": "https://nitecore.com/product/nb10000",
+    "websiteUrl": "https://www.nitecore.com/product/nb10000_gen2",
     "summary": "The world's lightest 10,000mAh carbon fiber power bank (150g) with 20W PD fast charging.",
     "specs": {
       "Capacity": "10,000 mAh 3.85V (38.5 Wh) · TSA Airline Flight Approved",
@@ -1638,7 +1650,9 @@
       "Low current mode charges headlamps, Garmin watches, and GPS beacons safely without tripping shutoff",
       "Dual-corner carbon fiber sheets absorb drops and trail impacts"
     ],
-    "size": "10,000 mAh"
+    "size": "10,000 mAh",
+    "imagePath": "images/personal-items-50.webp",
+    "imageSourceUrl": "https://www.nitecore.com/product/nb10000_gen2"
   },
   {
     "id": "sleep-shelter-51",
@@ -1673,8 +1687,8 @@
       "Laylow zero-profile micro-adjustable multi-functional flush valve with one-way airflow",
       "Includes high-volume Vortex pump sack for rapid moisture-free lung-free inflation"
     ],
-    "imagePath": "/images/sleep-shelter-51.webp",
-    "imageSourceUrl": "https://ozbackcountry.com.au/products/nemo-tensor-all-season-sleeping-mat",
+    "imagePath": "images/sleep-shelter-51.webp",
+    "imageSourceUrl": "https://www.nemoequipment.com/products/tensor-all-season-ultralight-insulated-sleeping-pad",
     "imageMatchQuality": "exact",
     "size": "Regular Mummy (183 × 51 cm)"
   },
@@ -1711,8 +1725,8 @@
       "Extra 64 cm (25 in) wide platform prevents elbows from dropping onto cold tent ground",
       "WingLock valve provides high-speed one-way inflation and instant twist-open dump deflation"
     ],
-    "imagePath": "/images/sleep-shelter-52.webp",
-    "imageSourceUrl": "https://cascadedesigns.com/products/therm-a-rest-neoair-xlite-nxt",
+    "imagePath": "images/sleep-shelter-52.webp",
+    "imageSourceUrl": "https://www.thermarest.com/products/sleeping-pads/fast-light/neoair-xlite-nxt/neoair-xlite-nxt.html",
     "imageMatchQuality": "exact",
     "size": "Regular Wide (183 × 64 cm)"
   },
@@ -1745,8 +1759,8 @@
       "Laminated zippered sleeve pocket and zippered hand pockets with soft brushed linings",
       "Gusseted underarms allow unrestricted arm movement around camp and trail"
     ],
-    "imagePath": "/images/clothing-footwear-53.webp",
-    "imageSourceUrl": "https://arcteryx.com/products/covert-cardigan-womens",
+    "imagePath": "images/clothing-footwear-53.webp",
+    "imageSourceUrl": "https://arcteryx.com/au/en/shop/womens/covert-cardigan",
     "imageMatchQuality": "exact",
     "size": "Women's S"
   },
@@ -1780,8 +1794,8 @@
       "Full underarm venting pit zips with welted exterior storm flaps",
       "Self-stuffs into left handwarmer pocket with carabiner clip-in loop"
     ],
-    "imagePath": "/images/clothing-footwear-54.webp",
-    "imageSourceUrl": "https://www.patagonia.com.au/products/womens-torrentshell-3l-rain-jacket-85246-wlwt",
+    "imagePath": "images/clothing-footwear-54.webp",
+    "imageSourceUrl": "https://www.patagonia.com.au/products/womens-torrentshell-3l-jacket-85246-wowl",
     "imageMatchQuality": "exact",
     "size": "Women's S"
   },
@@ -1813,7 +1827,7 @@
       "Fast-dissolving tablets prevent dehydration and muscle cramps on hot trail ascents",
       "Low sugar formula provides clean, refreshing hydration without syrupy gut distress"
     ],
-    "imagePath": "/images/cooking-hydration-55.webp",
+    "imagePath": "images/cooking-hydration-55.webp",
     "imageSourceUrl": "https://guenergy.com/products/hydration-drink-tabs",
     "imageMatchQuality": "exact",
     "size": "12-Tablet Tube (53 g)"
@@ -1846,7 +1860,7 @@
       "Instant burst of clean energy during steep pass ascents",
       "Branched-chain amino acids (BCAAs) reduce muscle fatigue and mental fog"
     ],
-    "imagePath": "/images/cooking-hydration-56.webp",
+    "imagePath": "images/cooking-hydration-56.webp",
     "imageSourceUrl": "https://guenergy.com/products/energy-gel",
     "imageMatchQuality": "exact",
     "size": "32 g (Single Pouch)"
@@ -1882,7 +1896,7 @@
       "Logged in personal hiking inventory (Purchased · ownership to confirm)",
       "Provenance: Paddy Pallin tax invoice 3046774"
     ],
-    "imagePath": "/images/packs-essentials-57.webp",
+    "imagePath": "images/packs-essentials-57.webp",
     "imageSourceUrl": "https://korjo.com/product/travel-umbrella/",
     "imageMatchQuality": "model",
     "size": "Compact (Folded 24 cm)"
@@ -1918,8 +1932,8 @@
       "Logged in personal hiking inventory (Purchased · ownership to confirm)",
       "Provenance: Paddy Pallin tax invoice 3320716"
     ],
-    "imagePath": "/images/packs-essentials-58.webp",
-    "imageSourceUrl": "https://www.lifeventure.com/products/fire-starter",
+    "imagePath": "images/packs-essentials-58.webp",
+    "imageSourceUrl": "https://www.lifeventure.com/products/outdoor-gear/fire-starter",
     "imageMatchQuality": "exact",
     "size": "One Size"
   },
@@ -1951,8 +1965,8 @@
       "High propane mix maintains vapor pressure down to -12°C",
       "Compact diameter nests directly inside Evernew and Jetboil cook pots"
     ],
-    "imagePath": "/images/cooking-hydration-59.webp",
-    "imageSourceUrl": "https://jetboil.johnsonoutdoors.com/products/jetpower-fuel-100g",
+    "imagePath": "images/cooking-hydration-59.webp",
+    "imageSourceUrl": "https://jetboil.com.au/products/jetpower-fuel-100g",
     "imageMatchQuality": "exact",
     "size": "100 g Canister"
   },
@@ -1984,8 +1998,8 @@
       "DuraLink instep strap guaranteed against trail wear for 1,000 miles",
       "Asymmetrical zipper design prevents ankle crease friction"
     ],
-    "imagePath": "/images/clothing-footwear-60.webp",
-    "imageSourceUrl": "https://kahtoola.com/gaiters/navagaiter-gtx/",
+    "imagePath": "images/clothing-footwear-60.webp",
+    "imageSourceUrl": "https://kahtoola.com/gaiters/navagaiter-tall-gtx/",
     "imageMatchQuality": "exact",
     "size": "Size L"
   },
@@ -1994,8 +2008,8 @@
     "category": "Food & Nutrition",
     "sourceCategory": "Cooking & Hydration",
     "itemType": "breakfast meal",
-    "brand": "Radix Nutrition",
-    "name": "Ultra Meal Bircher Muesli",
+    "brand": "Real Meals",
+    "name": "Real Meals Bircher Muesli",
     "quantity": 1,
     "unitWeightG": 175,
     "totalWeightG": 175,
@@ -2007,8 +2021,8 @@
     "invoiceEvidence": [
       "Paddy Pallin tax invoice 3337184"
     ],
-    "websiteUrl": "https://radixnutrition.com.au/products/ultra-meal-bircher-muesli",
-    "summary": "Radix Ultra-Meal freeze-dried Bircher Muesli delivering 600+ kcal of dense breakfast nutrition.",
+    "websiteUrl": "https://www.realmeals.co.nz/products/bircher-muesli",
+    "summary": "Wholesome freeze-dried New Zealand oats, dried apples, apricots, pears, raisins and yogurt soaked in orange juice with spices.",
     "specs": {
       "Net Weight": "175 g",
       "Calories": "600 kcal · 26g Protein, 30+ vitamins and minerals"
@@ -2017,7 +2031,9 @@
       "Cold-water or hot-water preparation in under 5 minutes",
       "Plant-based nutrient-dense superfood blend keeps energy high all morning"
     ],
-    "size": "800 kcal (166 g)"
+    "size": "800 kcal (166 g)",
+    "imagePath": "images/cooking-hydration-61.webp",
+    "imageSourceUrl": "https://www.realmeals.co.nz/products/bircher-muesli"
   },
   {
     "id": "cooking-hydration-62",
@@ -2047,8 +2063,8 @@
       "Delicious decadent chocolate pudding reward after long wet days on trail",
       "High-calorie density (approx. 620 kcal) replenishes depleted glycogen"
     ],
-    "imagePath": "/images/cooking-hydration-62.webp",
-    "imageSourceUrl": "https://shop.backcountrycuisine.com.au/products/chocolate-brownie-pudding",
+    "imagePath": "images/cooking-hydration-62.webp",
+    "imageSourceUrl": "https://backcountrycuisine.co.nz/products/chocolate-brownie-pudding",
     "imageMatchQuality": "exact",
     "size": "Regular (150 g)"
   },
@@ -2080,7 +2096,9 @@
       "Cooks directly inside pouch—no pot cleaning required",
       "Wholesome New Zealand beef with carrots, peas, and rich homestyle gravy"
     ],
-    "size": "Regular (160 g)"
+    "size": "Regular (160 g)",
+    "imagePath": "images/cooking-hydration-63.webp",
+    "imageSourceUrl": "https://backcountrycuisine.co.nz/products/beef-mince"
   },
   {
     "id": "cooking-hydration-64",
@@ -2110,7 +2128,9 @@
       "Sweet tart apple and boysenberry filling topped with toasted oat crumble",
       "Comforting warm dessert for alpine hut evenings"
     ],
-    "size": "Regular (150 g)"
+    "size": "Regular (150 g)",
+    "imagePath": "images/cooking-hydration-64.webp",
+    "imageSourceUrl": "https://backcountrycuisine.co.nz/products/apple-berry-crumble"
   },
   {
     "id": "cooking-hydration-65",
@@ -2140,7 +2160,9 @@
       "High-protein hearty meal designed to feed two or one famished thru-hiker",
       "Real freeze-dried chicken breast pieces retain texture and flavor"
     ],
-    "size": "Double Serve (DBL 175 g)"
+    "size": "Double Serve (DBL 175 g)",
+    "imagePath": "images/cooking-hydration-65.webp",
+    "imageSourceUrl": "https://backcountrycuisine.co.nz/products/roast-chicken"
   },
   {
     "id": "clothing-footwear-66",
@@ -2170,7 +2192,9 @@
       "Washes in camp streams and dries completely in 2 hours on hut line",
       "Seamless bonded leg openings eliminate chafe under pack hipbelts"
     ],
-    "size": "Women's S"
+    "size": "Women's S",
+    "imagePath": "images/clothing-footwear-66.webp",
+    "imageSourceUrl": "https://www.royalrobbins.com/product/womens-readydry-bikini"
   },
   {
     "id": "clothing-footwear-67",
@@ -2200,8 +2224,8 @@
       "Restores durable water repellency (DWR) while maintaining leather breathability",
       "Easy spray application on wet or dry leather"
     ],
-    "imagePath": "/images/clothing-footwear-67.webp",
-    "imageSourceUrl": "https://nikwax.com.au/products/nubuck-suede-proof",
+    "imagePath": "images/clothing-footwear-67.webp",
+    "imageSourceUrl": "https://www.nikwax.com/en-gb/products/waterproofing/nubuck-suede-proof/",
     "imageMatchQuality": "exact",
     "size": "125 ml Spray"
   },
@@ -2233,8 +2257,8 @@
       "Cleans dirt from membrane pores without degrading factory waterproof coatings",
       "Prepares footwear surface for fresh DWR waterproofing application"
     ],
-    "imagePath": "/images/clothing-footwear-68.webp",
-    "imageSourceUrl": "https://www.gearaid.com/products/revivex-boot-shoe-cleaner",
+    "imagePath": "images/clothing-footwear-68.webp",
+    "imageSourceUrl": "https://www.gearaid.com/products/revivex-boot-cleaner",
     "imageMatchQuality": "exact",
     "size": "118 ml Bottle"
   },
@@ -2271,8 +2295,8 @@
       "Low center of gravity spider design provides unmatched stability for boiling large pots of water",
       "Piezo igniter push button built into base for safe lighting"
     ],
-    "imagePath": "/images/cooking-hydration-69.webp",
-    "imageSourceUrl": "https://sotooutdoors.com/product/st-310-regulator-stove/",
+    "imagePath": "images/cooking-hydration-69.webp",
+    "imageSourceUrl": "https://sotooutdoors.com/product/regulator-stove-st-310/",
     "imageMatchQuality": "exact",
     "size": "Compact (Foldable)"
   },
@@ -2306,7 +2330,7 @@
       "Allows keeping gas canister inside sleeping bag or warm water bowl while cooking in sub-zero snow",
       "Threaded valves connect securely without gas leakage"
     ],
-    "imagePath": "/images/cooking-hydration-70.webp",
+    "imagePath": "images/cooking-hydration-70.webp",
     "imageSourceUrl": "https://www.campingmoon.com/products/z37",
     "imageMatchQuality": "model",
     "size": "25 cm Hose"
@@ -2343,7 +2367,7 @@
       "Interior cavity houses a standard 230g gas canister and compact stove for zero wasted pack space",
       "Silicone-insulated folding handles protect fingers against burns while boiling trail water"
     ],
-    "imagePath": "/images/cooking-hydration-71.webp",
+    "imagePath": "images/cooking-hydration-71.webp",
     "imageSourceUrl": "https://evernew-global.com/products/titanium/eca539.html",
     "imageMatchQuality": "exact",
     "size": "950 ml"
@@ -2379,7 +2403,7 @@
       "Ultralight trail mug for morning coffee, tea, and rehydrated soups",
       "Nests flush underneath the Evernew ECA539 pot to form a sleek, rattle-free cook kit"
     ],
-    "imagePath": "/images/cooking-hydration-72.webp",
+    "imagePath": "images/cooking-hydration-72.webp",
     "imageSourceUrl": "https://evernew-global.com/products/titanium/eca530.html",
     "imageMatchQuality": "exact",
     "size": "400 ml"
@@ -2415,8 +2439,8 @@
       "Logged in personal hiking inventory (Purchased · ownership to confirm)",
       "Provenance: Backpacking Light invoice ORD177646"
     ],
-    "imagePath": "/images/packs-essentials-73.webp",
-    "imageSourceUrl": "https://store.adaptoutdoors.com/products/osprey-hikelite-26-pine-leaf-green",
+    "imagePath": "images/packs-essentials-73.webp",
+    "imageSourceUrl": "https://www.osprey.com/au/en/product/hikelite-26-HIKELITE26.html",
     "imageMatchQuality": "exact",
     "size": "26 Litres"
   },
@@ -2452,7 +2476,7 @@
       "32GB internal storage lets you listen to music, audiobooks, and podcasts without carrying a phone",
       "Titanium memory-wire neckband provides bounce-free stability under heavy pack hoods and beanies"
     ],
-    "imagePath": "/images/personal-items-74.webp",
+    "imagePath": "images/personal-items-74.webp",
     "imageSourceUrl": "https://shokz.com.au/products/openswim-pro",
     "imageMatchQuality": "exact",
     "size": "One Size"
@@ -2488,8 +2512,8 @@
       "Helmet-compatible Halo Hood with wire-brimmed visor and peripheral cord cinch",
       "Dynamic Reach arm panels eliminate shoulder binding under loaded backpacks"
     ],
-    "imagePath": "/images/clothing-footwear-75.webp",
-    "imageSourceUrl": "https://k2.com.au/products/outdoor-research-microgravity-ascentshell-womens-hooded-jacket",
+    "imagePath": "images/clothing-footwear-75.webp",
+    "imageSourceUrl": "https://www.outdoorresearch.com/products/womens-microgravity-ascentshell-jacket-274853",
     "imageMatchQuality": "model",
     "size": "Women's S"
   },
@@ -2523,7 +2547,7 @@
       "Short brim profile fits seamlessly underneath climbing and mountaineering helmets",
       "Fast-wicking sweatband keeps perspiration away from eyes during steep alpine climbs"
     ],
-    "imagePath": "/images/clothing-footwear-76.webp",
+    "imagePath": "images/clothing-footwear-76.webp",
     "imageSourceUrl": "https://blackdiamondequipment.com/en_US/product/5-panel-synthetic-cap/",
     "imageMatchQuality": "exact",
     "size": "One Size (Adjustable)"
@@ -2559,7 +2583,7 @@
       "Dual ice axe tool carry pick pockets with metal dogbone pick protection sleeves",
       "Internal bladder sleeve with dual hose routing ports for all-day trail hydration"
     ],
-    "imagePath": "/images/packs-essentials-77.webp",
+    "imagePath": "images/packs-essentials-77.webp",
     "imageSourceUrl": "https://blackdiamondequipment.com.au/products/distance-8-backpack-womens",
     "imageMatchQuality": "exact",
     "size": "Women's S/M (8L)"
