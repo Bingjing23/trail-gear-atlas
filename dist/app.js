@@ -78,7 +78,7 @@ const defaultTypeOrders = {
   ],
 };
 
-const STORAGE_KEY = "trail_gear_atlas_trails_v3";
+const STORAGE_KEY = "trail_gear_atlas_trails_v4";
 
 const defaultTrails = [
   {
@@ -105,6 +105,7 @@ const defaultTrails = [
       "packs-essentials-08": 1,
       "clothing-footwear-20": 1,
       "clothing-footwear-35": 1,
+      "wishlist-03": 1,
     },
   },
   {
@@ -266,6 +267,30 @@ const elements = {
   formGearFeatures: document.querySelector("#form-gear-features"),
   formGearNotes: document.querySelector("#form-gear-notes"),
   btnSubmitGear: document.querySelector("#btn-submit-gear"),
+
+  // View mode switcher & Wishlist elements
+  tabViewOwned: document.querySelector("#tab-view-owned"),
+  tabViewWishlist: document.querySelector("#tab-view-wishlist"),
+  tabViewAll: document.querySelector("#tab-view-all"),
+  badgeCountOwned: document.querySelector("#badge-count-owned"),
+  badgeCountWishlist: document.querySelector("#badge-count-wishlist"),
+  badgeCountAll: document.querySelector("#badge-count-all"),
+  wishlistHeroBanner: document.querySelector("#wishlist-hero-banner"),
+  wishlistActiveTrailName: document.querySelector("#wishlist-active-trail-name"),
+  statWishlistCount: document.querySelector("#stat-wishlist-count"),
+  statWishlistWeight: document.querySelector("#stat-wishlist-weight"),
+  statWishlistPacked: document.querySelector("#stat-wishlist-packed"),
+  statWishlistCost: document.querySelector("#stat-wishlist-cost"),
+  collectionHeadingWrap: document.querySelector("#collection-heading-main-wrap"),
+  collectionKicker: document.querySelector("#collection-kicker"),
+  collectionTitle: document.querySelector("#collection-title"),
+  collectionDesc: document.querySelector("#collection-desc"),
+  btnAddWishlistGear: document.querySelector("#btn-add-wishlist-gear"),
+  btnViewOwnedKit: document.querySelector("#btn-view-owned-kit"),
+  navWishlist: document.querySelector("#nav-wishlist"),
+  metricWishlistG: document.querySelector("#metric-wishlist-g"),
+  metricWishlistSummary: document.querySelector("#metric-wishlist-summary"),
+  metricCardWishlist: document.querySelector("#metric-card-wishlist"),
 };
 
 const escapeHtml = (value) => String(value ?? "").replace(/[&<>"']/g, (character) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[character]);
@@ -310,34 +335,42 @@ function isConsumable(item) {
   return consumableTypes.has(type);
 }
 
-const INVENTORY_STORAGE_KEY = "trail_gear_atlas_inventory_v4";
+const INVENTORY_STORAGE_KEY = "trail_gear_atlas_inventory_v5";
 let defaultInventory = [];
 let gear = [];
 let trails = [];
 let activeTrailId = "milford-track";
 let currentLogFilter = "all";
+let currentViewMode = "owned"; // "owned" | "wishlist" | "all"
 
 function loadInventory(defaultData) {
   try {
-    const raw = localStorage.getItem(INVENTORY_STORAGE_KEY) || localStorage.getItem("trail_gear_atlas_inventory_v3");
+    const raw = localStorage.getItem(INVENTORY_STORAGE_KEY) || localStorage.getItem("trail_gear_atlas_inventory_v4") || localStorage.getItem("trail_gear_atlas_inventory_v3");
     if (raw) {
       const parsed = JSON.parse(raw);
       if (Array.isArray(parsed) && parsed.length > 0) {
-        const defaultMap = new Map(defaultData.map((d) => [d.id, d]));
-        gear = parsed.map((item) => {
-          const def = defaultMap.get(item.id);
-          if (def) {
-            return {
+        const parsedMap = new Map(parsed.map((item) => [item.id, item]));
+        const merged = [];
+        for (const def of defaultData) {
+          const userItem = parsedMap.get(def.id);
+          if (userItem) {
+            merged.push({
               ...def,
-              ...item,
+              ...userItem,
               imagePath: def.imagePath,
               imageSourceUrl: def.imageSourceUrl,
-              websiteUrl: def.websiteUrl || item.websiteUrl,
-              statusKey: normalizeStatus(item.status),
-            };
+              websiteUrl: def.websiteUrl || userItem.websiteUrl,
+              statusKey: normalizeStatus(userItem.status || def.status),
+            });
+            parsedMap.delete(def.id);
+          } else {
+            merged.push({ ...def, statusKey: normalizeStatus(def.status) });
           }
-          return { ...item, statusKey: normalizeStatus(item.status) };
-        });
+        }
+        for (const [_, customItem] of parsedMap) {
+          merged.push({ ...customItem, statusKey: normalizeStatus(customItem.status) });
+        }
+        gear = merged;
         saveInventory();
         return;
       }
@@ -345,7 +378,7 @@ function loadInventory(defaultData) {
   } catch (error) {
     console.warn("Failed to parse inventory from localStorage", error);
   }
-  gear = JSON.parse(JSON.stringify(defaultData));
+  gear = JSON.parse(JSON.stringify(defaultData)).map((item) => ({ ...item, statusKey: normalizeStatus(item.status) }));
   saveInventory();
 }
 
@@ -371,12 +404,17 @@ function updateInventoryStats() {
 
 function loadTrails() {
   try {
-    const raw = localStorage.getItem(STORAGE_KEY);
+    const raw = localStorage.getItem(STORAGE_KEY) || localStorage.getItem("trail_gear_atlas_trails_v3");
     if (raw) {
       const parsed = JSON.parse(raw);
       if (Array.isArray(parsed) && parsed.length > 0) {
         trails = parsed;
+        const milford = trails.find((t) => t.id === "milford-track");
+        if (milford && milford.pack && !("wishlist-03" in milford.pack)) {
+          milford.pack["wishlist-03"] = 1;
+        }
         activeTrailId = trails[0].id;
+        saveTrails();
         return;
       }
     }
@@ -407,6 +445,15 @@ function calculatePackMetrics(trail) {
   let missingCount = 0;
   let totalItems = 0;
 
+  let ownedWeightG = 0;
+  let ownedBaseWeightG = 0;
+  let ownedItemsCount = 0;
+
+  let wishlistWeightG = 0;
+  let wishlistBaseWeightG = 0;
+  let wishlistItemsCount = 0;
+  const wishlistItems = [];
+
   const categoryWeights = {};
   for (const cat of categories) {
     categoryWeights[cat.name] = 0;
@@ -417,6 +464,7 @@ function calculatePackMetrics(trail) {
     const item = gear.find((g) => g.id === itemId);
     if (!item) continue;
     totalItems += qty;
+    const isWishlist = (item.statusKey || normalizeStatus(item.status)) === "wishlist";
     const unitW = Number.isFinite(item.unitWeightG) ? item.unitWeightG : null;
     if (unitW === null) {
       missingCount += qty;
@@ -429,6 +477,17 @@ function calculatePackMetrics(trail) {
         baseWeightG += lineWeight;
       }
       categoryWeights[item.category] = (categoryWeights[item.category] || 0) + lineWeight;
+
+      if (isWishlist) {
+        wishlistWeightG += lineWeight;
+        wishlistItemsCount += qty;
+        wishlistItems.push({ item, qty, lineWeight });
+        if (!isConsumable(item)) wishlistBaseWeightG += lineWeight;
+      } else {
+        ownedWeightG += lineWeight;
+        ownedItemsCount += qty;
+        if (!isConsumable(item)) ownedBaseWeightG += lineWeight;
+      }
     }
   }
 
@@ -441,11 +500,22 @@ function calculatePackMetrics(trail) {
     missingCount,
     totalItems,
     categoryWeights,
+    ownedWeightG,
+    ownedWeightKg: ownedWeightG / 1000,
+    ownedBaseWeightG,
+    ownedBaseWeightKg: ownedBaseWeightG / 1000,
+    ownedItemsCount,
+    wishlistWeightG,
+    wishlistWeightKg: wishlistWeightG / 1000,
+    wishlistBaseWeightG,
+    wishlistItemsCount,
+    wishlistItems,
   };
 }
 
 function normalizeStatus(status) {
   const text = String(status || "").toLowerCase().trim();
+  if (text.includes("想买") || text.includes("wishlist") || text.includes("待购") || text.includes("心愿") || text.includes("计划购入")) return "wishlist";
   if (text === "使用中" || text === "in use" || text === "active" || text === "in_use") return "in_use";
   if (text.includes("卖掉") || text.includes("准备卖") || text.includes("for sale") || text.includes("selling") || text.includes("出二手")) return "selling";
   if (text.includes("退货") || text.includes("returned") || text.includes("return")) return "returned";
@@ -463,7 +533,7 @@ function isInactiveStatus(statusKey) {
 
 function statusClass(item) {
   const key = item.statusKey || normalizeStatus(item.status);
-  return ["in_use", "owned", "purchased", "gift", "lost", "selling", "returned", "older", "review"].includes(key) ? key : "review";
+  return ["in_use", "owned", "purchased", "gift", "lost", "selling", "returned", "older", "review", "wishlist"].includes(key) ? key : "review";
 }
 
 function extractDomain(url) {
@@ -828,22 +898,27 @@ function openProductModal(item) {
     `;
   }
 
+  const statusKey = item.statusKey || normalizeStatus(item.status);
+  const isWishlist = statusKey === "wishlist";
+
   elements.productModalContent.innerHTML = `
     <div class="product-detail-container" style="--section-color:${category.color}">
       <div class="product-modal-header">
         <div class="product-modal-eyebrow">
           <span class="product-category-chip">${escapeHtml(item.category)}</span>
           ${item.size ? `<span class="product-size-chip" title="Size / Capacity">📏 Size: ${escapeHtml(item.size)}</span>` : ""}
+          ${isWishlist ? `<span class="modal-wishlist-chip">✨ PROSPECTIVE GEAR · 想买待购</span><button class="btn-modal-convert-owned" data-convert-id="${escapeHtml(item.id)}" type="button" title="Convert to Owned / In Use kit">✓ Mark as Purchased (转为已拥有)</button>` : ""}
           <select class="modal-status-select ${statusClass(item)}" data-modal-status-id="${escapeHtml(item.id)}" title="Click to change status (点击切换状态)">
-            <option value="使用中" ${item.statusKey === "in_use" ? "selected" : ""}>使用中</option>
-            <option value="Owned" ${item.statusKey === "owned" ? "selected" : ""}>Owned (已拥有)</option>
-            <option value="Purchased · in inventory" ${item.statusKey === "purchased" ? "selected" : ""}>Purchased (已购入)</option>
-            <option value="Gift" ${item.statusKey === "gift" ? "selected" : ""}>Gift (礼品)</option>
-            <option value="lost" ${item.statusKey === "lost" ? "selected" : ""}>lost (已丢失 · 灰显)</option>
-            <option value="不想要了准备卖掉" ${item.statusKey === "selling" ? "selected" : ""}>不想要了准备卖掉 (准备出掉 · 灰显)</option>
-            <option value="退货" ${item.statusKey === "returned" ? "selected" : ""}>退货 (已退货 · 灰显)</option>
-            <option value="Older gear · ownership to confirm" ${item.statusKey === "older" ? "selected" : ""}>Older gear (旧款)</option>
-            <option value="Needs details" ${item.statusKey === "review" ? "selected" : ""}>Needs details (待补充)</option>
+            <option value="想买" ${statusKey === "wishlist" ? "selected" : ""}>✨ 想买 (Wishlist · 待购入)</option>
+            <option value="使用中" ${statusKey === "in_use" ? "selected" : ""}>使用中</option>
+            <option value="Owned" ${statusKey === "owned" ? "selected" : ""}>Owned (已拥有)</option>
+            <option value="Purchased · in inventory" ${statusKey === "purchased" ? "selected" : ""}>Purchased (已购入)</option>
+            <option value="Gift" ${statusKey === "gift" ? "selected" : ""}>Gift (礼品)</option>
+            <option value="lost" ${statusKey === "lost" ? "selected" : ""}>lost (已丢失 · 灰显)</option>
+            <option value="不想要了准备卖掉" ${statusKey === "selling" ? "selected" : ""}>不想要了准备卖掉 (准备出掉 · 灰显)</option>
+            <option value="退货" ${statusKey === "returned" ? "selected" : ""}>退货 (已退货 · 灰显)</option>
+            <option value="Older gear · ownership to confirm" ${statusKey === "older" ? "selected" : ""}>Older gear (旧款)</option>
+            <option value="Needs details" ${statusKey === "review" ? "selected" : ""}>Needs details (待补充)</option>
           </select>
         </div>
         <div class="product-modal-brand">${escapeHtml(item.brand || "Brand not recorded")}</div>
@@ -952,23 +1027,24 @@ function renderCard(item, category) {
   const lineWeight = weight ? weight * packedQty : null;
 
   const isInactive = isInactiveStatus(item.statusKey);
+  const isWishlist = item.statusKey === "wishlist";
 
   let packControl = "";
   if (isPacked) {
-    packControl = `<div class="card-pack-stepper is-packed ${isInactive ? "is-inactive-stepper" : ""}" data-card-id="${escapeHtml(item.id)}">
+    packControl = `<div class="card-pack-stepper is-packed ${isInactive ? "is-inactive-stepper" : ""} ${isWishlist ? "is-wishlist-stepper" : ""}" data-card-id="${escapeHtml(item.id)}">
       <button class="card-stepper-btn btn-card-minus" data-id="${escapeHtml(item.id)}" type="button" aria-label="Decrease quantity" title="Decrease packed quantity">−</button>
       <div class="card-stepper-display">
         <span class="card-stepper-qty-wrap">
           <input type="number" class="card-stepper-input" data-id="${escapeHtml(item.id)}" value="${packedQty}" min="1" max="99" aria-label="Quantity for ${escapeHtml(item.name || item.itemType)}" />
-          <span class="card-stepper-label">in pack</span>
+          <span class="card-stepper-label">${isWishlist ? "in pack (trial)" : "in pack"}</span>
         </span>
         <span class="card-stepper-weight">${formatWeight(lineWeight)}</span>
       </div>
       <button class="card-stepper-btn btn-card-plus" data-id="${escapeHtml(item.id)}" type="button" aria-label="Increase quantity" title="Increase packed quantity">+</button>
     </div>`;
   } else {
-    packControl = `<button class="card-pack-btn ${isInactive ? "is-inactive-pack" : ""}" data-pack-add="${escapeHtml(item.id)}" type="button" aria-pressed="false" ${isInactive ? `title="Item is ${escapeHtml(item.status || "Inactive")}"` : ""}>
-      + Pack for ${escapeHtml(activeTrail?.name || "Trail")} ${isInactive ? `(${escapeHtml(item.status)})` : ""}
+    packControl = `<button class="card-pack-btn ${isInactive ? "is-inactive-pack" : ""} ${isWishlist ? "btn-wishlist-pack" : ""}" data-pack-add="${escapeHtml(item.id)}" type="button" aria-pressed="false" ${isInactive ? `title="Item is ${escapeHtml(item.status || "Inactive")}"` : ""}>
+      + ${isWishlist ? "Test Pack (测重)" : "Pack for"} ${escapeHtml(activeTrail?.name || "Trail")} ${isInactive ? `(${escapeHtml(item.status)})` : ""}
     </button>`;
   }
 
@@ -980,9 +1056,14 @@ function renderCard(item, category) {
     ? `<div class="card-inactive-banner"><span>${escapeHtml(item.status || "Inactive")}</span></div>`
     : "";
 
+  const wishlistRibbon = isWishlist
+    ? `<div class="card-wishlist-ribbon"><span>✨ WISH LIST · 想买待购</span><button class="btn-card-mark-bought" data-convert-id="${escapeHtml(item.id)}" type="button" title="I purchased this! Move to Owned / In Use kit">✓ Mark Bought (转为已拥有)</button></div>`
+    : "";
+
   const specBadge = getCardSpecBadge(item);
 
-  return `<article class="gear-card ${isPacked ? "is-packed" : ""} ${isInactive ? `is-inactive-status status-${escapeHtml(item.statusKey)}` : ""}" id="item-${escapeHtml(item.id)}" style="--section-color:${category.color}">
+  return `<article class="gear-card ${isPacked ? "is-packed" : ""} ${isInactive ? `is-inactive-status status-${escapeHtml(item.statusKey)}` : ""} ${isWishlist ? "is-wishlist-item" : ""}" id="item-${escapeHtml(item.id)}" style="--section-color:${category.color}">
+    ${wishlistRibbon}
     ${packedBadge}
     ${inactiveBanner}
     ${mediaMarkup(item)}
@@ -993,6 +1074,7 @@ function renderCard(item, category) {
       </div>
       <div class="card-top-actions">
         <select class="status-quick-select ${statusClass(item)}" data-status-id="${escapeHtml(item.id)}" title="Click to change status (点击切换状态)">
+          <option value="想买" ${item.statusKey === "wishlist" ? "selected" : ""}>✨ 想买 (Wishlist · 待购)</option>
           <option value="使用中" ${item.statusKey === "in_use" ? "selected" : ""}>使用中</option>
           <option value="Owned" ${item.statusKey === "owned" ? "selected" : ""}>Owned (已拥有)</option>
           <option value="Purchased · in inventory" ${item.statusKey === "purchased" ? "selected" : ""}>Purchased (已购入)</option>
@@ -1059,9 +1141,20 @@ function filteredItems() {
   const query = elements.search.value.trim().toLowerCase();
   const status = elements.status.value;
   return gear.filter((item) => {
+    const isWishlist = item.statusKey === "wishlist";
+
+    // View mode separation ("放在另外一个页面或者你设计一下")
+    if (currentViewMode === "owned") {
+      if (isWishlist) return false;
+    } else if (currentViewMode === "wishlist") {
+      if (!isWishlist) return false;
+    }
+
     if (status !== "all") {
       if (status === "active") {
-        if (isInactiveStatus(item.statusKey)) return false;
+        if (isInactiveStatus(item.statusKey) || isWishlist) return false;
+      } else if (status === "wishlist") {
+        if (!isWishlist) return false;
       } else if (item.statusKey !== status) {
         return false;
       }
@@ -1113,11 +1206,22 @@ function renderPlanner() {
 
   if (elements.metricTotalG) {
     elements.metricTotalG.textContent = new Intl.NumberFormat("en-AU").format(metrics.totalWeightG);
-    elements.metricTotalKg.textContent = `${metrics.totalWeightKg.toFixed(2)} kg total carried load`;
+    if (metrics.wishlistItemsCount > 0) {
+      elements.metricTotalKg.innerHTML = `<strong>${(metrics.ownedWeightG / 1000).toFixed(2)} kg</strong> owned + <strong>${(metrics.wishlistWeightG / 1000).toFixed(2)} kg</strong> wishlist (${metrics.wishlistItemsCount} items)`;
+    } else {
+      elements.metricTotalKg.textContent = `${metrics.totalWeightKg.toFixed(2)} kg total carried load`;
+    }
     elements.metricBaseG.textContent = new Intl.NumberFormat("en-AU").format(metrics.baseWeightG);
     elements.metricBaseKg.textContent = `${metrics.baseWeightKg.toFixed(2)} kg pack base weight`;
     elements.metricItemCount.textContent = metrics.totalItems;
     elements.metricConsumableSummary.textContent = `${new Intl.NumberFormat("en-AU").format(metrics.consumableWeightG)} g consumables (food, fuel, tabs)`;
+
+    if (elements.metricWishlistG) {
+      elements.metricWishlistG.textContent = metrics.wishlistWeightG > 0 ? `+${new Intl.NumberFormat("en-AU").format(metrics.wishlistWeightG)}` : "+0";
+      elements.metricWishlistSummary.textContent = metrics.wishlistItemsCount > 0
+        ? `✨ ${metrics.wishlistItemsCount} prospective item(s) on trial in pack`
+        : "0 prospective items on trial";
+    }
   }
 
   // Header & Sticky Pack pill
@@ -1191,17 +1295,24 @@ function renderPlanner() {
           </div>`;
 
         for (const { item, qty } of catItems) {
+          const isWishlist = (item.statusKey || normalizeStatus(item.status)) === "wishlist";
           const thumb = item.imagePath
             ? `<img class="packed-item-thumb" src="${escapeHtml(item.imagePath)}" alt="${escapeHtml(item.name || "")}" />`
             : `<div class="packed-item-thumb placeholder">${escapeHtml(item.itemType ? item.itemType.slice(0, 4).toUpperCase() : "GEAR")}</div>`;
           const lineWeight = Number.isFinite(item.unitWeightG) ? item.unitWeightG * qty : null;
 
-          html += `<div class="packed-item-row" data-item-id="${escapeHtml(item.id)}">
+          const wishlistChip = isWishlist ? `<span class="packed-wishlist-chip" title="Prospective gear tested in pack">✨ 想买待购</span>` : "";
+          const convertBtn = isWishlist
+            ? `<button class="btn-pack-mark-bought" data-convert-id="${escapeHtml(item.id)}" type="button" title="I purchased this! Move to Owned collection">✓ Mark Bought</button>`
+            : "";
+
+          html += `<div class="packed-item-row ${isWishlist ? "is-wishlist-packed-row" : ""}" data-item-id="${escapeHtml(item.id)}">
             ${thumb}
             <div class="packed-item-details">
-              <div class="packed-item-brand">${escapeHtml(item.brand || "Brand not recorded")}</div>
+              <div class="packed-item-brand">${escapeHtml(item.brand || "Brand not recorded")} ${wishlistChip}</div>
               <div class="packed-item-name" title="${escapeHtml(item.name || item.itemType)}">${escapeHtml(item.name || item.itemType)}</div>
             </div>
+            ${convertBtn}
             <div class="qty-stepper">
               <button class="btn-qty-minus" data-id="${escapeHtml(item.id)}" type="button" aria-label="Decrease quantity">−</button>
               <input type="number" class="planner-qty-input" data-id="${escapeHtml(item.id)}" value="${qty}" min="1" max="99" aria-label="Quantity for ${escapeHtml(item.name || item.itemType)}" />
@@ -1310,6 +1421,41 @@ function updateStickyBar() {
 }
 
 function render() {
+  const ownedCount = gear.filter((g) => (g.statusKey || normalizeStatus(g.status)) !== "wishlist").length;
+  const wishlistCount = gear.filter((g) => (g.statusKey || normalizeStatus(g.status)) === "wishlist").length;
+  if (elements.badgeCountOwned) elements.badgeCountOwned.textContent = ownedCount;
+  if (elements.badgeCountWishlist) elements.badgeCountWishlist.textContent = wishlistCount;
+  if (elements.badgeCountAll) elements.badgeCountAll.textContent = gear.length;
+
+  elements.tabViewOwned?.classList.toggle("active", currentViewMode === "owned");
+  elements.tabViewWishlist?.classList.toggle("active", currentViewMode === "wishlist");
+  elements.tabViewAll?.classList.toggle("active", currentViewMode === "all");
+
+  const activeTrail = getActiveTrail();
+  if (currentViewMode === "wishlist") {
+    if (elements.wishlistHeroBanner) {
+      elements.wishlistHeroBanner.hidden = false;
+      const wishlistAll = gear.filter((g) => (g.statusKey || normalizeStatus(g.status)) === "wishlist");
+      const totalWishlistWeight = wishlistAll.reduce((acc, g) => acc + (Number.isFinite(g.unitWeightG) ? g.unitWeightG : 0), 0);
+      const packedWishlistCount = Object.keys(activeTrail?.pack || {}).filter((id) => wishlistAll.some((w) => w.id === id && (activeTrail.pack[id] || 0) > 0)).length;
+      const totalWishlistCost = wishlistAll.reduce((acc, g) => acc + (Number.isFinite(g.unitPriceAud) ? g.unitPriceAud : 0), 0);
+
+      if (elements.wishlistActiveTrailName) elements.wishlistActiveTrailName.textContent = activeTrail?.name || "Active Expedition";
+      if (elements.statWishlistCount) elements.statWishlistCount.textContent = wishlistAll.length;
+      if (elements.statWishlistWeight) elements.statWishlistWeight.textContent = `${new Intl.NumberFormat("en-AU").format(totalWishlistWeight)} g`;
+      if (elements.statWishlistPacked) elements.statWishlistPacked.textContent = packedWishlistCount;
+      if (elements.statWishlistCost) elements.statWishlistCost.textContent = `$${new Intl.NumberFormat("en-AU").format(totalWishlistCost)} AUD`;
+    }
+    if (elements.collectionKicker) elements.collectionKicker.textContent = "✨ PROSPECTIVE GEAR LAB & UPGRADE SIMULATOR";
+    if (elements.collectionTitle) elements.collectionTitle.textContent = "Wishlist & Trail Weight Trials.";
+    if (elements.collectionDesc) elements.collectionDesc.textContent = "Prospective gear you plan to buy or test. Adjust pack quantities to simulate trail load, compare weight differences, and one-click convert to Owned once purchased.";
+  } else {
+    if (elements.wishlistHeroBanner) elements.wishlistHeroBanner.hidden = true;
+    if (elements.collectionKicker) elements.collectionKicker.textContent = currentViewMode === "all" ? "COMPLETE REPERTOIRE" : "MASTER GEAR INVENTORY";
+    if (elements.collectionTitle) elements.collectionTitle.textContent = currentViewMode === "all" ? "All Owned & Planned Gear." : "Built for the trail.";
+    if (elements.collectionDesc) elements.collectionDesc.textContent = currentViewMode === "all" ? "Explore all items in your kit, including currently owned equipment and prospective wishlist candidates." : "Browse by system, search for a specific piece, or compare recorded weight and price across your owned kit.";
+  }
+
   const items = filteredItems();
   elements.count.textContent = `SHOWING ${items.length} OF ${gear.length} ITEMS`;
   elements.empty.hidden = items.length !== 0;
@@ -1412,7 +1558,7 @@ function closeExportModal() {
   elements.exportModal?.classList.remove("open");
 }
 
-function openGearModal(item = null) {
+function openGearModal(item = null, defaultStatus = null) {
   if (!elements.gearModal || !elements.gearForm) return;
   elements.gearForm.reset();
   if (item) {
@@ -1455,13 +1601,14 @@ function openGearModal(item = null) {
     elements.formGearNotes.value = item.notes || "";
     elements.btnSubmitGear.textContent = "Save Changes (保存修改)";
   } else {
-    elements.modalGearTitle.textContent = "Add New Gear Item (新增装备到清单)";
+    const isWishlistAdd = defaultStatus === "想买" || currentViewMode === "wishlist";
+    elements.modalGearTitle.textContent = isWishlistAdd ? "Add Wishlist Item (添加想买装备)" : "Add New Gear Item (新增装备到清单)";
     elements.formGearId.value = "";
     elements.formGearCurrency.value = "AUD";
-    elements.formGearStatus.value = "使用中";
+    elements.formGearStatus.value = isWishlistAdd ? "想买" : "使用中";
     elements.formGearCategory.value = "Sleep & Shelter";
     if (elements.formGearSize) elements.formGearSize.value = "";
-    elements.btnSubmitGear.textContent = "Add to Inventory (添加至清单)";
+    elements.btnSubmitGear.textContent = isWishlistAdd ? "Add to Wishlist (添加至想买清单)" : "Add to Inventory (添加至清单)";
   }
   elements.gearModal.classList.add("open");
   elements.formGearName.focus();
@@ -1524,6 +1671,10 @@ async function init() {
     defaultInventory = data.map((item) => ({ ...item, statusKey: normalizeStatus(item.status) }));
     loadInventory(defaultInventory);
     loadTrails();
+
+    if (window.location.hash === "#wishlist") {
+      currentViewMode = "wishlist";
+    }
 
     updateInventoryStats();
     render();
@@ -1610,7 +1761,27 @@ document.addEventListener("click", (e) => {
     return;
   }
 
-  // 0d. Open product detail modal
+  // 0d. Convert wishlist item to owned / in use
+  const convertTrigger = e.target.closest("[data-convert-id]");
+  if (convertTrigger) {
+    e.stopPropagation();
+    const itemId = convertTrigger.dataset.convertId;
+    const item = gear.find((g) => g.id === itemId);
+    if (item) {
+      item.status = "使用中";
+      item.statusKey = "in_use";
+      saveInventory();
+      render();
+      updateInventoryStats();
+      showToast(`🎉 <strong>${escapeHtml(item.name || item.itemType)}</strong> 已标记为已购买！已移入主装备库（状态：使用中）。`);
+      if (elements.productModal?.classList.contains("open")) {
+        openProductModal(item);
+      }
+    }
+    return;
+  }
+
+  // 0e. Open product detail modal
   const detailTrigger = e.target.closest("[data-detail-id]");
   if (detailTrigger) {
     if (e.target.closest(".photo-source") || e.target.closest(".modal-photo-source")) return;
@@ -2127,6 +2298,49 @@ elements.logFilterBtns?.forEach((btn) => {
     currentLogFilter = btn.dataset.filter || "all";
     renderTrailLog();
   });
+});
+
+// View mode tabs & Wishlist navigation
+elements.tabViewOwned?.addEventListener("click", () => {
+  currentViewMode = "owned";
+  render();
+});
+
+elements.tabViewWishlist?.addEventListener("click", () => {
+  currentViewMode = "wishlist";
+  render();
+});
+
+elements.tabViewAll?.addEventListener("click", () => {
+  currentViewMode = "all";
+  render();
+});
+
+elements.navWishlist?.addEventListener("click", (e) => {
+  currentViewMode = "wishlist";
+  render();
+  setTimeout(() => {
+    document.querySelector("#collection")?.scrollIntoView({ behavior: "smooth" });
+  }, 50);
+});
+
+elements.btnViewOwnedKit?.addEventListener("click", () => {
+  currentViewMode = "owned";
+  render();
+});
+
+elements.btnAddWishlistGear?.addEventListener("click", () => {
+  openGearModal(null, "想买");
+});
+
+window.addEventListener("hashchange", () => {
+  if (window.location.hash === "#wishlist") {
+    currentViewMode = "wishlist";
+    render();
+    setTimeout(() => {
+      document.querySelector("#collection")?.scrollIntoView({ behavior: "smooth" });
+    }, 50);
+  }
 });
 
 window.addEventListener("scroll", updateStickyBar, { passive: true });
