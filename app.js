@@ -1,20 +1,84 @@
 const categories = [
   { name: "Sleep & Shelter", id: "sleep-shelter", color: "#537767", description: "Sleeping bags, shelter, mats and the small things that make nights outside easier." },
   { name: "Packs & Essentials", id: "packs-essentials", color: "#687d91", description: "Carry systems, lighting, trekking poles and useful trail accessories." },
-  { name: "Clothing & Footwear", id: "clothing-footwear", color: "#9b777b", description: "Layers, weather protection and footwear for changing conditions." },
   { name: "Cooking & Hydration", id: "cooking-hydration", color: "#a27957", description: "Stove, cookware, water storage and filtration." },
+  { name: "Food & Nutrition", id: "food-nutrition", color: "#b56b3c", description: "Backcountry freeze-dried meals, breakfasts, trail desserts, energy gels and electrolyte hydration." },
+  { name: "Clothing & Footwear", id: "clothing-footwear", color: "#9b777b", description: "Layers, weather protection and footwear for changing conditions." },
   { name: "Personal Items", id: "personal-items", color: "#877b9b", description: "The personal supplies that still need a little more detail." },
 ];
 
 const defaultTypeOrders = {
-  "Sleep & Shelter": ["tent", "tent footprint", "sleep bag", "liner", "sleep pad", "pillow"],
-  "Packs & Essentials": ["backpack", "summit bag", "dry bag", "first aid bag", "head light", "camp light", "poles", "umbrella", "fire starter"],
-  "Clothing & Footwear": ["base layer", "underwear", "socks", "fleece jacket", "fleece cardigan", "downjacket", "hard shell", "waterproof jacket", "hard shell pants", "pants", "beanie", "fleece gloves", "neck gaiters", "gaiters", "hiking shoes", "camp boots", "sunglasses", "shoe care"],
-  "Cooking & Hydration": ["filter", "water system", "thermo bottle", "stove", "stove accessory", "stove fuel", "pot", "titanium pot", "cup", "titanium cup", "spoons and chopsticks", "hydration tablets", "energy gel", "trail meal", "knife"],
-  "Personal Items": ["contact lenses", "wet wipes", "power bank", "headphones"],
+  "Sleep & Shelter": [
+    "tent",
+    "tent footprint",
+    "sleep bag",
+    "liner",
+    "sleep pad",
+    "pillow"
+  ],
+  "Packs & Essentials": [
+    "backpack",
+    "summit bag",
+    "dry bag",
+    "poles",
+    "head light",
+    "camp light",
+    "first aid bag",
+    "fire starter",
+    "umbrella"
+  ],
+  "Cooking & Hydration": [
+    "stove",
+    "pot",
+    "titanium pot",
+    "cup",
+    "titanium cup",
+    "filter",
+    "water system",
+    "thermo bottle",
+    "stove accessory",
+    "stove fuel",
+    "spoons and chopsticks",
+    "knife"
+  ],
+  "Food & Nutrition": [
+    "breakfast meal",
+    "freeze dried meal",
+    "trail meal",
+    "trail dessert",
+    "energy gel",
+    "hydration tablets"
+  ],
+  "Clothing & Footwear": [
+    "base layer",
+    "underwear",
+    "fleece jacket",
+    "fleece cardigan",
+    "downjacket",
+    "hard shell",
+    "waterproof jacket",
+    "hard shell pants",
+    "pants",
+    "hiking shoes",
+    "camp boots",
+    "gaiters",
+    "socks",
+    "fleece gloves",
+    "beanie",
+    "cap",
+    "neck gaiters",
+    "sunglasses",
+    "shoe care"
+  ],
+  "Personal Items": [
+    "power bank",
+    "headphones",
+    "wet wipes",
+    "contact lenses"
+  ],
 };
 
-const STORAGE_KEY = "trail_gear_atlas_trails_v2";
+const STORAGE_KEY = "trail_gear_atlas_trails_v3";
 
 const defaultTrails = [
   {
@@ -32,8 +96,12 @@ const defaultTrails = [
       "sleep-shelter-02": 1,
       "sleep-shelter-03": 1,
       "cooking-hydration-43": 1,
-      "cooking-hydration-71": 1,
+      "cooking-hydration-44": 1,
       "cooking-hydration-45": 1,
+      "cooking-hydration-55": 1,
+      "cooking-hydration-56": 2,
+      "cooking-hydration-61": 2,
+      "cooking-hydration-65": 1,
       "packs-essentials-08": 1,
       "clothing-footwear-20": 1,
       "clothing-footwear-35": 1,
@@ -186,6 +254,7 @@ const elements = {
   formGearBrand: document.querySelector("#form-gear-brand"),
   formGearCategory: document.querySelector("#form-gear-category"),
   formGearType: document.querySelector("#form-gear-type"),
+  formGearSize: document.querySelector("#form-gear-size"),
   formGearWeight: document.querySelector("#form-gear-weight"),
   formGearPrice: document.querySelector("#form-gear-price"),
   formGearCurrency: document.querySelector("#form-gear-currency"),
@@ -235,13 +304,13 @@ function showToast(message, duration = 3800) {
   }, duration);
 }
 
-const consumableTypes = new Set(["trail meal", "stove fuel", "hydration tablets", "energy gel", "wet wipes"]);
+const consumableTypes = new Set(["trail meal", "breakfast meal", "freeze dried meal", "trail dessert", "stove fuel", "hydration tablets", "energy gel", "wet wipes"]);
 function isConsumable(item) {
   const type = String(item.itemType || "").toLowerCase();
   return consumableTypes.has(type);
 }
 
-const INVENTORY_STORAGE_KEY = "trail_gear_atlas_inventory_v2";
+const INVENTORY_STORAGE_KEY = "trail_gear_atlas_inventory_v3";
 let defaultInventory = [];
 let gear = [];
 let trails = [];
@@ -740,6 +809,7 @@ function openProductModal(item) {
       <div class="product-modal-header">
         <div class="product-modal-eyebrow">
           <span class="product-category-chip">${escapeHtml(item.category)}</span>
+          ${item.size ? `<span class="product-size-chip" title="Size / Capacity">📏 Size: ${escapeHtml(item.size)}</span>` : ""}
           <span class="status ${statusClass(item)}">${escapeHtml(item.status || "In Inventory")}</span>
         </div>
         <div class="product-modal-brand">${escapeHtml(item.brand || "Brand not recorded")}</div>
@@ -753,6 +823,10 @@ function openProductModal(item) {
           ${mediaMarkup}
 
           <div class="modal-meta-grid">
+            <div class="modal-meta-box">
+              <span class="modal-meta-k">Size / Capacity</span>
+              <strong class="modal-meta-v ${item.size ? "" : "missing"}">${escapeHtml(item.size || "Standard / One Size")}</strong>
+            </div>
             <div class="modal-meta-box">
               <span class="modal-meta-k">Unit Weight</span>
               <strong class="modal-meta-v ${weight === null ? "missing" : ""}">${formatWeight(weight)}</strong>
@@ -870,7 +944,10 @@ function renderCard(item, category) {
     ${packedBadge}
     ${mediaMarkup(item)}
     <div class="card-top">
-      <span class="item-type">${escapeHtml(item.itemType || "Gear")}</span>
+      <div class="card-type-and-size">
+        <span class="item-type">${escapeHtml(item.itemType || "Gear")}</span>
+        ${item.size ? `<span class="item-size-badge" title="Size / Capacity: ${escapeHtml(item.size)}">${escapeHtml(item.size)}</span>` : ""}
+      </div>
       <div class="card-top-actions">
         <span class="status ${statusClass(item)}">${escapeHtml(item.status || "Needs details")}</span>
         <button class="card-mini-action btn-card-edit" data-edit-id="${escapeHtml(item.id)}" type="button" title="Edit this gear item" aria-label="Edit item">✏️</button>
@@ -1286,6 +1363,7 @@ function openGearModal(item = null) {
     elements.formGearBrand.value = item.brand || "";
     elements.formGearCategory.value = item.category || "Sleep & Shelter";
     elements.formGearType.value = item.itemType || "";
+    if (elements.formGearSize) elements.formGearSize.value = item.size || "";
     elements.formGearWeight.value = Number.isFinite(item.unitWeightG) ? item.unitWeightG : "";
     if (Number.isFinite(item.unitPriceAud)) {
       elements.formGearPrice.value = item.unitPriceAud;
@@ -1314,6 +1392,7 @@ function openGearModal(item = null) {
     elements.formGearCurrency.value = "AUD";
     elements.formGearStatus.value = "Owned";
     elements.formGearCategory.value = "Sleep & Shelter";
+    if (elements.formGearSize) elements.formGearSize.value = "";
     elements.btnSubmitGear.textContent = "Add to Inventory (添加至清单)";
   }
   elements.gearModal.classList.add("open");
@@ -1753,6 +1832,7 @@ elements.gearForm?.addEventListener("submit", (e) => {
   const brand = elements.formGearBrand.value.trim();
   const category = elements.formGearCategory.value;
   const itemType = elements.formGearType.value.trim() || "Gear";
+  const size = elements.formGearSize ? elements.formGearSize.value.trim() : null;
   const rawWeight = elements.formGearWeight.value.trim();
   const unitWeightG = rawWeight !== "" && !isNaN(rawWeight) ? parseFloat(rawWeight) : null;
 
@@ -1806,6 +1886,7 @@ elements.gearForm?.addEventListener("submit", (e) => {
       }
       targetItem.status = status;
       targetItem.statusKey = normalizeStatus(status);
+      targetItem.size = size || null;
       targetItem.websiteUrl = websiteUrl || null;
       if (imagePath) targetItem.imagePath = imagePath;
       targetItem.summary = summary || null;
@@ -1822,6 +1903,7 @@ elements.gearForm?.addEventListener("submit", (e) => {
       brand,
       category,
       itemType,
+      size: size || null,
       unitWeightG,
       totalWeightG: unitWeightG,
       quantity: 1,
