@@ -38,7 +38,10 @@
     "provenance": "Original workbook · Sheet1 row 3",
     "invoiceEvidence": [
       "2935544"
-    ]
+    ],
+    "imagePath": "/images/sleep-shelter-02.webp",
+    "imageSourceUrl": "https://www.mont.com.au/products/moondance-1-full-nylon-1-person-tent",
+    "imageMatchQuality": "model"
   },
   {
     "id": "sleep-shelter-03",
@@ -133,7 +136,10 @@
     "totalPriceAud": null,
     "status": "Needs details · footprint model to confirm",
     "notes": "Previously listed as Moondance 1FN footprint; the tent invoice says Moondance 1P 2021. Match not verified.",
-    "provenance": "Chat · Hiking & Camping Gear Upgrade"
+    "provenance": "Chat · Hiking & Camping Gear Upgrade",
+    "imagePath": "/images/sleep-shelter-07.webp",
+    "imageSourceUrl": "https://www.adventurecampingandfishing.com.au/products/mont-moondance-1-1fn-footprint",
+    "imageMatchQuality": "model"
   },
   {
     "id": "packs-essentials-08",
@@ -993,7 +999,10 @@
     "provenance": "Paddy Pallin tax invoice 2935544",
     "invoiceEvidence": [
       "Paddy Pallin tax invoice 2935544"
-    ]
+    ],
+    "imagePath": "/images/sleep-shelter-51.webp",
+    "imageSourceUrl": "https://ozbackcountry.com.au/products/nemo-tensor-all-season-sleeping-mat",
+    "imageMatchQuality": "exact"
   },
   {
     "id": "sleep-shelter-52",
@@ -1012,7 +1021,10 @@
     "provenance": "Paddy Pallin tax invoice 2943418",
     "invoiceEvidence": [
       "Paddy Pallin tax invoice 2943418"
-    ]
+    ],
+    "imagePath": "/images/sleep-shelter-52.webp",
+    "imageSourceUrl": "https://cascadedesigns.com/products/therm-a-rest-neoair-xlite-nxt",
+    "imageMatchQuality": "exact"
   },
   {
     "id": "clothing-footwear-53",
@@ -1031,7 +1043,10 @@
     "provenance": "Paddy Pallin tax invoice 2861654",
     "invoiceEvidence": [
       "Paddy Pallin tax invoice 2861654"
-    ]
+    ],
+    "imagePath": "/images/clothing-footwear-53.webp",
+    "imageSourceUrl": "https://arcteryx.com/products/covert-cardigan-womens",
+    "imageMatchQuality": "exact"
   },
   {
     "id": "clothing-footwear-54",
@@ -1050,7 +1065,10 @@
     "provenance": "Paddy Pallin tax invoice 2861654",
     "invoiceEvidence": [
       "Paddy Pallin tax invoice 2861654"
-    ]
+    ],
+    "imagePath": "/images/clothing-footwear-54.webp",
+    "imageSourceUrl": "https://www.patagonia.com.au/products/womens-torrentshell-3l-rain-jacket-85246-wlwt",
+    "imageMatchQuality": "exact"
   },
   {
     "id": "cooking-hydration-55",
@@ -1069,7 +1087,10 @@
     "provenance": "Paddy Pallin tax invoice 2935558",
     "invoiceEvidence": [
       "Paddy Pallin tax invoice 2935558"
-    ]
+    ],
+    "imagePath": "/images/cooking-hydration-55.webp",
+    "imageSourceUrl": "https://guenergy.com/products/hydration-drink-tabs",
+    "imageMatchQuality": "exact"
   },
   {
     "id": "cooking-hydration-56",
@@ -1088,7 +1109,10 @@
     "provenance": "Paddy Pallin tax invoice 2935558",
     "invoiceEvidence": [
       "Paddy Pallin tax invoice 2935558"
-    ]
+    ],
+    "imagePath": "/images/cooking-hydration-56.webp",
+    "imageSourceUrl": "https://guenergy.com/products/energy-gel",
+    "imageMatchQuality": "exact"
   },
   {
     "id": "packs-essentials-57",
@@ -1107,7 +1131,10 @@
     "provenance": "Paddy Pallin tax invoice 3046774",
     "invoiceEvidence": [
       "Paddy Pallin tax invoice 3046774"
-    ]
+    ],
+    "imagePath": "/images/packs-essentials-57.webp",
+    "imageSourceUrl": "https://korjo.com/product/travel-umbrella/",
+    "imageMatchQuality": "model"
   },
   {
     "id": "packs-essentials-58",
@@ -1126,7 +1153,10 @@
     "provenance": "Paddy Pallin tax invoice 3320716",
     "invoiceEvidence": [
       "Paddy Pallin tax invoice 3320716"
-    ]
+    ],
+    "imagePath": "/images/packs-essentials-58.webp",
+    "imageSourceUrl": "https://www.lifeventure.com/products/fire-starter",
+    "imageMatchQuality": "exact"
   },
   {
     "id": "cooking-hydration-59",
@@ -1145,7 +1175,10 @@
     "provenance": "Paddy Pallin tax invoice 3320716",
     "invoiceEvidence": [
       "Paddy Pallin tax invoice 3320716"
-    ]
+    ],
+    "imagePath": "/images/cooking-hydration-59.webp",
+    "imageSourceUrl": "https://jetboil.johnsonoutdoors.com/products/jetpower-fuel-100g",
+    "imageMatchQuality": "exact"
   },
   {
     "id": "clothing-footwear-60",
@@ -1164,7 +1197,10 @@
     "provenance": "Paddy Pallin tax invoice 3337184",
     "invoiceEvidence": [
       "Paddy Pallin tax invoice 3337184"
-    ]
+    ],
+    "imagePath": "/images/clothing-footwear-60.webp",
+    "imageSourceUrl": "https://kahtoola.com/gaiters/navagaiter-gtx/",
+    "imageMatchQuality": "exact"
   },
   {
     "id": "cooking-hydration-61",
@@ -1202,7 +1238,10 @@
     "provenance": "Paddy Pallin tax invoice 3337184",
     "invoiceEvidence": [
       "Paddy Pallin tax invoice 3337184"
-    ]
+    ],
+    "imagePath": "/images/cooking-hydration-62.webp",
+    "imageSourceUrl": "https://shop.backcountrycuisine.com.au/products/chocolate-brownie-pudding",
+    "imageMatchQuality": "exact"
   },
   {
     "id": "cooking-hydration-63",
@@ -1297,7 +1336,10 @@
     "provenance": "Paddy Pallin tax invoice 3373606",
     "invoiceEvidence": [
       "Paddy Pallin tax invoice 3373606"
-    ]
+    ],
+    "imagePath": "/images/clothing-footwear-67.webp",
+    "imageSourceUrl": "https://nikwax.com.au/products/nubuck-suede-proof",
+    "imageMatchQuality": "exact"
   },
   {
     "id": "clothing-footwear-68",
@@ -1316,7 +1358,10 @@
     "provenance": "Paddy Pallin tax invoice 3373606",
     "invoiceEvidence": [
       "Paddy Pallin tax invoice 3373606"
-    ]
+    ],
+    "imagePath": "/images/clothing-footwear-68.webp",
+    "imageSourceUrl": "https://www.gearaid.com/products/revivex-boot-shoe-cleaner",
+    "imageMatchQuality": "exact"
   },
   {
     "id": "cooking-hydration-69",
@@ -1337,7 +1382,10 @@
       "Purchase screenshot IMG_5407.jpg"
     ],
     "unitPriceCny": 310.72,
-    "totalPriceCny": 310.72
+    "totalPriceCny": 310.72,
+    "imagePath": "/images/cooking-hydration-69.webp",
+    "imageSourceUrl": "https://sotooutdoors.com/product/st-310-regulator-stove/",
+    "imageMatchQuality": "exact"
   },
   {
     "id": "cooking-hydration-70",
@@ -1358,7 +1406,10 @@
       "Purchase screenshot IMG_5407.jpg"
     ],
     "unitPriceCny": 102.42,
-    "totalPriceCny": 102.42
+    "totalPriceCny": 102.42,
+    "imagePath": "/images/cooking-hydration-70.webp",
+    "imageSourceUrl": "https://www.campingmoon.com/products/z37",
+    "imageMatchQuality": "model"
   },
   {
     "id": "cooking-hydration-71",
@@ -1379,7 +1430,10 @@
       "Purchase screenshot IMG_5408.jpg"
     ],
     "unitPriceCny": 367.49,
-    "totalPriceCny": 367.49
+    "totalPriceCny": 367.49,
+    "imagePath": "/images/cooking-hydration-71.webp",
+    "imageSourceUrl": "https://evernew-global.com/products/titanium/eca539.html",
+    "imageMatchQuality": "exact"
   },
   {
     "id": "cooking-hydration-72",
@@ -1400,7 +1454,10 @@
       "Purchase screenshot IMG_5409.jpg"
     ],
     "unitPriceCny": 119.51,
-    "totalPriceCny": 119.51
+    "totalPriceCny": 119.51,
+    "imagePath": "/images/cooking-hydration-72.webp",
+    "imageSourceUrl": "https://evernew-global.com/products/titanium/eca530.html",
+    "imageMatchQuality": "exact"
   },
   {
     "id": "packs-essentials-73",
