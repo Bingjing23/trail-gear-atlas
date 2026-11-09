@@ -20,6 +20,7 @@
         </a>
         <nav class="desktop-nav" aria-label="Main navigation">
           <a href="#collection">Explore gear</a>
+          <a href="#wishlist" id="nav-wishlist">✨ Wishlist &amp; trials</a>
           <a href="#trail-planner">Pack planner &amp; weights</a>
           <a href="#trail-log">Trail log</a>
           <a href="#about">About this kit</a>
@@ -141,7 +142,7 @@
             </div>
           </div>
 
-          <!-- Weight Dashboard -->
+          <!-- Weight Dashboard (4-Metric Analytics Grid including Wishlist Simulation) -->
           <div class="weight-dashboard">
             <div class="weight-card primary">
               <span class="weight-card-label">TOTAL PACK WEIGHT</span>
@@ -157,6 +158,11 @@
               <span class="weight-card-label">PACK LOAD SUMMARY</span>
               <div class="weight-huge"><span id="metric-item-count">0</span><small>items</small></div>
               <div class="weight-subtext" id="metric-consumable-summary">0 g consumables (food, fuel, tabs)</div>
+            </div>
+            <div class="weight-card wishlist-card" id="metric-card-wishlist">
+              <span class="weight-card-label">WISHLIST TRIAL LOAD · 想买试重</span>
+              <div class="weight-huge"><span id="metric-wishlist-g">+0</span><small>g</small></div>
+              <div class="weight-subtext" id="metric-wishlist-summary">0 prospective items on trial</div>
             </div>
           </div>
 
@@ -192,11 +198,64 @@
 
       <section class="collection" id="collection" aria-labelledby="collection-title">
         <div class="shell">
-          <div class="collection-heading">
+          <!-- Kit View Mode Switcher: Master Inventory vs Wishlist & Trials vs All -->
+          <div class="view-mode-tabs" role="tablist" aria-label="Kit views">
+            <button class="view-tab-btn active" id="tab-view-owned" role="tab" aria-selected="true" data-view="owned">
+              <span class="tab-icon">📦</span>
+              <span>Master Inventory (我的装备库)</span>
+              <span class="tab-badge" id="badge-count-owned">77</span>
+            </button>
+            <button class="view-tab-btn" id="tab-view-wishlist" role="tab" aria-selected="false" data-view="wishlist">
+              <span class="tab-icon">✨</span>
+              <span>Wishlist &amp; Trials (想买清单与测重)</span>
+              <span class="tab-badge badge-wishlist" id="badge-count-wishlist">4</span>
+            </button>
+            <button class="view-tab-btn" id="tab-view-all" role="tab" aria-selected="false" data-view="all">
+              <span class="tab-icon">🌐</span>
+              <span>All Items (全部装备)</span>
+              <span class="tab-badge" id="badge-count-all">81</span>
+            </button>
+          </div>
+
+          <!-- Wishlist Laboratory Dedicated Banner -->
+          <div class="wishlist-hero-banner" id="wishlist-hero-banner" hidden>
+            <div class="wishlist-hero-main">
+              <div class="wishlist-hero-kicker">
+                <span class="sparkle-dot"></span>
+                <span>PROSPECTIVE GEAR LAB &amp; UPGRADE SIMULATOR · 想买心愿单与换装测重</span>
+              </div>
+              <h3>Simulate your pack before buying.</h3>
+              <p>Items in this list represent prospective gear you are considering. You can pack them directly into your active route (<strong><span id="wishlist-active-trail-name">Milford Track</span></strong>) to test weight impact, compare against existing kit, and convert to Owned with one click once purchased.</p>
+            </div>
+            <div class="wishlist-hero-stats">
+              <div class="wishlist-stat-box">
+                <span class="wishlist-stat-num" id="stat-wishlist-count">4</span>
+                <span class="wishlist-stat-lbl">Wishlist items</span>
+              </div>
+              <div class="wishlist-stat-box">
+                <span class="wishlist-stat-num" id="stat-wishlist-weight">2,167 g</span>
+                <span class="wishlist-stat-lbl">Total prospective wt</span>
+              </div>
+              <div class="wishlist-stat-box">
+                <span class="wishlist-stat-num" id="stat-wishlist-packed">1</span>
+                <span class="wishlist-stat-lbl">Tested in active pack</span>
+              </div>
+              <div class="wishlist-stat-box">
+                <span class="wishlist-stat-num" id="stat-wishlist-cost">$1,898 AUD</span>
+                <span class="wishlist-stat-lbl">Est. total investment</span>
+              </div>
+            </div>
+            <div class="wishlist-hero-actions">
+              <button class="btn-primary btn-add-wishlist" id="btn-add-wishlist-gear" type="button">+ Add Wishlist Gear (添加想买装备)</button>
+              <button class="btn-secondary" id="btn-view-owned-kit" type="button">← Back to Master Inventory (返回已拥有装备)</button>
+            </div>
+          </div>
+
+          <div class="collection-heading" id="collection-heading-main-wrap">
             <div class="collection-heading-main">
-              <span class="section-kicker">EXPLORE THE KIT</span>
+              <span class="section-kicker" id="collection-kicker">EXPLORE THE KIT</span>
               <h2 id="collection-title">Built for the trail.</h2>
-              <p>Browse by system, search for a specific piece, or compare the recorded weight and price across the kit.</p>
+              <p id="collection-desc">Browse by system, search for a specific piece, or compare the recorded weight and price across the kit.</p>
             </div>
             <div class="collection-heading-actions">
               <button class="btn-primary btn-add-gear" id="btn-add-gear" type="button" title="Add a new gear item to your inventory">+ Add Gear Item</button>
@@ -209,7 +268,7 @@
               <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 5 5"/></svg>
               <input id="gear-search" type="search" placeholder="Search brand, product or notes" autocomplete="off" />
             </label>
-            <label class="select-field" for="status-filter"><span>Status</span><select id="status-filter"><option value="all">All items (全部)</option><option value="active">Active kit (仅现役可用)</option><option value="in_use">使用中 (In Use)</option><option value="owned">Owned (已拥有)</option><option value="purchased">Purchased (已购入)</option><option value="gift">Gift (礼品)</option><option value="lost">lost (已丢失)</option><option value="selling">不想要了准备卖掉</option><option value="returned">退货 (已退货)</option><option value="older">Older gear (旧款)</option><option value="review">Needs details (待补充)</option></select></label>
+            <label class="select-field" for="status-filter"><span>Status</span><select id="status-filter"><option value="all">All items (全部)</option><option value="active">Active kit (仅现役可用)</option><option value="wishlist">✨ 想买待购 (Wishlist only)</option><option value="in_use">使用中 (In Use)</option><option value="owned">Owned (已拥有)</option><option value="purchased">Purchased (已购入)</option><option value="gift">Gift (礼品)</option><option value="lost">lost (已丢失)</option><option value="selling">不想要了准备卖掉</option><option value="returned">退货 (已退货)</option><option value="older">Older gear (旧款)</option><option value="review">Needs details (待补充)</option></select></label>
             <label class="select-field" for="sort-order"><span>Sort</span><select id="sort-order"><option value="original">Grouped by gear type</option><option value="weight-asc">Lightest first</option><option value="weight-desc">Heaviest first</option><option value="price-asc">Lowest price by currency</option><option value="price-desc">Highest price by currency</option></select></label>
             <button class="toolbar-add-btn" id="btn-toolbar-add-gear" type="button" title="Add a new gear item to inventory">+ Add Item</button>
           </div>
@@ -411,6 +470,7 @@
               <label for="form-gear-status">Ownership Status (装备状态) *</label>
               <select id="form-gear-status">
                 <option value="使用中">使用中 (In Use · 现役)</option>
+                <option value="想买">✨ 想买 (Wishlist · 待购入)</option>
                 <option value="Owned">Owned (已拥有)</option>
                 <option value="Purchased · in inventory">Purchased (已购入)</option>
                 <option value="Gift">Gift (礼品)</option>
