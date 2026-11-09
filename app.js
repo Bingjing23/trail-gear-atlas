@@ -125,10 +125,15 @@ const elements = {
   // Header & Sticky
   headerTrailName: document.querySelector("#header-trail-name"),
   headerPackWeight: document.querySelector("#header-pack-weight"),
+  headerBtnNewTrail: document.querySelector("#header-btn-new-trail"),
   stickyBar: document.querySelector("#sticky-pack-bar"),
   stickyTrailName: document.querySelector("#sticky-trail-name"),
   stickyItemCount: document.querySelector("#sticky-item-count"),
   stickyWeight: document.querySelector("#sticky-weight"),
+  stickyBtnNewTrail: document.querySelector("#sticky-btn-new-trail"),
+
+  // Guided workflow
+  guideActiveTrail: document.querySelector("#guide-active-trail"),
 
   // Trail Log elements
   btnLogNewTrail: document.querySelector("#btn-log-new-trail"),
@@ -151,6 +156,9 @@ const elements = {
   formTrailDuration: document.querySelector("#form-trail-duration"),
   formTrailDate: document.querySelector("#form-trail-date"),
   formTrailNotes: document.querySelector("#form-trail-notes"),
+  formTrailTemplate: document.querySelector("#form-trail-template"),
+  formTemplateRow: document.querySelector("#form-template-row"),
+  btnSubmitTrail: document.querySelector("#btn-submit-trail"),
   modalTrailTitle: document.querySelector("#modal-trail-title"),
 
   exportModal: document.querySelector("#export-modal"),
@@ -179,6 +187,22 @@ const formatEvidence = (entry) => {
   if (entry.startsWith("#")) return `Invoice ${entry}`;
   return `Invoice #${entry}`;
 };
+
+function showToast(message, duration = 3800) {
+  const container = document.querySelector("#toast-container");
+  if (!container) return;
+  const toast = document.createElement("div");
+  toast.className = "toast";
+  toast.innerHTML = message;
+  container.appendChild(toast);
+  requestAnimationFrame(() => {
+    toast.classList.add("show");
+  });
+  setTimeout(() => {
+    toast.classList.remove("show");
+    setTimeout(() => toast.remove(), 350);
+  }, duration);
+}
 
 const consumableTypes = new Set(["trail meal", "stove fuel", "hydration tablets", "energy gel", "wet wipes"]);
 function isConsumable(item) {
@@ -306,11 +330,33 @@ function renderCard(item, category) {
   const activeTrail = getActiveTrail();
   const packedQty = activeTrail?.pack?.[item.id] || 0;
   const isPacked = packedQty > 0;
-  const packBtnText = isPacked
-    ? `✓ In Pack (${packedQty}) · ${formatWeight(weight ? weight * packedQty : null)}`
-    : `+ Pack for ${escapeHtml(activeTrail?.name || "Trail")}`;
+  const lineWeight = weight ? weight * packedQty : null;
+
+  let packControl = "";
+  if (isPacked) {
+    packControl = `<div class="card-pack-stepper is-packed" data-card-id="${escapeHtml(item.id)}">
+      <button class="card-stepper-btn btn-card-minus" data-id="${escapeHtml(item.id)}" type="button" aria-label="Decrease quantity" title="Decrease packed quantity">−</button>
+      <div class="card-stepper-display">
+        <span class="card-stepper-qty-wrap">
+          <input type="number" class="card-stepper-input" data-id="${escapeHtml(item.id)}" value="${packedQty}" min="1" max="99" aria-label="Quantity for ${escapeHtml(item.name || item.itemType)}" />
+          <span class="card-stepper-label">in pack</span>
+        </span>
+        <span class="card-stepper-weight">${formatWeight(lineWeight)}</span>
+      </div>
+      <button class="card-stepper-btn btn-card-plus" data-id="${escapeHtml(item.id)}" type="button" aria-label="Increase quantity" title="Increase packed quantity">+</button>
+    </div>`;
+  } else {
+    packControl = `<button class="card-pack-btn" data-pack-add="${escapeHtml(item.id)}" type="button" aria-pressed="false">
+      + Pack for ${escapeHtml(activeTrail?.name || "Trail")}
+    </button>`;
+  }
+
+  const packedBadge = isPacked
+    ? `<div class="card-packed-badge">✓ ${packedQty > 1 ? `${packedQty} IN PACK` : `IN ACTIVE PACK`}</div>`
+    : "";
 
   return `<article class="gear-card ${isPacked ? "is-packed" : ""}" id="item-${escapeHtml(item.id)}" style="--section-color:${category.color}">
+    ${packedBadge}
     ${mediaMarkup(item)}
     <div class="card-top"><span class="item-type">${escapeHtml(item.itemType || "Gear")}</span><span class="status ${statusClass(item)}">${escapeHtml(item.status || "Needs details")}</span></div>
     <div class="card-brand">${escapeHtml(item.brand || "Brand not recorded")}</div>
@@ -319,9 +365,7 @@ function renderCard(item, category) {
     <div class="card-metrics"><div class="metric"><span>Listed weight</span><strong class="${weight === null ? "missing" : ""}">${formatWeight(weight)}</strong></div><div class="metric"><span>Recorded price</span><strong class="${hasPrice ? "" : "missing"}">${formatPrice(item)}</strong></div></div>
     ${quantity}
     ${source}
-    <button class="card-pack-btn ${isPacked ? "is-packed" : ""}" data-pack-id="${escapeHtml(item.id)}" type="button" aria-pressed="${isPacked}">
-      ${packBtnText}
-    </button>
+    ${packControl}
   </article>`;
 }
 
@@ -371,6 +415,10 @@ function filteredItems() {
 function renderPlanner() {
   const trail = getActiveTrail();
   if (!trail) return;
+
+  if (elements.guideActiveTrail) {
+    elements.guideActiveTrail.textContent = trail.name;
+  }
 
   // 1. Selector
   if (elements.activeTrailSelect) {
@@ -447,9 +495,11 @@ function renderPlanner() {
   if (elements.missingWeightsAlert) {
     if (metrics.missingCount > 0) {
       elements.missingWeightsAlert.hidden = false;
+      elements.missingWeightsAlert.style.display = "flex";
       elements.missingWeightsText.textContent = `${metrics.missingCount} packed item${metrics.missingCount > 1 ? "s do" : " does"} not have listed weight recorded and ${metrics.missingCount > 1 ? "are" : "is"} excluded from the total calculation.`;
     } else {
       elements.missingWeightsAlert.hidden = true;
+      elements.missingWeightsAlert.style.display = "none";
     }
   }
 
@@ -495,7 +545,7 @@ function renderPlanner() {
             </div>
             <div class="qty-stepper">
               <button class="btn-qty-minus" data-id="${escapeHtml(item.id)}" type="button" aria-label="Decrease quantity">−</button>
-              <span>${qty}</span>
+              <input type="number" class="planner-qty-input" data-id="${escapeHtml(item.id)}" value="${qty}" min="1" max="99" aria-label="Quantity for ${escapeHtml(item.name || item.itemType)}" />
               <button class="btn-qty-plus" data-id="${escapeHtml(item.id)}" type="button" aria-label="Increase quantity">+</button>
             </div>
             <div class="packed-item-weight">
@@ -576,7 +626,10 @@ function renderTrailLog() {
       ${packedNames ? `<div class="trail-card-gear-summary"><span>🎒</span><span>${metrics.totalItems} items (${escapeHtml(packedNames)}...)</span></div>` : ""}
 
       <div class="trail-card-actions">
-        ${isActive ? `<button class="btn-primary" disabled style="opacity:.85;">✓ Currently Active</button>` : `<button class="btn-primary btn-switch-trail" data-id="${escapeHtml(t.id)}" type="button">Switch to this Pack</button>`}
+        ${isActive
+          ? `<button class="btn-primary btn-pack-now" data-id="${escapeHtml(t.id)}" type="button">🎒 Currently Active (Pack Gear Below ↓)</button>`
+          : `<button class="btn-primary btn-switch-trail" data-id="${escapeHtml(t.id)}" type="button">🎒 Pack for this Trail ↓</button>`}
+        <button class="btn-secondary btn-view-weights" data-id="${escapeHtml(t.id)}" type="button">📊 Weights</button>
         <button class="btn-secondary btn-edit-trail-card" data-id="${escapeHtml(t.id)}" type="button">Edit</button>
       </div>
     </article>`;
@@ -638,10 +691,14 @@ function openTrailModal(trail = null) {
     elements.formTrailDuration.value = trail.durationDays || "";
     elements.formTrailDate.value = trail.date || "";
     elements.formTrailNotes.value = trail.notes || "";
+    if (elements.formTemplateRow) elements.formTemplateRow.style.display = "none";
+    if (elements.btnSubmitTrail) elements.btnSubmitTrail.textContent = "Save Changes";
   } else {
-    elements.modalTrailTitle.textContent = "Plan a New Expedition";
+    elements.modalTrailTitle.textContent = "Plan a New Expedition (新建徒步计划)";
     elements.formTrailId.value = "";
     elements.formTrailStatus.value = "planned";
+    if (elements.formTemplateRow) elements.formTemplateRow.style.display = "block";
+    if (elements.btnSubmitTrail) elements.btnSubmitTrail.textContent = "Save & Start Packing Gear ↓";
   }
   elements.trailModal.classList.add("open");
   elements.formTrailName.focus();
@@ -725,25 +782,56 @@ async function init() {
 for (const control of [elements.search, elements.status, elements.sort]) control.addEventListener("input", render);
 elements.reset.addEventListener("click", () => { elements.search.value = ""; elements.status.value = "all"; elements.sort.value = "original"; render(); elements.search.focus(); });
 
-// Pack toggle on gear cards
+// Pack toggle and multi-quantity stepper events
 document.addEventListener("click", (e) => {
-  const packBtn = e.target.closest(".card-pack-btn");
-  if (packBtn) {
-    const itemId = packBtn.dataset.packId;
+  // 1. Initial "+ Pack for [Trail]" click
+  const packAddBtn = e.target.closest("[data-pack-add]");
+  if (packAddBtn) {
+    const itemId = packAddBtn.dataset.packAdd;
     const trail = getActiveTrail();
     if (!trail) return;
     trail.pack = trail.pack || {};
-    if (trail.pack[itemId]) {
-      delete trail.pack[itemId];
-    } else {
-      trail.pack[itemId] = 1;
-    }
+    trail.pack[itemId] = 1;
     saveTrails();
     render();
+    const item = gear.find((g) => g.id === itemId);
+    showToast(`Added <strong>${escapeHtml(item?.name || item?.itemType || "Item")}</strong> to ${escapeHtml(trail.name)} pack.`);
     return;
   }
 
-  // Stepper inside planner
+  // 2. Card stepper [+] button
+  const cardPlusBtn = e.target.closest(".btn-card-plus");
+  if (cardPlusBtn) {
+    const itemId = cardPlusBtn.dataset.id;
+    const trail = getActiveTrail();
+    if (trail) {
+      trail.pack = trail.pack || {};
+      trail.pack[itemId] = (trail.pack[itemId] || 0) + 1;
+      saveTrails();
+      render();
+    }
+    return;
+  }
+
+  // 3. Card stepper [-] button
+  const cardMinusBtn = e.target.closest(".btn-card-minus");
+  if (cardMinusBtn) {
+    const itemId = cardMinusBtn.dataset.id;
+    const trail = getActiveTrail();
+    if (trail && trail.pack?.[itemId]) {
+      trail.pack[itemId] -= 1;
+      if (trail.pack[itemId] <= 0) {
+        delete trail.pack[itemId];
+        const item = gear.find((g) => g.id === itemId);
+        showToast(`Removed <strong>${escapeHtml(item?.name || item?.itemType || "Item")}</strong> from pack.`);
+      }
+      saveTrails();
+      render();
+    }
+    return;
+  }
+
+  // 4. Stepper inside planner: minus
   const minusBtn = e.target.closest(".btn-qty-minus");
   if (minusBtn) {
     const itemId = minusBtn.dataset.id;
@@ -757,6 +845,7 @@ document.addEventListener("click", (e) => {
     return;
   }
 
+  // 5. Stepper inside planner: plus
   const plusBtn = e.target.closest(".btn-qty-plus");
   if (plusBtn) {
     const itemId = plusBtn.dataset.id;
@@ -770,6 +859,7 @@ document.addEventListener("click", (e) => {
     return;
   }
 
+  // 6. Planner remove item button
   const removeBtn = e.target.closest(".packed-item-remove");
   if (removeBtn) {
     const itemId = removeBtn.dataset.id;
@@ -782,10 +872,30 @@ document.addEventListener("click", (e) => {
     return;
   }
 
-  // Switch trail from trail log card
+  // 7. Trail log card actions
   const switchBtn = e.target.closest(".btn-switch-trail");
   if (switchBtn) {
     const targetId = switchBtn.dataset.id;
+    if (targetId && trails.some((t) => t.id === targetId)) {
+      activeTrailId = targetId;
+      saveTrails();
+      render();
+      const trail = getActiveTrail();
+      showToast(`Now packing for <strong>${escapeHtml(trail.name)}</strong>. Select gears below.`);
+      document.querySelector("#collection")?.scrollIntoView({ behavior: "smooth" });
+    }
+    return;
+  }
+
+  const packNowBtn = e.target.closest(".btn-pack-now");
+  if (packNowBtn) {
+    document.querySelector("#collection")?.scrollIntoView({ behavior: "smooth" });
+    return;
+  }
+
+  const viewWeightsBtn = e.target.closest(".btn-view-weights");
+  if (viewWeightsBtn) {
+    const targetId = viewWeightsBtn.dataset.id;
     if (targetId && trails.some((t) => t.id === targetId)) {
       activeTrailId = targetId;
       saveTrails();
@@ -795,7 +905,7 @@ document.addEventListener("click", (e) => {
     return;
   }
 
-  // Edit trail from trail log card
+  // 8. Edit trail from card
   const editCardBtn = e.target.closest(".btn-edit-trail-card");
   if (editCardBtn) {
     const targetId = editCardBtn.dataset.id;
@@ -805,17 +915,58 @@ document.addEventListener("click", (e) => {
   }
 });
 
+// Direct quantity editing via input on cards or planner
+document.addEventListener("change", (e) => {
+  const cardInput = e.target.closest(".card-stepper-input");
+  if (cardInput) {
+    const itemId = cardInput.dataset.id;
+    const trail = getActiveTrail();
+    if (!trail) return;
+    const val = parseInt(cardInput.value, 10);
+    trail.pack = trail.pack || {};
+    if (Number.isFinite(val) && val > 0) {
+      trail.pack[itemId] = Math.min(99, val);
+    } else {
+      delete trail.pack[itemId];
+    }
+    saveTrails();
+    render();
+    return;
+  }
+
+  const plannerInput = e.target.closest(".planner-qty-input");
+  if (plannerInput) {
+    const itemId = plannerInput.dataset.id;
+    const trail = getActiveTrail();
+    if (!trail) return;
+    const val = parseInt(plannerInput.value, 10);
+    trail.pack = trail.pack || {};
+    if (Number.isFinite(val) && val > 0) {
+      trail.pack[itemId] = Math.min(99, val);
+    } else {
+      delete trail.pack[itemId];
+    }
+    saveTrails();
+    render();
+    return;
+  }
+});
+
 // Active trail selector dropdown
 elements.activeTrailSelect?.addEventListener("change", (e) => {
   activeTrailId = e.target.value;
   saveTrails();
   render();
+  const trail = getActiveTrail();
+  showToast(`Active expedition switched to <strong>${escapeHtml(trail.name)}</strong>.`);
 });
 
 // Trail Planner buttons
 elements.btnCreateTrail?.addEventListener("click", () => openTrailModal());
 elements.btnLogNewTrail?.addEventListener("click", () => openTrailModal());
 elements.btnEditActiveTrail?.addEventListener("click", () => openTrailModal(getActiveTrail()));
+elements.headerBtnNewTrail?.addEventListener("click", () => openTrailModal());
+elements.stickyBtnNewTrail?.addEventListener("click", () => openTrailModal());
 
 elements.btnToggleCompleteTrail?.addEventListener("click", () => {
   const trail = getActiveTrail();
@@ -823,6 +974,7 @@ elements.btnToggleCompleteTrail?.addEventListener("click", () => {
   trail.status = trail.status === "completed" ? "planned" : "completed";
   saveTrails();
   render();
+  showToast(`Expedition status updated to <strong>${trail.status.toUpperCase()}</strong>.`);
 });
 
 elements.btnClearPack?.addEventListener("click", () => {
@@ -832,6 +984,7 @@ elements.btnClearPack?.addEventListener("click", () => {
     trail.pack = {};
     saveTrails();
     render();
+    showToast(`Pack emptied for <strong>${escapeHtml(trail.name)}</strong>.`);
   }
 });
 
@@ -859,9 +1012,18 @@ elements.trailForm?.addEventListener("submit", (e) => {
       existing.durationDays = elements.formTrailDuration.value ? parseInt(elements.formTrailDuration.value, 10) : null;
       existing.date = elements.formTrailDate.value.trim();
       existing.notes = elements.formTrailNotes.value.trim();
+      showToast(`Updated details for <strong>${escapeHtml(existing.name)}</strong>.`);
     }
   } else {
     const newId = `trail-${Date.now()}`;
+    let initialPack = {};
+    const templateChoice = elements.formTrailTemplate?.value;
+    if (templateChoice === "copy-active") {
+      const active = getActiveTrail();
+      if (active?.pack) {
+        initialPack = JSON.parse(JSON.stringify(active.pack));
+      }
+    }
     const newTrail = {
       id: newId,
       name,
@@ -871,10 +1033,16 @@ elements.trailForm?.addEventListener("submit", (e) => {
       durationDays: elements.formTrailDuration.value ? parseInt(elements.formTrailDuration.value, 10) : null,
       date: elements.formTrailDate.value.trim(),
       notes: elements.formTrailNotes.value.trim(),
-      pack: {},
+      pack: initialPack,
     };
     trails.push(newTrail);
     activeTrailId = newId;
+
+    showToast(`🎉 Expedition <strong>${escapeHtml(newTrail.name)}</strong> created!<br/>Now packing for this trail. Select gears below.`);
+
+    setTimeout(() => {
+      document.querySelector("#collection")?.scrollIntoView({ behavior: "smooth" });
+    }, 200);
   }
 
   saveTrails();
