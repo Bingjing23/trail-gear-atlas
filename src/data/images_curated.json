@@ -299,5 +299,138 @@
     "sourceUrl": "https://k2.com.au/products/outdoor-research-microgravity-ascentshell-womens-hooded-jacket",
     "downloadUrl": "https://k2.com.au/cdn/shop/products/Outdoor-Research_MicroGravity-AscentShell-Womens-Hooded-Jacket_Sunset_01.jpg",
     "matchQuality": "model"
+  },
+  {
+    "id": "sleep-shelter-02",
+    "imagePath": "/images/sleep-shelter-02.webp",
+    "sourceUrl": "https://www.mont.com.au/products/moondance-1-full-nylon-1-person-tent",
+    "downloadUrl": "https://www.mont.com.au/cdn/shop/products/mont-moondance-1fn-tent-camp-shelter-tent-1-person-moondance-1fn-one-person-hiking-tent-519066393_2000x.jpg",
+    "matchQuality": "model"
+  },
+  {
+    "id": "sleep-shelter-07",
+    "imagePath": "/images/sleep-shelter-07.webp",
+    "sourceUrl": "https://www.adventurecampingandfishing.com.au/products/mont-moondance-1-1fn-footprint",
+    "downloadUrl": "https://www.adventurecampingandfishing.com.au/cdn/shop/files/mont-moondance-1-1fn-footprint-camp-shelter-accessories-footprints-moondance-1-1fn-footprint-61-10-24-521810521_5000x_516447c1-70de-48e7-b65d-e012d3d709d8.webp",
+    "matchQuality": "model"
+  },
+  {
+    "id": "sleep-shelter-51",
+    "imagePath": "/images/sleep-shelter-51.webp",
+    "sourceUrl": "https://ozbackcountry.com.au/products/nemo-tensor-all-season-sleeping-mat",
+    "downloadUrl": "https://ozbackcountry.com.au/cdn/shop/files/nemo-camp-mattress-tensor-all-seasons-31706575601773.jpg?v=1713508403&width=1214",
+    "matchQuality": "exact"
+  },
+  {
+    "id": "sleep-shelter-52",
+    "imagePath": "/images/sleep-shelter-52.webp",
+    "sourceUrl": "https://cascadedesigns.com/products/therm-a-rest-neoair-xlite-nxt",
+    "downloadUrl": "https://cascadedesigns.com/cdn/shop/files/11627_thermarest_neoair_xlite_nxt_solarflare_regular_top.jpg?v=1724820256&width=1946",
+    "matchQuality": "exact"
+  },
+  {
+    "id": "clothing-footwear-53",
+    "imagePath": "/images/clothing-footwear-53.webp",
+    "sourceUrl": "https://arcteryx.com/products/covert-cardigan-womens",
+    "downloadUrl": "https://www.thebrokedownpalace.com/cdn/shop/files/Arcteryx-SP26-WsCovertCardigan-AtmosHeather-02_2048x.webp",
+    "matchQuality": "exact"
+  },
+  {
+    "id": "clothing-footwear-54",
+    "imagePath": "/images/clothing-footwear-54.webp",
+    "sourceUrl": "https://www.patagonia.com.au/products/womens-torrentshell-3l-rain-jacket-85246-wlwt",
+    "downloadUrl": "https://www.patagonia.com.au/cdn/shop/files/85246_WLWT_1780x.png?v=1740005254",
+    "matchQuality": "exact"
+  },
+  {
+    "id": "cooking-hydration-55",
+    "imagePath": "/images/cooking-hydration-55.webp",
+    "sourceUrl": "https://guenergy.com/products/hydration-drink-tabs",
+    "downloadUrl": "https://www.thetrail.co/cdn/shop/files/769493201911.jpg?v=1716712771",
+    "matchQuality": "exact"
+  },
+  {
+    "id": "cooking-hydration-56",
+    "imagePath": "/images/cooking-hydration-56.webp",
+    "sourceUrl": "https://guenergy.com/products/energy-gel",
+    "downloadUrl": "https://cdn11.bigcommerce.com/s-tpvx4esvgk/images/stencil/1280x1280/products/127973/334698/gu-energy-gel-lemon-sublime-gu-109__63072.1697102496.jpg?c=11",
+    "matchQuality": "exact"
+  },
+  {
+    "id": "packs-essentials-58",
+    "imagePath": "/images/packs-essentials-58.webp",
+    "sourceUrl": "https://www.lifeventure.com/products/fire-starter",
+    "downloadUrl": "https://www.lifeventure.com/cdn/shop/files/42216_fire-starter-1.jpg?v=1743075457&width=2200",
+    "matchQuality": "exact"
+  },
+  {
+    "id": "cooking-hydration-59",
+    "imagePath": "/images/cooking-hydration-59.webp",
+    "sourceUrl": "https://jetboil.johnsonoutdoors.com/products/jetpower-fuel-100g",
+    "downloadUrl": "https://johnsonoutdoors.widen.net/content/wm4opmbi2g/webp/1063955_1097922_1111202_primary.webp?w=640",
+    "matchQuality": "exact"
+  },
+  {
+    "id": "clothing-footwear-60",
+    "imagePath": "/images/clothing-footwear-60.webp",
+    "sourceUrl": "https://kahtoola.com/gaiters/navagaiter-gtx/",
+    "downloadUrl": "https://cdn11.bigcommerce.com/s-m69x292sg4/images/stencil/1280x1280/products/179/1222/NAVAgaiter_profile__68910.1786636143.webp?c=1",
+    "matchQuality": "exact"
+  },
+  {
+    "id": "cooking-hydration-62",
+    "imagePath": "/images/cooking-hydration-62.webp",
+    "sourceUrl": "https://shop.backcountrycuisine.com.au/products/chocolate-brownie-pudding",
+    "downloadUrl": "https://shop.backcountrycuisine.com.au/cdn/shop/products/Back-Country-Cuisine-Freeze-Dri-Chocolate-Brownie-Pudding-Gluten-Free-Two-Serve-150g_1500x1500.jpg?v=1689132019",
+    "matchQuality": "exact"
+  },
+  {
+    "id": "clothing-footwear-67",
+    "imagePath": "/images/clothing-footwear-67.webp",
+    "sourceUrl": "https://nikwax.com.au/products/nubuck-suede-proof",
+    "downloadUrl": "http://nikwax.com.au/cdn/shop/files/NikwaxNubuck_SuedeProoferSpongeOn.jpg?v=1782872999",
+    "matchQuality": "exact"
+  },
+  {
+    "id": "clothing-footwear-68",
+    "imagePath": "/images/clothing-footwear-68.webp",
+    "sourceUrl": "https://www.gearaid.com/products/revivex-boot-shoe-cleaner",
+    "downloadUrl": "https://www.gearaid.com/cdn/shop/products/36250-RVX-Boot_Shoe-Cleaner-PKG-4oz.jpg?v=1551737361&width=3000",
+    "matchQuality": "exact"
+  },
+  {
+    "id": "cooking-hydration-69",
+    "imagePath": "/images/cooking-hydration-69.webp",
+    "sourceUrl": "https://sotooutdoors.com/product/st-310-regulator-stove/",
+    "downloadUrl": "https://sotooutdoors.com/wp-content/uploads/2024/07/ST-310-Regulator-Stove.jpg",
+    "matchQuality": "exact"
+  },
+  {
+    "id": "cooking-hydration-71",
+    "imagePath": "/images/cooking-hydration-71.webp",
+    "sourceUrl": "https://evernew-global.com/products/titanium/eca539.html",
+    "downloadUrl": "https://evernew-global.com/assets/images/titanium/item-ECA539.jpg",
+    "matchQuality": "exact"
+  },
+  {
+    "id": "cooking-hydration-72",
+    "imagePath": "/images/cooking-hydration-72.webp",
+    "sourceUrl": "https://evernew-global.com/products/titanium/eca530.html",
+    "downloadUrl": "https://evernew-global.com/assets/images/titanium/item-ECA530.jpg",
+    "matchQuality": "exact"
+  },
+  {
+    "id": "packs-essentials-57",
+    "imagePath": "/images/packs-essentials-57.webp",
+    "sourceUrl": "https://korjo.com/product/travel-umbrella/",
+    "downloadUrl": "https://korjo.com/wp-content/uploads/2017/03/KOR17188_UM-52_0124-768x768.jpg",
+    "matchQuality": "model"
+  },
+  {
+    "id": "cooking-hydration-70",
+    "imagePath": "/images/cooking-hydration-70.webp",
+    "sourceUrl": "https://www.campingmoon.com/products/z37",
+    "downloadUrl": "https://www.campingmoon.com/cdn/shop/files/SP1_535x.png?v=1723580883",
+    "matchQuality": "model"
   }
 ]
