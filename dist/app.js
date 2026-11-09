@@ -166,6 +166,11 @@ const elements = {
   modalExportCloseBtn: document.querySelector("#modal-export-close-btn"),
   exportTextArea: document.querySelector("#export-text-area"),
   btnCopyExport: document.querySelector("#btn-copy-export"),
+
+  // Product Detail Modal
+  productModal: document.querySelector("#product-modal"),
+  modalProductClose: document.querySelector("#modal-product-close"),
+  productModalContent: document.querySelector("#product-modal-content"),
 };
 
 const escapeHtml = (value) => String(value ?? "").replace(/[&<>"']/g, (character) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[character]);
@@ -304,18 +309,448 @@ function statusClass(item) {
   return ["owned", "purchased", "gift", "lost", "review", "older"].includes(item.statusKey) ? item.statusKey : "review";
 }
 
+function extractDomain(url) {
+  if (!url) return "";
+  try {
+    const u = new URL(url);
+    return u.hostname.replace(/^www\./, "");
+  } catch {
+    return url;
+  }
+}
+
+function parseTemp(text) {
+  if (!text) return null;
+  const comfortMatch = text.match(/comfort\s*([+\-]?\d+°[CF](?:\s*\([+\-]?\d+°[CF]\))?)/i);
+  const limitMatch = text.match(/limit\s*([+\-]?\d+°[CF](?:\s*\([+\-]?\d+°[CF]\))?)/i);
+  const extremeMatch = text.match(/extreme\s*([+\-]?\d+°[CF](?:\s*\([+\-]?\d+°[CF]\))?)/i);
+  const standardMatch = text.match(/\(([^)]*(?:ISO|EN)[^)]*)\)/i);
+  return {
+    comfort: comfortMatch ? comfortMatch[1].trim() : null,
+    limit: limitMatch ? limitMatch[1].trim() : null,
+    extreme: extremeMatch ? extremeMatch[1].trim() : null,
+    standard: standardMatch ? standardMatch[1].trim() : "Standard Certified"
+  };
+}
+
+function parseRValue(text) {
+  if (!text) return null;
+  const numMatch = text.match(/(\d+(?:\.\d+)?)/);
+  const value = numMatch ? parseFloat(numMatch[1]) : null;
+  let categoryLabel = "All-Round Trail Performance";
+  let seasonIcon = "🏕️";
+  if (value >= 5.0) {
+    categoryLabel = "Extreme Alpine & Snow Camping (Sub-Zero Ground)";
+    seasonIcon = "❄️❄️❄️";
+  } else if (value >= 4.0) {
+    categoryLabel = "4-Season Cold Mountain Versatility";
+    seasonIcon = "❄️❄️";
+  } else if (value >= 2.5) {
+    categoryLabel = "3-Season Spring to Autumn Trails";
+    seasonIcon = "🍂🌱";
+  } else {
+    categoryLabel = "Warm Weather / Fast & Light Summer";
+    seasonIcon = "☀️";
+  }
+  return {
+    raw: text,
+    value,
+    categoryLabel,
+    seasonIcon
+  };
+}
+
+function getCardSpecBadge(item) {
+  const specs = item.specs;
+  if (!specs) return "";
+  if (specs["Temperature Rating"]) {
+    const raw = specs["Temperature Rating"];
+    const m = raw.match(/comfort\s*([+\-]?\d+°[CF](?:\s*\([+\-]?\d+°[CF]\))?)/i);
+    const label = m ? `Comfort ${m[1]}` : raw.split("|")[0].trim();
+    return `<div class="card-spec-badge badge-temp" data-detail-id="${escapeHtml(item.id)}" title="${escapeHtml(raw)}">
+      <span class="badge-icon">🌡️</span>
+      <span class="badge-text">${escapeHtml(label)}</span>
+    </div>`;
+  }
+  if (specs["R-Value"]) {
+    const raw = specs["R-Value"];
+    const num = raw.match(/\d+(?:\.\d+)?/)?.[0] || "";
+    return `<div class="card-spec-badge badge-rval" data-detail-id="${escapeHtml(item.id)}" title="${escapeHtml(raw)}">
+      <span class="badge-icon">❄️</span>
+      <span class="badge-text">R-Value ${escapeHtml(num || raw)}</span>
+    </div>`;
+  }
+  if (specs["Output"]) {
+    const raw = specs["Output"];
+    const btu = raw.match(/[\d,]+\s*BTU/i)?.[0];
+    return `<div class="card-spec-badge badge-output" data-detail-id="${escapeHtml(item.id)}" title="${escapeHtml(raw)}">
+      <span class="badge-icon">🔥</span>
+      <span class="badge-text">${escapeHtml(btu || raw.split("(")[0].trim())}</span>
+    </div>`;
+  }
+  if (specs["Filter Rating"]) {
+    const raw = specs["Filter Rating"];
+    const m = raw.match(/\d+(?:\.\d+)?\s*Micron/i)?.[0];
+    return `<div class="card-spec-badge badge-filter" data-detail-id="${escapeHtml(item.id)}" title="${escapeHtml(raw)}">
+      <span class="badge-icon">💧</span>
+      <span class="badge-text">${escapeHtml(m || "0.1 Micron")} Absolute</span>
+    </div>`;
+  }
+  if (specs["Capacity"] && specs["Capacity"].includes("mAh")) {
+    const m = specs["Capacity"].match(/[\d,]+\s*mAh/i)?.[0];
+    return `<div class="card-spec-badge badge-battery" data-detail-id="${escapeHtml(item.id)}" title="${escapeHtml(specs["Capacity"])}">
+      <span class="badge-icon">⚡</span>
+      <span class="badge-text">${escapeHtml(m || specs["Capacity"])}</span>
+    </div>`;
+  }
+  if (specs["Membrane"]) {
+    const raw = specs["Membrane"];
+    const m = raw.match(/(?:GORE-TEX[^\(]*|H2No[^\(]*|AscentShell[^\(]*|Porelle[^\(]*)/i)?.[0];
+    const shortM = (m || raw.split("(")[0]).trim();
+    return `<div class="card-spec-badge badge-membrane" data-detail-id="${escapeHtml(item.id)}" title="${escapeHtml(raw)}">
+      <span class="badge-icon">🌧️</span>
+      <span class="badge-text">${escapeHtml(shortM)}</span>
+    </div>`;
+  }
+  if (specs["Thermal Boost"]) {
+    return `<div class="card-spec-badge badge-temp" data-detail-id="${escapeHtml(item.id)}" title="${escapeHtml(specs["Thermal Boost"])}">
+      <span class="badge-icon">🌡️</span>
+      <span class="badge-text">${escapeHtml(specs["Thermal Boost"].split("to")[0].trim())}</span>
+    </div>`;
+  }
+  if (specs["Thermal Retention"]) {
+    return `<div class="card-spec-badge badge-temp" data-detail-id="${escapeHtml(item.id)}" title="${escapeHtml(specs["Thermal Retention"])}">
+      <span class="badge-icon">☕</span>
+      <span class="badge-text">${escapeHtml(specs["Thermal Retention"].split("·")[0].trim())}</span>
+    </div>`;
+  }
+  if (specs["Insulation"] && specs["Insulation"].toLowerCase().includes("down")) {
+    const loft = specs["Insulation"].match(/\d+\+?\s*(?:Loft|Fill)/i)?.[0];
+    return `<div class="card-spec-badge badge-insulation" data-detail-id="${escapeHtml(item.id)}" title="${escapeHtml(specs["Insulation"])}">
+      <span class="badge-icon">🪶</span>
+      <span class="badge-text">${escapeHtml(loft ? `${loft} Down` : "Down Fill")}</span>
+    </div>`;
+  }
+  if (specs["Capacity & Season"]) {
+    return `<div class="card-spec-badge badge-tent" data-detail-id="${escapeHtml(item.id)}" title="${escapeHtml(specs["Capacity & Season"])}">
+      <span class="badge-icon">⛺</span>
+      <span class="badge-text">${escapeHtml(specs["Capacity & Season"].split("·")[0].trim())}</span>
+    </div>`;
+  }
+  return "";
+}
+
+function renderTempCallout(item) {
+  const tempText = item.specs?.["Temperature Rating"];
+  if (!tempText) return "";
+  const parsed = parseTemp(tempText);
+  if (!parsed || (!parsed.comfort && !parsed.limit)) {
+    return `
+      <div class="temp-rating-card">
+        <div class="temp-rating-header">
+          <span class="temp-icon">🌡️</span>
+          <div>
+            <strong class="temp-main-title">Temperature Rating (ISO / EN Certified)</strong>
+            <p class="temp-raw-text">${escapeHtml(tempText)}</p>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  return `
+    <div class="temp-rating-card">
+      <div class="temp-rating-header">
+        <div class="temp-title-group">
+          <span class="temp-icon">🌡️</span>
+          <div>
+            <h4 class="temp-main-title">Alpine Temperature Ratings</h4>
+            <span class="temp-standard-tag">${escapeHtml(parsed.standard)}</span>
+          </div>
+        </div>
+      </div>
+      <div class="temp-levels-grid">
+        ${parsed.comfort ? `
+          <div class="temp-level-box temp-comfort">
+            <span class="temp-level-label">COMFORT</span>
+            <span class="temp-level-val">${escapeHtml(parsed.comfort)}</span>
+            <span class="temp-level-desc">Ideal relaxed sleep for cold sleepers</span>
+          </div>
+        ` : ""}
+        ${parsed.limit ? `
+          <div class="temp-level-box temp-limit">
+            <span class="temp-level-label">LOWER LIMIT</span>
+            <span class="temp-level-val">${escapeHtml(parsed.limit)}</span>
+            <span class="temp-level-desc">Standard limit for warm sleepers</span>
+          </div>
+        ` : ""}
+        ${parsed.extreme ? `
+          <div class="temp-level-box temp-extreme">
+            <span class="temp-level-label">EXTREME</span>
+            <span class="temp-level-val">${escapeHtml(parsed.extreme)}</span>
+            <span class="temp-level-desc">Emergency survival threshold only</span>
+          </div>
+        ` : ""}
+      </div>
+    </div>
+  `;
+}
+
+function renderRValueCallout(item) {
+  const rvalText = item.specs?.["R-Value"];
+  if (!rvalText) return "";
+  const parsed = parseRValue(rvalText);
+  if (!parsed || parsed.value === null) {
+    return `
+      <div class="rval-rating-card">
+        <div class="rval-header">
+          <span class="rval-icon">❄️</span>
+          <div>
+            <strong class="rval-title">Thermal Resistance (R-Value)</strong>
+            <p class="rval-note">${escapeHtml(rvalText)}</p>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  return `
+    <div class="rval-rating-card">
+      <div class="rval-top">
+        <div class="rval-score-badge">
+          <span class="rval-score-num">${parsed.value}</span>
+          <span class="rval-score-label">R-VALUE</span>
+        </div>
+        <div class="rval-details">
+          <h4 class="rval-title">ASTM F3340 Thermal Insulation</h4>
+          <p class="rval-suitability">${parsed.seasonIcon} <strong>${escapeHtml(parsed.categoryLabel)}</strong></p>
+          <span class="rval-note">${escapeHtml(parsed.raw)}</span>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function renderModalPackControls(item, trail) {
+  if (!trail) return `<p class="modal-no-trail">No active expedition selected.</p>`;
+  const packedQty = trail.pack?.[item.id] || 0;
+  const isPacked = packedQty > 0;
+  const weight = Number.isFinite(item.unitWeightG) ? item.unitWeightG : null;
+  const lineWeight = weight ? weight * packedQty : null;
+
+  if (isPacked) {
+    return `
+      <div class="modal-pack-active">
+        <div class="modal-pack-status-line">
+          <span class="modal-packed-check">✓ Packed for <strong>${escapeHtml(trail.name)}</strong></span>
+          <span class="modal-packed-weight">${formatWeight(lineWeight)} total</span>
+        </div>
+        <div class="modal-stepper-wrap">
+          <button class="btn-modal-minus" data-id="${escapeHtml(item.id)}" type="button" aria-label="Decrease quantity" title="Decrease packed quantity">−</button>
+          <div class="modal-stepper-center">
+            <input type="number" class="modal-qty-input" data-id="${escapeHtml(item.id)}" value="${packedQty}" min="1" max="99" aria-label="Packed quantity for ${escapeHtml(item.name || item.itemType)}" />
+            <span class="modal-stepper-unit">in pack</span>
+          </div>
+          <button class="btn-modal-plus" data-id="${escapeHtml(item.id)}" type="button" aria-label="Increase quantity" title="Increase packed quantity">+</button>
+        </div>
+        <button class="btn-modal-remove" data-id="${escapeHtml(item.id)}" type="button">Remove from active pack</button>
+      </div>
+    `;
+  }
+
+  return `
+    <button class="btn-modal-pack" data-id="${escapeHtml(item.id)}" type="button">
+      + Pack for ${escapeHtml(trail.name)}
+    </button>
+  `;
+}
+
+function refreshModalPackControls(itemId) {
+  const container = document.querySelector("#modal-pack-control-box .modal-pack-control-inner");
+  if (!container) return;
+  const item = gear.find((g) => g.id === itemId);
+  const trail = getActiveTrail();
+  if (item && trail) {
+    container.innerHTML = renderModalPackControls(item, trail);
+  }
+}
+
+function openProductModal(item) {
+  if (!elements.productModal || !elements.productModalContent) return;
+  const activeTrail = getActiveTrail();
+  const category = categories.find((c) => c.name === item.category) || { color: "#17342e", name: item.category };
+  const weight = Number.isFinite(item.unitWeightG) ? item.unitWeightG : null;
+  const hasPrice = Number.isFinite(item.unitPriceAud) || Number.isFinite(item.unitPriceCny);
+
+  const tempCallout = renderTempCallout(item);
+  const rvalCallout = renderRValueCallout(item);
+
+  const websiteCta = item.websiteUrl ? `
+    <div class="modal-website-banner">
+      <div class="website-banner-info">
+        <span class="website-banner-label">OFFICIAL BRAND RESOURCE</span>
+        <span class="website-banner-domain">${escapeHtml(extractDomain(item.websiteUrl))}</span>
+      </div>
+      <a class="btn-official-website" href="${escapeHtml(item.websiteUrl)}" target="_blank" rel="noopener noreferrer" title="Open official manufacturer website in a new tab">
+        <span>Official Brand Website</span>
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+      </a>
+    </div>
+  ` : "";
+
+  const specsEntries = Object.entries(item.specs || {});
+  const specsMarkup = specsEntries.length ? `
+    <div class="modal-specs-section">
+      <h4 class="modal-section-title">
+        <span class="section-title-icon">⚙️</span>
+        <span>Technical Specifications &amp; Parameters</span>
+      </h4>
+      <div class="specs-table">
+        ${specsEntries.map(([key, val]) => `
+          <div class="spec-row">
+            <span class="spec-label">${escapeHtml(key)}</span>
+            <span class="spec-value">${escapeHtml(val)}</span>
+          </div>
+        `).join("")}
+      </div>
+    </div>
+  ` : "";
+
+  const featuresMarkup = item.features?.length ? `
+    <div class="modal-features-section">
+      <h4 class="modal-section-title">
+        <span class="section-title-icon">🏔️</span>
+        <span>Alpine &amp; Trail Design Features</span>
+      </h4>
+      <ul class="modal-features-list">
+        ${item.features.map((feat) => `
+          <li>
+            <span class="feat-check">✓</span>
+            <span class="feat-text">${escapeHtml(feat)}</span>
+          </li>
+        `).join("")}
+      </ul>
+    </div>
+  ` : "";
+
+  const notesMarkup = item.notes?.trim() ? `
+    <div class="modal-notes-section">
+      <h4 class="modal-section-title">
+        <span class="section-title-icon">📝</span>
+        <span>Personal Notes &amp; Field Experience</span>
+      </h4>
+      <div class="modal-notes-card">${escapeHtml(item.notes)}</div>
+    </div>
+  ` : "";
+
+  const summaryMarkup = item.summary ? `
+    <p class="modal-product-summary">${escapeHtml(item.summary)}</p>
+  ` : "";
+
+  let mediaMarkup = "";
+  if (item.imagePath) {
+    const alt = `${item.brand || ""} ${item.name || item.itemType || "gear"} product photo`.trim();
+    const photoSource = item.imageSourceUrl ? `
+      <a class="modal-photo-source" href="${escapeHtml(item.imageSourceUrl)}" target="_blank" rel="noopener noreferrer">
+        Photo Source: ${escapeHtml(extractDomain(item.imageSourceUrl))} ↗
+      </a>
+    ` : "";
+    mediaMarkup = `
+      <div class="modal-media-wrap">
+        <img class="modal-product-img" src="${escapeHtml(item.imagePath)}" alt="${escapeHtml(alt)}" />
+        ${photoSource}
+      </div>
+    `;
+  } else {
+    mediaMarkup = `
+      <div class="modal-media-wrap modal-no-image">
+        <svg viewBox="0 0 180 120" aria-hidden="true"><circle cx="131" cy="35" r="16"/><path d="M8 101 55 47l30 35 19-21 62 40H8Z"/><path d="M8 110h158"/></svg>
+        <span>IMAGE TO ADD</span>
+      </div>
+    `;
+  }
+
+  elements.productModalContent.innerHTML = `
+    <div class="product-detail-container" style="--section-color:${category.color}">
+      <div class="product-modal-header">
+        <div class="product-modal-eyebrow">
+          <span class="product-category-chip">${escapeHtml(item.category)}</span>
+          <span class="status ${statusClass(item)}">${escapeHtml(item.status || "In Inventory")}</span>
+        </div>
+        <div class="product-modal-brand">${escapeHtml(item.brand || "Brand not recorded")}</div>
+        <h3 class="product-modal-name" id="modal-product-title">${escapeHtml(item.name || item.itemType || "Unnamed Gear")}</h3>
+        ${summaryMarkup}
+        ${websiteCta}
+      </div>
+
+      <div class="product-modal-layout">
+        <div class="product-modal-aside">
+          ${mediaMarkup}
+
+          <div class="modal-meta-grid">
+            <div class="modal-meta-box">
+              <span class="modal-meta-k">Unit Weight</span>
+              <strong class="modal-meta-v ${weight === null ? "missing" : ""}">${formatWeight(weight)}</strong>
+              ${weight ? `<span class="modal-meta-sub">${((weight * 0.035274).toFixed(1))} oz / ${(weight / 1000).toFixed(2)} kg</span>` : ""}
+            </div>
+            <div class="modal-meta-box">
+              <span class="modal-meta-k">Recorded Price</span>
+              <strong class="modal-meta-v ${hasPrice ? "" : "missing"}">${formatPrice(item)}</strong>
+            </div>
+            <div class="modal-meta-box">
+              <span class="modal-meta-k">Gear Type</span>
+              <strong class="modal-meta-v">${escapeHtml(item.itemType || "Gear")}</strong>
+            </div>
+            <div class="modal-meta-box">
+              <span class="modal-meta-k">Receipt / Invoice</span>
+              <strong class="modal-meta-v modal-meta-evidence">${escapeHtml((item.invoiceEvidence || []).join(", ") || item.provenance || "Workbook")}</strong>
+            </div>
+          </div>
+
+          <div class="modal-pack-card" id="modal-pack-control-box">
+            <div class="modal-pack-card-header">
+              <span class="modal-pack-trail-tag">EXPEDITION PACK</span>
+              <strong class="modal-pack-trail-name">${escapeHtml(activeTrail?.name || "Active Trail")}</strong>
+            </div>
+            <div class="modal-pack-control-inner">
+              ${renderModalPackControls(item, activeTrail)}
+            </div>
+          </div>
+        </div>
+
+        <div class="product-modal-main">
+          ${tempCallout}
+          ${rvalCallout}
+          ${specsMarkup}
+          ${featuresMarkup}
+          ${notesMarkup}
+        </div>
+      </div>
+    </div>
+  `;
+
+  elements.productModal.classList.add("open");
+  const box = elements.productModal.querySelector(".modal-box");
+  if (box) box.scrollTop = 0;
+}
+
+function closeProductModal() {
+  elements.productModal?.classList.remove("open");
+}
+
 function mediaMarkup(item) {
   if (!item.imagePath) {
-    return `<div class="card-media media-placeholder" aria-label="Product image not available">
+    return `<div class="card-media media-placeholder clickable-media" data-detail-id="${escapeHtml(item.id)}" aria-label="Product image not available" title="Click to view specs &amp; official website">
       <svg viewBox="0 0 180 120" aria-hidden="true"><circle cx="131" cy="35" r="16"/><path d="M8 101 55 47l30 35 19-21 62 40H8Z"/><path d="M8 110h158"/></svg>
       <span>IMAGE TO ADD</span>
+      <span class="card-media-hover-hint">Inspect Specs ↗</span>
     </div>`;
   }
   const alt = `${item.brand || ""} ${item.name || item.itemType || "gear"} product photo`.trim();
   const credit = item.imageSourceUrl
     ? `<a class="photo-source" href="${escapeHtml(item.imageSourceUrl)}" target="_blank" rel="noopener noreferrer" aria-label="View image source for ${escapeHtml(item.name || item.itemType)}">PHOTO SOURCE ↗</a>`
     : "";
-  return `<div class="card-media"><img class="product-image" src="${escapeHtml(item.imagePath)}" alt="${escapeHtml(alt)}" loading="lazy" decoding="async" />${credit}</div>`;
+  return `<div class="card-media clickable-media" data-detail-id="${escapeHtml(item.id)}" title="Click to view specs &amp; official website"><img class="product-image" src="${escapeHtml(item.imagePath)}" alt="${escapeHtml(alt)}" loading="lazy" decoding="async" />${credit}<span class="card-media-hover-hint">Inspect Specs ↗</span></div>`;
 }
 
 function renderCard(item, category) {
@@ -355,16 +790,23 @@ function renderCard(item, category) {
     ? `<div class="card-packed-badge">✓ ${packedQty > 1 ? `${packedQty} IN PACK` : `IN ACTIVE PACK`}</div>`
     : "";
 
+  const specBadge = getCardSpecBadge(item);
+
   return `<article class="gear-card ${isPacked ? "is-packed" : ""}" id="item-${escapeHtml(item.id)}" style="--section-color:${category.color}">
     ${packedBadge}
     ${mediaMarkup(item)}
     <div class="card-top"><span class="item-type">${escapeHtml(item.itemType || "Gear")}</span><span class="status ${statusClass(item)}">${escapeHtml(item.status || "Needs details")}</span></div>
     <div class="card-brand">${escapeHtml(item.brand || "Brand not recorded")}</div>
-    <h4>${escapeHtml(item.name || item.itemType || "Unnamed item")}</h4>
+    <h4 class="card-title clickable-title" data-detail-id="${escapeHtml(item.id)}" title="Click to view specs &amp; official website">${escapeHtml(item.name || item.itemType || "Unnamed item")}</h4>
+    ${specBadge}
     ${note}
     <div class="card-metrics"><div class="metric"><span>Listed weight</span><strong class="${weight === null ? "missing" : ""}">${formatWeight(weight)}</strong></div><div class="metric"><span>Recorded price</span><strong class="${hasPrice ? "" : "missing"}">${formatPrice(item)}</strong></div></div>
     ${quantity}
     ${source}
+    <button class="card-detail-btn" data-detail-id="${escapeHtml(item.id)}" type="button" title="View technical specs, features, and official brand link">
+      <span>Specs &amp; Details</span>
+      <span class="detail-link-arrow">↗</span>
+    </button>
     ${packControl}
   </article>`;
 }
@@ -784,6 +1226,91 @@ elements.reset.addEventListener("click", () => { elements.search.value = ""; ele
 
 // Pack toggle and multi-quantity stepper events
 document.addEventListener("click", (e) => {
+  // 0a. Close modals on backdrop overlay click
+  if (e.target.classList.contains("modal-overlay")) {
+    closeTrailModal();
+    closeExportModal();
+    closeProductModal();
+    return;
+  }
+
+  // 0b. Open product detail modal
+  const detailTrigger = e.target.closest("[data-detail-id]");
+  if (detailTrigger) {
+    if (e.target.closest(".photo-source") || e.target.closest(".modal-photo-source")) return;
+    const itemId = detailTrigger.dataset.detailId;
+    const item = gear.find((g) => g.id === itemId);
+    if (item) openProductModal(item);
+    return;
+  }
+
+  // 0c. Modal pack button
+  const modalPackBtn = e.target.closest(".btn-modal-pack");
+  if (modalPackBtn) {
+    const itemId = modalPackBtn.dataset.id;
+    const trail = getActiveTrail();
+    if (trail) {
+      trail.pack = trail.pack || {};
+      trail.pack[itemId] = 1;
+      saveTrails();
+      render();
+      const item = gear.find((g) => g.id === itemId);
+      showToast(`Added <strong>${escapeHtml(item?.name || item?.itemType || "Item")}</strong> to ${escapeHtml(trail.name)} pack.`);
+      refreshModalPackControls(itemId);
+    }
+    return;
+  }
+
+  // 0d. Modal stepper plus
+  const modalPlusBtn = e.target.closest(".btn-modal-plus");
+  if (modalPlusBtn) {
+    const itemId = modalPlusBtn.dataset.id;
+    const trail = getActiveTrail();
+    if (trail) {
+      trail.pack = trail.pack || {};
+      trail.pack[itemId] = (trail.pack[itemId] || 0) + 1;
+      saveTrails();
+      render();
+      refreshModalPackControls(itemId);
+    }
+    return;
+  }
+
+  // 0e. Modal stepper minus
+  const modalMinusBtn = e.target.closest(".btn-modal-minus");
+  if (modalMinusBtn) {
+    const itemId = modalMinusBtn.dataset.id;
+    const trail = getActiveTrail();
+    if (trail && trail.pack?.[itemId]) {
+      trail.pack[itemId] -= 1;
+      if (trail.pack[itemId] <= 0) {
+        delete trail.pack[itemId];
+        const item = gear.find((g) => g.id === itemId);
+        showToast(`Removed <strong>${escapeHtml(item?.name || item?.itemType || "Item")}</strong> from pack.`);
+      }
+      saveTrails();
+      render();
+      refreshModalPackControls(itemId);
+    }
+    return;
+  }
+
+  // 0f. Modal remove button
+  const modalRemoveBtn = e.target.closest(".btn-modal-remove");
+  if (modalRemoveBtn) {
+    const itemId = modalRemoveBtn.dataset.id;
+    const trail = getActiveTrail();
+    if (trail && trail.pack?.[itemId]) {
+      delete trail.pack[itemId];
+      saveTrails();
+      render();
+      const item = gear.find((g) => g.id === itemId);
+      showToast(`Removed <strong>${escapeHtml(item?.name || item?.itemType || "Item")}</strong> from pack.`);
+      refreshModalPackControls(itemId);
+    }
+    return;
+  }
+
   // 1. Initial "+ Pack for [Trail]" click
   const packAddBtn = e.target.closest("[data-pack-add]");
   if (packAddBtn) {
@@ -917,6 +1444,24 @@ document.addEventListener("click", (e) => {
 
 // Direct quantity editing via input on cards or planner
 document.addEventListener("change", (e) => {
+  const modalInput = e.target.closest(".modal-qty-input");
+  if (modalInput) {
+    const itemId = modalInput.dataset.id;
+    const trail = getActiveTrail();
+    if (!trail) return;
+    const val = parseInt(modalInput.value, 10);
+    trail.pack = trail.pack || {};
+    if (Number.isFinite(val) && val > 0) {
+      trail.pack[itemId] = Math.min(99, val);
+    } else {
+      delete trail.pack[itemId];
+    }
+    saveTrails();
+    render();
+    refreshModalPackControls(itemId);
+    return;
+  }
+
   const cardInput = e.target.closest(".card-stepper-input");
   if (cardInput) {
     const itemId = cardInput.dataset.id;
@@ -995,6 +1540,16 @@ elements.modalTrailClose?.addEventListener("click", closeTrailModal);
 elements.modalTrailCancel?.addEventListener("click", closeTrailModal);
 elements.modalExportClose?.addEventListener("click", closeExportModal);
 elements.modalExportCloseBtn?.addEventListener("click", closeExportModal);
+elements.modalProductClose?.addEventListener("click", closeProductModal);
+
+// Close modals on Escape key
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape") {
+    closeTrailModal();
+    closeExportModal();
+    closeProductModal();
+  }
+});
 
 elements.trailForm?.addEventListener("submit", (e) => {
   e.preventDefault();
