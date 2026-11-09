@@ -7,13 +7,6 @@
     "matchQuality": "model"
   },
   {
-    "id": "sleep-shelter-02",
-    "imagePath": "/images/sleep-shelter-02.webp",
-    "sourceUrl": "https://www.mont.com.au/products/moondance-1-full-nylon-1-person-tent",
-    "downloadUrl": "https://www.mont.com.au/cdn/shop/products/mont-moondance-1fn-tent-camp-shelter-tent-1-person-moondance-1fn-one-person-hiking-tent-519066393_2000x.jpg?v=1768498927",
-    "matchQuality": "model"
-  },
-  {
     "id": "sleep-shelter-03",
     "imagePath": "/images/sleep-shelter-03.webp",
     "sourceUrl": "https://www.hyperlitemountaingear.com/products/thermarest-z-lite-sol-foam-sleep-pad",
@@ -39,13 +32,6 @@
     "imagePath": "/images/sleep-shelter-06.webp",
     "sourceUrl": "https://military.eu/p/sea-to-summit/sea-to-summit-reactor-midweight-regular-sleeping-bag-liner-beluga-2861657",
     "downloadUrl": "https://cdn.military.eu/int/media/catalog/product/2/8/2861657_sea-to-summit-reactor-midweight-regular-sleeping-bag-liner-beluga-693909.jpg",
-    "matchQuality": "model"
-  },
-  {
-    "id": "sleep-shelter-07",
-    "imagePath": "/images/sleep-shelter-07.webp",
-    "sourceUrl": "https://www.adventurecampingandfishing.com.au/products/mont-moondance-1-1fn-footprint",
-    "downloadUrl": "https://www.adventurecampingandfishing.com.au/cdn/shop/files/mont-moondance-1-1fn-footprint-camp-shelter-accessories-footprints-moondance-1-1fn-footprint-61-10-24-521810521_5000x_516447c1-70de-48e7-b65d-e012d3d709d8.webp?v=1780641084&width=1214",
     "matchQuality": "model"
   },
   {
@@ -292,5 +278,12 @@
     "sourceUrl": "https://en.zalando.de/smartwool-hike-classic-edition-full-cushion-crew-sports-socks-medium-gray-wo944d016-c11.html",
     "downloadUrl": "https://img01.ztat.net/article/spp-media-p1/5001547f865840e9ada564f4f46e4287/85d62b2f50754a7c98f8074bbd8e85a6.jpg?imwidth=500",
     "matchQuality": "model"
+  },
+  {
+    "id": "packs-essentials-73",
+    "imagePath": "/images/packs-essentials-73.webp",
+    "sourceUrl": "https://store.adaptoutdoors.com/products/osprey-hikelite-26-pine-leaf-green",
+    "downloadUrl": "https://store.adaptoutdoors.com/images/products/H/Hi/hikelite26_s23_side_pineleafgreen-10004801-2.jpg?width=1998&height=1998&quality=85&mode=pad&format=webp&bgcolor=ffffff",
+    "matchQuality": "exact"
   }
 ]

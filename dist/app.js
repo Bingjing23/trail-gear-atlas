@@ -6,6 +6,14 @@ const categories = [
   { name: "Personal Items", id: "personal-items", color: "#877b9b", description: "The personal supplies that still need a little more detail." },
 ];
 
+const defaultTypeOrders = {
+  "Sleep & Shelter": ["tent", "tent footprint", "sleep bag", "liner", "sleep pad", "pillow"],
+  "Packs & Essentials": ["backpack", "summit bag", "dry bag", "first aid bag", "head light", "camp light", "poles", "umbrella", "fire starter"],
+  "Clothing & Footwear": ["base layer", "underwear", "socks", "fleece jacket", "fleece cardigan", "downjacket", "hard shell", "waterproof jacket", "hard shell pants", "pants", "beanie", "fleece gloves", "neck gaiters", "gaiters", "hiking shoes", "camp boots", "sunglasses", "shoe care"],
+  "Cooking & Hydration": ["filter", "water system", "thermo bottle", "stove", "stove accessory", "stove fuel", "pot", "titanium pot", "cup", "titanium cup", "spoons and chopsticks", "hydration tablets", "energy gel", "trail meal", "knife"],
+  "Personal Items": ["contact lenses", "wet wipes", "power bank"],
+};
+
 const elements = {
   stats: document.querySelector("#stats"),
   search: document.querySelector("#gear-search"),
@@ -20,7 +28,21 @@ const elements = {
 
 const escapeHtml = (value) => String(value ?? "").replace(/[&<>"']/g, (character) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[character]);
 const formatWeight = (value) => Number.isFinite(value) ? `${new Intl.NumberFormat("en-AU", { maximumFractionDigits: 1 }).format(value)} g` : "Not recorded";
-const formatPrice = (value, item) => Number.isFinite(value) ? (value === 0 && item.statusKey === "gift" ? "Gift" : new Intl.NumberFormat("en-AU", { style: "currency", currency: "AUD" }).format(value)) : "Not recorded";
+const formatPrice = (item) => {
+  if (Number.isFinite(item.unitPriceCny)) return new Intl.NumberFormat("en-AU", { style: "currency", currency: "CNY", currencyDisplay: "code" }).format(item.unitPriceCny);
+  if (Number.isFinite(item.unitPriceAud)) return item.unitPriceAud === 0 && item.statusKey === "gift" ? "Gift" : new Intl.NumberFormat("en-AU", { style: "currency", currency: "AUD" }).format(item.unitPriceAud);
+  return "Not recorded";
+};
+
+const formatEvidence = (entry) => {
+  if (entry.startsWith("Purchase screenshot")) return "Purchase screenshot";
+  if (entry.startsWith("Paddy Pallin tax invoice ")) return `Paddy Pallin #${entry.replace(/^Paddy Pallin tax invoice /, "")}`;
+  if (entry.startsWith("Backpacking Light invoice ")) return `Backpacking Light #${entry.replace(/^Backpacking Light invoice /, "")}`;
+  if (entry.startsWith("Ultralight Gear invoice ")) return `Ultralight Gear #${entry.replace(/^Ultralight Gear invoice #?/, "")}`;
+  if (/^\d{7}$/.test(entry)) return `Paddy Pallin #${entry}`;
+  if (entry.startsWith("#")) return `Invoice ${entry}`;
+  return `Invoice #${entry}`;
+};
 
 let gear = [];
 
@@ -54,29 +76,51 @@ function mediaMarkup(item) {
 
 function renderCard(item, category) {
   const note = item.notes?.trim() ? `<p class="card-note">${escapeHtml(item.notes)}</p>` : "";
-  const quantity = item.quantity && item.quantity !== 1 ? `<div class="item-qty">Quantity in inventory: ${escapeHtml(item.quantity)}</div>` : "";
+  const quantityLabel = item.status === "Purchased · ownership to confirm" ? "Quantity on receipt" : "Quantity in inventory";
+  const quantity = item.quantity && item.quantity !== 1 ? `<div class="item-qty">${quantityLabel}: ${escapeHtml(item.quantity)}</div>` : "";
+  const evidence = Array.isArray(item.invoiceEvidence) ? item.invoiceEvidence.filter((source) => source !== "unmatched") : [];
+  const source = evidence.length ? `<div class="card-source">${evidence.map(formatEvidence).map(escapeHtml).join(" · ")}</div>` : "";
   const weight = Number.isFinite(item.unitWeightG) ? item.unitWeightG : null;
-  const price = Number.isFinite(item.unitPriceAud) ? item.unitPriceAud : null;
+  const hasPrice = Number.isFinite(item.unitPriceAud) || Number.isFinite(item.unitPriceCny);
   return `<article class="gear-card" id="item-${escapeHtml(item.id)}" style="--section-color:${category.color}">
     ${mediaMarkup(item)}
     <div class="card-top"><span class="item-type">${escapeHtml(item.itemType || "Gear")}</span><span class="status ${statusClass(item)}">${escapeHtml(item.status || "Needs details")}</span></div>
     <div class="card-brand">${escapeHtml(item.brand || "Brand not recorded")}</div>
     <h4>${escapeHtml(item.name || item.itemType || "Unnamed item")}</h4>
     ${note}
-    <div class="card-metrics"><div class="metric"><span>Listed weight</span><strong class="${weight === null ? "missing" : ""}">${formatWeight(weight)}</strong></div><div class="metric"><span>Recorded price</span><strong class="${price === null ? "missing" : ""}">${formatPrice(price, item)}</strong></div></div>
+    <div class="card-metrics"><div class="metric"><span>Listed weight</span><strong class="${weight === null ? "missing" : ""}">${formatWeight(weight)}</strong></div><div class="metric"><span>Recorded price</span><strong class="${hasPrice ? "" : "missing"}">${formatPrice(item)}</strong></div></div>
     ${quantity}
+    ${source}
   </article>`;
 }
 
 function sortedItems(items) {
   const copy = [...items];
   const mode = elements.sort.value;
-  if (mode === "original") return copy;
-  const key = mode.startsWith("weight") ? "unitWeightG" : "unitPriceAud";
+  if (mode === "original") {
+    const category = copy[0]?.category;
+    const typeOrder = defaultTypeOrders[category] || [];
+    const typeRank = new Map(typeOrder.map((itemType, index) => [itemType.toLowerCase(), index]));
+    return copy
+      .map((item, index) => ({ item, index }))
+      .sort((a, b) => {
+        const aRank = typeRank.get(String(a.item.itemType || "").trim().toLowerCase()) ?? typeOrder.length;
+        const bRank = typeRank.get(String(b.item.itemType || "").trim().toLowerCase()) ?? typeOrder.length;
+        return aRank - bRank || a.index - b.index;
+      })
+      .map(({ item }) => item);
+  }
+  const weightMode = mode.startsWith("weight");
   const sign = mode.endsWith("desc") ? -1 : 1;
   return copy.sort((a, b) => {
-    const aValue = Number.isFinite(a[key]) ? a[key] : null;
-    const bValue = Number.isFinite(b[key]) ? b[key] : null;
+    const aCurrency = Number.isFinite(a.unitPriceAud) ? 0 : Number.isFinite(a.unitPriceCny) ? 1 : 2;
+    const bCurrency = Number.isFinite(b.unitPriceAud) ? 0 : Number.isFinite(b.unitPriceCny) ? 1 : 2;
+    if (!weightMode && aCurrency !== bCurrency) return aCurrency - bCurrency;
+    const aRaw = weightMode ? a.unitWeightG : aCurrency === 0 ? a.unitPriceAud : a.unitPriceCny;
+    const bRaw = weightMode ? b.unitWeightG : bCurrency === 0 ? b.unitPriceAud : b.unitPriceCny;
+    const aValue = Number.isFinite(aRaw) ? aRaw : null;
+    const bValue = Number.isFinite(bRaw) ? bRaw : null;
+    if (aValue === null && bValue === null) return 0;
     if (aValue === null) return 1;
     if (bValue === null) return -1;
     return sign * (aValue - bValue);
@@ -89,7 +133,7 @@ function filteredItems() {
   return gear.filter((item) => {
     if (status !== "all" && item.statusKey !== status) return false;
     if (!query) return true;
-    return [item.brand, item.name, item.itemType, item.notes, item.category].some((value) => String(value || "").toLowerCase().includes(query));
+    return [item.brand, item.name, item.itemType, item.notes, item.category, item.provenance, ...(item.invoiceEvidence || [])].some((value) => String(value || "").toLowerCase().includes(query));
   });
 }
 

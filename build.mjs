@@ -5,7 +5,7 @@ const source = new URL("./src/data/gear.json", import.meta.url);
 const target = new URL("./dist/gear.json", import.meta.url);
 const data = JSON.parse(await fs.readFile(source, "utf8"));
 if (!Array.isArray(data) || data.length === 0) throw new Error("Gear data is empty");
-const imageMaps = ["images_curated.json", "images_sleep_packs.json", "images_clothing.json", "images_cooking.json"];
+const imageMaps = ["images_curated.json", "images_invoices.json", "images_sleep_packs.json", "images_clothing.json", "images_cooking.json"];
 const images = new Map();
 for (const filename of imageMaps) {
   try {
