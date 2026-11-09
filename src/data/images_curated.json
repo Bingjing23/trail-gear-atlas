@@ -432,5 +432,19 @@
     "sourceUrl": "https://www.campingmoon.com/products/z37",
     "downloadUrl": "https://www.campingmoon.com/cdn/shop/files/SP1_535x.png?v=1723580883",
     "matchQuality": "model"
+  },
+  {
+    "id": "clothing-footwear-76",
+    "imagePath": "/images/clothing-footwear-76.webp",
+    "sourceUrl": "https://blackdiamondequipment.com/en_US/product/5-panel-synthetic-cap/",
+    "downloadUrl": "https://blackdiamondequipment.com/cdn/shop/files/723054_9681_5-Panel_Synthetic_Cap_Pale_Mauve-Black_Icon_Logo_01.jpg",
+    "matchQuality": "exact"
+  },
+  {
+    "id": "packs-essentials-77",
+    "imagePath": "/images/packs-essentials-77.webp",
+    "sourceUrl": "https://blackdiamondequipment.com.au/products/distance-8-backpack-womens",
+    "downloadUrl": "https://images.bike24.com/i/mb/72/20/90/black-diamond-distance-8-backpack-women-glacier-1-2053369.jpg",
+    "matchQuality": "exact"
   }
 ]

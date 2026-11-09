@@ -24,7 +24,18 @@
           <a href="#trail-log">Trail log</a>
           <a href="#about">About this kit</a>
         </nav>
-        <a class="header-action" href="#trail-planner" id="header-pack-pill">🎒 Pack: <span id="header-trail-name">Milford Track</span> · <span id="header-pack-weight">0 g</span> <span aria-hidden="true">↗</span></a>
+        <div class="header-trail-controls">
+          <a class="header-action" href="#trail-planner" id="header-pack-pill" title="View active pack details and weight breakdown">
+            <span class="header-pack-dot"></span>
+            <span>🎒 <span id="header-trail-name">Milford Track</span></span>
+            <span class="header-pack-divider">·</span>
+            <span id="header-pack-weight">0 g</span>
+            <span aria-hidden="true">↗</span>
+          </a>
+          <button class="header-new-trail-btn" id="header-btn-new-trail" type="button" title="Create a new hiking expedition plan">
+            + New Trail
+          </button>
+        </div>
       </div>
     </header>
 
@@ -80,6 +91,33 @@
             </div>
           </div>
 
+          <!-- 3-Step Guided Packing Workflow -->
+          <div class="planner-workflow-guide" aria-label="How to plan your trail pack">
+            <div class="workflow-step active">
+              <span class="step-num">1</span>
+              <div>
+                <strong>Active Trail:</strong>
+                <span id="guide-active-trail">Milford Track</span>
+              </div>
+            </div>
+            <div class="workflow-arrow" aria-hidden="true">→</div>
+            <div class="workflow-step">
+              <span class="step-num">2</span>
+              <div>
+                <strong>Select Gear &amp; Quantities</strong>
+                <span>Click [+] / [-] on cards below</span>
+              </div>
+            </div>
+            <div class="workflow-arrow" aria-hidden="true">→</div>
+            <div class="workflow-step">
+              <span class="step-num">3</span>
+              <div>
+                <strong>Monitor Carried Load</strong>
+                <span>Base weight vs consumables</span>
+              </div>
+            </div>
+          </div>
+
           <!-- Active Trail Banner -->
           <div class="active-trail-banner" id="active-trail-banner">
             <div class="active-trail-info">
@@ -117,7 +155,7 @@
             </div>
             <div class="weight-card">
               <span class="weight-card-label">PACK LOAD SUMMARY</span>
-              <div class="weight-huge"><span id="metric-item-count">0</span><small>/ 75</small></div>
+              <div class="weight-huge"><span id="metric-item-count">0</span><small>items</small></div>
               <div class="weight-subtext" id="metric-consumable-summary">0 g consumables (food, fuel, tabs)</div>
             </div>
           </div>
@@ -213,7 +251,10 @@
         <span class="sticky-pack-trail">🎒 <span id="sticky-trail-name">Milford Track</span></span>
         <span class="sticky-pack-stats"><strong id="sticky-item-count">0</strong> items · <strong id="sticky-weight">0 g</strong></span>
       </div>
-      <a class="sticky-pack-link" href="#trail-planner">View Pack &amp; Weights ↑</a>
+      <div class="sticky-pack-actions">
+        <button class="btn-sticky-new" id="sticky-btn-new-trail" type="button" title="Plan a new expedition track">+ New Trail</button>
+        <a class="sticky-pack-link" href="#trail-planner">View Pack &amp; Weights ↑</a>
+      </div>
     </div>
 
     <!-- Modal: Create / Edit Trail -->
@@ -228,7 +269,7 @@
           <div class="form-grid">
             <div class="form-field full">
               <label for="form-trail-name">Trail / Activity Name *</label>
-              <input type="text" id="form-trail-name" required placeholder="e.g. Milford Track, Overland Track" />
+              <input type="text" id="form-trail-name" required placeholder="e.g. Milford Track, Overland Track, Mount Bogong" />
             </div>
             <div class="form-field">
               <label for="form-trail-destination">Destination / Region</label>
@@ -254,6 +295,13 @@
               <label for="form-trail-date">Date / Trip Period</label>
               <input type="text" id="form-trail-date" placeholder="e.g. November 2026, or Oct 2026" />
             </div>
+            <div class="form-field full" id="form-template-row">
+              <label for="form-trail-template">Gear Pack Starting Setup (装备初始搭配)</label>
+              <select id="form-trail-template">
+                <option value="empty">Start with empty pack (从零自选装备)</option>
+                <option value="copy-active">Copy gear pack from active trail (复制当前路线装备搭配)</option>
+              </select>
+            </div>
             <div class="form-field full">
               <label for="form-trail-notes">Field Notes &amp; Route Description</label>
               <textarea id="form-trail-notes" rows="3" placeholder="Terrain conditions, weather precautions, pass elevation, etc."></textarea>
@@ -261,7 +309,7 @@
           </div>
           <div class="modal-actions">
             <button class="btn-secondary" type="button" id="modal-trail-cancel">Cancel</button>
-            <button class="btn-primary" type="submit">Save Trail</button>
+            <button class="btn-primary" type="submit" id="btn-submit-trail">Save &amp; Start Packing Gear ↓</button>
           </div>
         </form>
       </div>
@@ -282,5 +330,8 @@
         </div>
       </div>
     </div>
+
+    <!-- Floating Toast Notification Container -->
+    <div id="toast-container" class="toast-container" aria-live="polite"></div>
   </body>
 </html>
