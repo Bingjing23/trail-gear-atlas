@@ -430,17 +430,25 @@ function calculatePackMetrics(trail) {
 }
 
 function normalizeStatus(status) {
-  const text = String(status || "").toLowerCase();
-  if (text.startsWith("purchased")) return "purchased";
-  if (text.startsWith("gift")) return "gift";
-  if (text.startsWith("lost")) return "lost";
-  if (text.startsWith("older")) return "older";
-  if (text.startsWith("owned")) return "owned";
+  const text = String(status || "").toLowerCase().trim();
+  if (text === "使用中" || text === "in use" || text === "active" || text === "in_use") return "in_use";
+  if (text.includes("卖掉") || text.includes("准备卖") || text.includes("for sale") || text.includes("selling") || text.includes("出二手")) return "selling";
+  if (text.includes("退货") || text.includes("returned") || text.includes("return")) return "returned";
+  if (text.startsWith("lost") || text.includes("丢失") || text === "lost") return "lost";
+  if (text.startsWith("purchased") || text.includes("已购") || text.includes("已买")) return "purchased";
+  if (text.startsWith("gift") || text.includes("礼品") || text.includes("赠送")) return "gift";
+  if (text.startsWith("older") || text.includes("旧款") || text.includes("旧装备")) return "older";
+  if (text.startsWith("owned") || text.includes("已拥有") || text.includes("持有")) return "owned";
   return "review";
 }
 
+function isInactiveStatus(statusKey) {
+  return ["lost", "selling", "returned"].includes(statusKey);
+}
+
 function statusClass(item) {
-  return ["owned", "purchased", "gift", "lost", "review", "older"].includes(item.statusKey) ? item.statusKey : "review";
+  const key = item.statusKey || normalizeStatus(item.status);
+  return ["in_use", "owned", "purchased", "gift", "lost", "selling", "returned", "older", "review"].includes(key) ? key : "review";
 }
 
 function extractDomain(url) {
@@ -810,7 +818,17 @@ function openProductModal(item) {
         <div class="product-modal-eyebrow">
           <span class="product-category-chip">${escapeHtml(item.category)}</span>
           ${item.size ? `<span class="product-size-chip" title="Size / Capacity">📏 Size: ${escapeHtml(item.size)}</span>` : ""}
-          <span class="status ${statusClass(item)}">${escapeHtml(item.status || "In Inventory")}</span>
+          <select class="modal-status-select ${statusClass(item)}" data-modal-status-id="${escapeHtml(item.id)}" title="Click to change status (点击切换状态)">
+            <option value="使用中" ${item.statusKey === "in_use" ? "selected" : ""}>使用中</option>
+            <option value="Owned" ${item.statusKey === "owned" ? "selected" : ""}>Owned (已拥有)</option>
+            <option value="Purchased · in inventory" ${item.statusKey === "purchased" ? "selected" : ""}>Purchased (已购入)</option>
+            <option value="Gift" ${item.statusKey === "gift" ? "selected" : ""}>Gift (礼品)</option>
+            <option value="lost" ${item.statusKey === "lost" ? "selected" : ""}>lost (已丢失 · 灰显)</option>
+            <option value="不想要了准备卖掉" ${item.statusKey === "selling" ? "selected" : ""}>不想要了准备卖掉 (准备出掉 · 灰显)</option>
+            <option value="退货" ${item.statusKey === "returned" ? "selected" : ""}>退货 (已退货 · 灰显)</option>
+            <option value="Older gear · ownership to confirm" ${item.statusKey === "older" ? "selected" : ""}>Older gear (旧款)</option>
+            <option value="Needs details" ${item.statusKey === "review" ? "selected" : ""}>Needs details (待补充)</option>
+          </select>
         </div>
         <div class="product-modal-brand">${escapeHtml(item.brand || "Brand not recorded")}</div>
         <h3 class="product-modal-name" id="modal-product-title">${escapeHtml(item.name || item.itemType || "Unnamed Gear")}</h3>
@@ -915,9 +933,11 @@ function renderCard(item, category) {
   const isPacked = packedQty > 0;
   const lineWeight = weight ? weight * packedQty : null;
 
+  const isInactive = isInactiveStatus(item.statusKey);
+
   let packControl = "";
   if (isPacked) {
-    packControl = `<div class="card-pack-stepper is-packed" data-card-id="${escapeHtml(item.id)}">
+    packControl = `<div class="card-pack-stepper is-packed ${isInactive ? "is-inactive-stepper" : ""}" data-card-id="${escapeHtml(item.id)}">
       <button class="card-stepper-btn btn-card-minus" data-id="${escapeHtml(item.id)}" type="button" aria-label="Decrease quantity" title="Decrease packed quantity">−</button>
       <div class="card-stepper-display">
         <span class="card-stepper-qty-wrap">
@@ -929,8 +949,8 @@ function renderCard(item, category) {
       <button class="card-stepper-btn btn-card-plus" data-id="${escapeHtml(item.id)}" type="button" aria-label="Increase quantity" title="Increase packed quantity">+</button>
     </div>`;
   } else {
-    packControl = `<button class="card-pack-btn" data-pack-add="${escapeHtml(item.id)}" type="button" aria-pressed="false">
-      + Pack for ${escapeHtml(activeTrail?.name || "Trail")}
+    packControl = `<button class="card-pack-btn ${isInactive ? "is-inactive-pack" : ""}" data-pack-add="${escapeHtml(item.id)}" type="button" aria-pressed="false" ${isInactive ? `title="Item is ${escapeHtml(item.status || "Inactive")}"` : ""}>
+      + Pack for ${escapeHtml(activeTrail?.name || "Trail")} ${isInactive ? `(${escapeHtml(item.status)})` : ""}
     </button>`;
   }
 
@@ -938,10 +958,15 @@ function renderCard(item, category) {
     ? `<div class="card-packed-badge">✓ ${packedQty > 1 ? `${packedQty} IN PACK` : `IN ACTIVE PACK`}</div>`
     : "";
 
+  const inactiveBanner = isInactive
+    ? `<div class="card-inactive-banner"><span>${escapeHtml(item.status || "Inactive")}</span></div>`
+    : "";
+
   const specBadge = getCardSpecBadge(item);
 
-  return `<article class="gear-card ${isPacked ? "is-packed" : ""}" id="item-${escapeHtml(item.id)}" style="--section-color:${category.color}">
+  return `<article class="gear-card ${isPacked ? "is-packed" : ""} ${isInactive ? `is-inactive-status status-${escapeHtml(item.statusKey)}` : ""}" id="item-${escapeHtml(item.id)}" style="--section-color:${category.color}">
     ${packedBadge}
+    ${inactiveBanner}
     ${mediaMarkup(item)}
     <div class="card-top">
       <div class="card-type-and-size">
@@ -949,7 +974,17 @@ function renderCard(item, category) {
         ${item.size ? `<span class="item-size-badge" title="Size / Capacity: ${escapeHtml(item.size)}">${escapeHtml(item.size)}</span>` : ""}
       </div>
       <div class="card-top-actions">
-        <span class="status ${statusClass(item)}">${escapeHtml(item.status || "Needs details")}</span>
+        <select class="status-quick-select ${statusClass(item)}" data-status-id="${escapeHtml(item.id)}" title="Click to change status (点击切换状态)">
+          <option value="使用中" ${item.statusKey === "in_use" ? "selected" : ""}>使用中</option>
+          <option value="Owned" ${item.statusKey === "owned" ? "selected" : ""}>Owned (已拥有)</option>
+          <option value="Purchased · in inventory" ${item.statusKey === "purchased" ? "selected" : ""}>Purchased (已购入)</option>
+          <option value="Gift" ${item.statusKey === "gift" ? "selected" : ""}>Gift (礼品)</option>
+          <option value="lost" ${item.statusKey === "lost" ? "selected" : ""}>lost (已丢失)</option>
+          <option value="不想要了准备卖掉" ${item.statusKey === "selling" ? "selected" : ""}>不想要了准备卖掉</option>
+          <option value="退货" ${item.statusKey === "returned" ? "selected" : ""}>退货</option>
+          <option value="Older gear · ownership to confirm" ${item.statusKey === "older" ? "selected" : ""}>Older gear (旧款)</option>
+          <option value="Needs details" ${item.statusKey === "review" ? "selected" : ""}>Needs details (待补充)</option>
+        </select>
         <button class="card-mini-action btn-card-edit" data-edit-id="${escapeHtml(item.id)}" type="button" title="Edit this gear item" aria-label="Edit item">✏️</button>
         <button class="card-mini-action btn-card-delete" data-delete-id="${escapeHtml(item.id)}" type="button" title="Delete this gear item from inventory" aria-label="Delete item">🗑️</button>
       </div>
@@ -1006,9 +1041,15 @@ function filteredItems() {
   const query = elements.search.value.trim().toLowerCase();
   const status = elements.status.value;
   return gear.filter((item) => {
-    if (status !== "all" && item.statusKey !== status) return false;
+    if (status !== "all") {
+      if (status === "active") {
+        if (isInactiveStatus(item.statusKey)) return false;
+      } else if (item.statusKey !== status) {
+        return false;
+      }
+    }
     if (!query) return true;
-    return [item.brand, item.name, item.itemType, item.notes, item.category, item.provenance, ...(item.invoiceEvidence || [])].some((value) => String(value || "").toLowerCase().includes(query));
+    return [item.brand, item.name, item.itemType, item.notes, item.category, item.provenance, item.status, ...(item.invoiceEvidence || [])].some((value) => String(value || "").toLowerCase().includes(query));
   });
 }
 
@@ -1375,7 +1416,16 @@ function openGearModal(item = null) {
       elements.formGearPrice.value = "";
       elements.formGearCurrency.value = "AUD";
     }
-    elements.formGearStatus.value = item.status || "Owned";
+    if (elements.formGearStatus) {
+      const optValues = Array.from(elements.formGearStatus.options).map((o) => o.value);
+      if (optValues.includes(item.status)) {
+        elements.formGearStatus.value = item.status;
+      } else {
+        const key = normalizeStatus(item.status);
+        const match = Array.from(elements.formGearStatus.options).find((o) => normalizeStatus(o.value) === key);
+        elements.formGearStatus.value = match ? match.value : (item.status || "使用中");
+      }
+    }
     elements.formGearWebsite.value = item.websiteUrl || "";
     elements.formGearImage.value = item.imagePath || "";
     elements.formGearSummary.value = item.summary || "";
@@ -1390,7 +1440,7 @@ function openGearModal(item = null) {
     elements.modalGearTitle.textContent = "Add New Gear Item (新增装备到清单)";
     elements.formGearId.value = "";
     elements.formGearCurrency.value = "AUD";
-    elements.formGearStatus.value = "Owned";
+    elements.formGearStatus.value = "使用中";
     elements.formGearCategory.value = "Sleep & Shelter";
     if (elements.formGearSize) elements.formGearSize.value = "";
     elements.btnSubmitGear.textContent = "Add to Inventory (添加至清单)";
@@ -1471,7 +1521,51 @@ for (const control of [elements.search, elements.status, elements.sort]) control
 elements.reset.addEventListener("click", () => { elements.search.value = ""; elements.status.value = "all"; elements.sort.value = "original"; render(); elements.search.focus(); });
 
 // Pack toggle and multi-quantity stepper events
+document.addEventListener("change", (e) => {
+  // Quick status change from card
+  const cardSelect = e.target.closest(".status-quick-select");
+  if (cardSelect) {
+    const itemId = cardSelect.dataset.statusId;
+    const newStatus = cardSelect.value;
+    const item = gear.find((g) => g.id === itemId);
+    if (item) {
+      item.status = newStatus;
+      item.statusKey = normalizeStatus(newStatus);
+      saveInventory();
+      render();
+      updateInventoryStats();
+      const isInactive = isInactiveStatus(item.statusKey);
+      showToast(`Status of <strong>${escapeHtml(item.name || item.itemType)}</strong> changed to <strong>${escapeHtml(newStatus)}</strong>${isInactive ? " (已设为灰显状态)" : ""}.`);
+    }
+    return;
+  }
+
+  // Quick status change from product modal
+  const modalSelect = e.target.closest(".modal-status-select");
+  if (modalSelect) {
+    const itemId = modalSelect.dataset.modalStatusId;
+    const newStatus = modalSelect.value;
+    const item = gear.find((g) => g.id === itemId);
+    if (item) {
+      item.status = newStatus;
+      item.statusKey = normalizeStatus(newStatus);
+      saveInventory();
+      render();
+      updateInventoryStats();
+      openProductModal(item);
+      const isInactive = isInactiveStatus(item.statusKey);
+      showToast(`Status of <strong>${escapeHtml(item.name || item.itemType)}</strong> changed to <strong>${escapeHtml(newStatus)}</strong>${isInactive ? " (已设为灰显状态)" : ""}.`);
+    }
+    return;
+  }
+});
+
 document.addEventListener("click", (e) => {
+  // 00. Prevent modal opening when clicking on status quick-select
+  if (e.target.closest(".status-quick-select") || e.target.closest(".modal-status-select")) {
+    return;
+  }
+
   // 0a. Close modals on backdrop overlay click
   if (e.target.classList.contains("modal-overlay")) {
     closeTrailModal();

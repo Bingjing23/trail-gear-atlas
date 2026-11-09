@@ -2070,3 +2070,188 @@
   color: var(--forest);
   border: 1px solid #bdcab9;
 }
+
+/* ==========================================================================
+   Inactive & Discarded Gear Cards (lost, 不想要了准备卖掉, 退货 等置灰变灰效果)
+   ========================================================================== */
+
+.gear-card.is-inactive-status {
+  background: #f3f5f2 !important;
+  border-color: #d2d8ce !important;
+  opacity: 0.62;
+  filter: grayscale(0.88);
+  box-shadow: none !important;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.gear-card.is-inactive-status:hover {
+  opacity: 0.94;
+  filter: grayscale(0.25);
+  box-shadow: 0 10px 24px rgba(27, 48, 39, 0.1) !important;
+  border-color: #bcc6b8 !important;
+}
+
+.gear-card.is-inactive-status .card-title {
+  color: #647368 !important;
+  text-decoration: line-through;
+  text-decoration-color: rgba(100, 115, 104, 0.55);
+}
+
+.gear-card.is-inactive-status .card-brand {
+  color: #8c978f !important;
+}
+
+.gear-card.is-inactive-status .product-image {
+  filter: grayscale(1);
+  opacity: 0.72;
+}
+
+.card-inactive-banner {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  z-index: 4;
+  background: rgba(85, 93, 87, 0.88);
+  backdrop-filter: blur(4px);
+  color: #ffffff;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  padding: 2px 7px;
+  border-radius: 3px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+  pointer-events: none;
+}
+
+.gear-card.status-lost .card-inactive-banner {
+  background: rgba(155, 86, 80, 0.92);
+}
+
+.gear-card.status-selling .card-inactive-banner {
+  background: rgba(156, 112, 59, 0.92);
+}
+
+.gear-card.status-returned .card-inactive-banner {
+  background: rgba(88, 103, 118, 0.92);
+}
+
+/* Inactive Pack Controls */
+.card-pack-btn.is-inactive-pack {
+  background: #e3e7e1 !important;
+  color: #68736c !important;
+  border-color: #ccd3c9 !important;
+}
+
+.card-pack-btn.is-inactive-pack:hover {
+  background: #d8dfd6 !important;
+  color: #3b4740 !important;
+}
+
+/* Quick Status Dropdowns (Card & Modal) */
+.status-quick-select {
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: .03em;
+  padding: 2px 18px 2px 6px;
+  border-radius: 3px;
+  border: 1px solid #c9d4c7;
+  background-color: #eef2e9;
+  color: #3b503e;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8' viewBox='0 0 24 24' fill='none' stroke='%233b503e' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 4px center;
+  transition: all 0.15s ease;
+  line-height: 1.4;
+  outline: none;
+  max-width: 130px;
+}
+
+.status-quick-select:hover,
+.status-quick-select:focus {
+  border-color: var(--forest);
+  box-shadow: 0 0 0 2px rgba(23, 52, 46, 0.12);
+}
+
+.status-quick-select.in_use {
+  background-color: #e6f4ea;
+  color: #1e6b37;
+  border-color: #b7e0c3;
+}
+
+.status-quick-select.owned {
+  background-color: #edf3ee;
+  color: #2e533d;
+  border-color: #c4d7c8;
+}
+
+.status-quick-select.purchased {
+  background-color: #e4f2f0;
+  color: #1e5e54;
+  border-color: #b8ded7;
+}
+
+.status-quick-select.gift {
+  background-color: #fbf1e6;
+  color: #925c27;
+  border-color: #ebd4bb;
+}
+
+.status-quick-select.lost {
+  background-color: #ebe7e7;
+  color: #725252;
+  border-color: #cfbebe;
+}
+
+.status-quick-select.selling {
+  background-color: #ebe7df;
+  color: #665b45;
+  border-color: #cfc7b8;
+}
+
+.status-quick-select.returned {
+  background-color: #e8eaed;
+  color: #555b63;
+  border-color: #cbd0d6;
+}
+
+.status-quick-select.older {
+  background-color: #ebefec;
+  color: #616b61;
+  border-color: #c9d2cb;
+}
+
+.status-quick-select.review {
+  background-color: #f7f2e4;
+  color: #786429;
+  border-color: #e2d8b8;
+}
+
+/* Modal Status Selector */
+.modal-status-select {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .06em;
+  padding: 4px 22px 4px 9px;
+  border-radius: 3px;
+  border: 1px solid #c8d3c5;
+  background-color: #ffffff;
+  color: var(--forest);
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='9' height='9' viewBox='0 0 24 24' fill='none' stroke='%2317342e' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 6px center;
+  transition: all 0.15s ease;
+  line-height: 1.4;
+  outline: none;
+}
+
+.modal-status-select:hover,
+.modal-status-select:focus {
+  border-color: var(--forest);
+  box-shadow: 0 0 0 2px rgba(23, 52, 46, 0.15);
+}
