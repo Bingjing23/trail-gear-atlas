@@ -209,7 +209,7 @@
               <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 5 5"/></svg>
               <input id="gear-search" type="search" placeholder="Search brand, product or notes" autocomplete="off" />
             </label>
-            <label class="select-field" for="status-filter"><span>Status</span><select id="status-filter"><option value="all">All items</option><option value="owned">Owned</option><option value="purchased">Purchased</option><option value="gift">Gift</option><option value="older">Older gear</option><option value="lost">Lost</option><option value="review">Needs details</option></select></label>
+            <label class="select-field" for="status-filter"><span>Status</span><select id="status-filter"><option value="all">All items (全部)</option><option value="active">Active kit (仅现役可用)</option><option value="in_use">使用中 (In Use)</option><option value="owned">Owned (已拥有)</option><option value="purchased">Purchased (已购入)</option><option value="gift">Gift (礼品)</option><option value="lost">lost (已丢失)</option><option value="selling">不想要了准备卖掉</option><option value="returned">退货 (已退货)</option><option value="older">Older gear (旧款)</option><option value="review">Needs details (待补充)</option></select></label>
             <label class="select-field" for="sort-order"><span>Sort</span><select id="sort-order"><option value="original">Grouped by gear type</option><option value="weight-asc">Lightest first</option><option value="weight-desc">Heaviest first</option><option value="price-asc">Lowest price by currency</option><option value="price-desc">Highest price by currency</option></select></label>
             <button class="toolbar-add-btn" id="btn-toolbar-add-gear" type="button" title="Add a new gear item to inventory">+ Add Item</button>
           </div>
@@ -408,11 +408,15 @@
             </div>
 
             <div class="form-field">
-              <label for="form-gear-status">Ownership Status</label>
+              <label for="form-gear-status">Ownership Status (装备状态) *</label>
               <select id="form-gear-status">
+                <option value="使用中">使用中 (In Use · 现役)</option>
                 <option value="Owned">Owned (已拥有)</option>
                 <option value="Purchased · in inventory">Purchased (已购入)</option>
                 <option value="Gift">Gift (礼品)</option>
+                <option value="lost">lost (已丢失 · 灰显)</option>
+                <option value="不想要了准备卖掉">不想要了准备卖掉 (准备出掉 · 灰显)</option>
+                <option value="退货">退货 (已退货 · 灰显)</option>
                 <option value="Older gear · ownership to confirm">Older gear (旧款/待确认)</option>
                 <option value="Needs details">Needs details (需补充信息)</option>
               </select>
