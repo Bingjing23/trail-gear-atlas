@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#17342e" />
+    <meta name="description" content="A personal field guide to hiking gear, with recorded weights, prices, and ownership status." />
+    <title>Trail Gear Atlas — A Personal Hiking Kit</title>
+    <link rel="stylesheet" href="./styles.css" />
+    <script type="module" src="./app.js"></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#collection">Skip to the gear collection</a>
+
+    <header class="site-header">
+      <div class="header-inner shell">
+        <a class="wordmark" href="#top" aria-label="Trail Gear Atlas, back to top">
+          <span class="wordmark-mark" aria-hidden="true">T<span>G</span></span>
+          <span class="wordmark-copy">TRAIL GEAR <em>ATLAS</em></span>
+        </a>
+        <nav class="desktop-nav" aria-label="Main navigation">
+          <a href="#collection">Explore gear</a>
+          <a href="#about">About this kit</a>
+        </nav>
+        <a class="header-action" href="#collection">Browse the kit <span aria-hidden="true">↗</span></a>
+      </div>
+    </header>
+
+    <main id="top">
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="hero-inner shell">
+          <div class="hero-copy">
+            <div class="eyebrow"><span class="eyebrow-line"></span> A PERSONAL FIELD INDEX <span class="eyebrow-index">01 / 05</span></div>
+            <h1 id="hero-title">The gear<br />behind <em>the miles.</em></h1>
+            <p>A clear record of what is in the pack, what it weighs, and its recorded price. Built for planning the next trail, one item at a time.</p>
+            <a class="hero-button" href="#collection">Explore the collection <span aria-hidden="true">↗</span></a>
+          </div>
+          <div class="hero-art" aria-hidden="true">
+            <div class="art-orbit art-orbit-one"></div>
+            <div class="art-orbit art-orbit-two"></div>
+            <div class="art-sun"></div>
+            <svg class="landscape" viewBox="0 0 700 520" preserveAspectRatio="xMidYMid slice" role="presentation">
+              <path class="ridge ridge-back" d="M0 340 C90 305 146 335 225 260 C280 208 326 221 386 177 C449 133 492 195 557 173 C620 152 653 174 700 145 L700 520 L0 520 Z" />
+              <path class="ridge ridge-mid" d="M0 377 C100 335 153 355 220 320 C283 286 324 306 393 254 C475 193 511 273 583 226 C624 202 662 213 700 198 L700 520 L0 520 Z" />
+              <path class="ridge ridge-front" d="M0 425 C102 387 150 419 231 369 C304 323 362 370 438 329 C505 293 582 336 700 282 L700 520 L0 520 Z" />
+              <path class="trail-line" d="M456 520 C394 472 371 451 391 427 C416 398 485 411 504 381 C527 347 484 323 489 297" />
+            </svg>
+            <div class="art-coordinate">TRAIL KIT<br />FIELD INDEX</div>
+            <div class="art-caption"><span class="art-caption-dot"></span> FIELD NOTES / 2026</div>
+          </div>
+        </div>
+        <div class="hero-bottom shell">
+          <span>GEAR, WEIGHT &amp; VALUE — ALL IN ONE PLACE</span>
+          <span class="scroll-cue">SCROLL TO EXPLORE <span aria-hidden="true">↓</span></span>
+        </div>
+      </section>
+
+      <section class="overview shell" aria-label="Collection summary">
+        <div class="overview-lead"><span class="section-kicker">THE COLLECTION</span><h2>Every item<br />has a place.</h2></div>
+        <div class="overview-stats" id="stats" aria-live="polite"></div>
+      </section>
+
+      <section class="collection" id="collection" aria-labelledby="collection-title">
+        <div class="shell">
+          <div class="collection-heading">
+            <div><span class="section-kicker">EXPLORE THE KIT</span><h2 id="collection-title">Built for the trail.</h2></div>
+            <p>Browse by system, search for a specific piece, or compare the recorded weight and price across the kit.</p>
+          </div>
+
+          <div class="toolbar" role="search">
+            <label class="search-field" for="gear-search">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 5 5"/></svg>
+              <input id="gear-search" type="search" placeholder="Search brand, product or notes" autocomplete="off" />
+            </label>
+            <label class="select-field" for="status-filter"><span>Status</span><select id="status-filter"><option value="all">All items</option><option value="owned">Owned</option><option value="purchased">Purchased</option><option value="gift">Gift</option><option value="older">Older gear</option><option value="lost">Lost</option><option value="review">Needs details</option></select></label>
+            <label class="select-field" for="sort-order"><span>Sort</span><select id="sort-order"><option value="original">Original order</option><option value="weight-asc">Lightest first</option><option value="weight-desc">Heaviest first</option><option value="price-asc">Lowest price</option><option value="price-desc">Highest price</option></select></label>
+          </div>
+
+          <nav class="category-nav" id="category-nav" aria-label="Gear categories"></nav>
+          <div class="result-count" id="result-count" aria-live="polite"></div>
+          <div id="gear-sections"></div>
+          <div class="empty-state" id="empty-state" hidden><span>NO MATCHES FOUND</span><h3>Nothing in the kit matches that search.</h3><p>Try a different product name or clear the filters.</p><button id="reset-filters" type="button">Clear filters</button></div>
+        </div>
+      </section>
+
+      <section class="about" id="about" aria-labelledby="about-title">
+        <div class="shell about-inner">
+          <div><span class="section-kicker">ABOUT THE RECORD</span><h2 id="about-title">A living gear list.</h2></div>
+          <div class="about-copy"><p>This collection brings together the original hiking inventory and later confirmed purchases. Prices are recorded purchase or list values in Australian dollars, not live retail prices. Weights are listed or approximate values and may change after an item is weighed at home.</p><p>Product photos show the listed models; colors or revisions may differ from the items owned. Items with missing details stay visible so the record can be completed over time. Older and lost gear is identified separately from the current kit.</p></div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer"><div class="shell footer-inner"><span class="footer-brand">TRAIL GEAR <em>ATLAS</em></span><span>PERSONAL HIKING KIT · UPDATED NOVEMBER 2026</span><a href="#top">BACK TO TOP ↑</a></div></footer>
+  </body>
+</html>
