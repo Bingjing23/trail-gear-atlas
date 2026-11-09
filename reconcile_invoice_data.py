@@ -144,7 +144,22 @@ add_item(
 )
 by_id["packs-essentials-73"].update(unitWeightG=740, totalWeightG=740)
 
+# 99 Bikes purchase
+add_item(
+    "personal-items-74",
+    "Personal Items",
+    "headphones",
+    "Shokz",
+    "OpenSwim Pro Bone Conduction Headphones, Grey",
+    1,
+    249.00,
+    "99 Bikes tax invoice INV8649424",
+    "Purchased from 99 Bikes Brisbane CBD (Invoice #INV8649424). Model S710-ST-GY.",
+    currency="AUD",
+)
+by_id["personal-items-74"].update(unitWeightG=27.3, totalWeightG=27.3)
 
-assert len(items) == 73, f"Expected 73 records after reconciliation, got {len(items)}"
+
+assert len(items) == 74, f"Expected 74 records after reconciliation, got {len(items)}"
 DATA_PATH.write_text(json.dumps(items, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 print(f"Reconciled {len(items)} gear records")

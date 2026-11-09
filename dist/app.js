@@ -11,7 +11,7 @@ const defaultTypeOrders = {
   "Packs & Essentials": ["backpack", "summit bag", "dry bag", "first aid bag", "head light", "camp light", "poles", "umbrella", "fire starter"],
   "Clothing & Footwear": ["base layer", "underwear", "socks", "fleece jacket", "fleece cardigan", "downjacket", "hard shell", "waterproof jacket", "hard shell pants", "pants", "beanie", "fleece gloves", "neck gaiters", "gaiters", "hiking shoes", "camp boots", "sunglasses", "shoe care"],
   "Cooking & Hydration": ["filter", "water system", "thermo bottle", "stove", "stove accessory", "stove fuel", "pot", "titanium pot", "cup", "titanium cup", "spoons and chopsticks", "hydration tablets", "energy gel", "trail meal", "knife"],
-  "Personal Items": ["contact lenses", "wet wipes", "power bank"],
+  "Personal Items": ["contact lenses", "wet wipes", "power bank", "headphones"],
 };
 
 const elements = {
@@ -39,6 +39,7 @@ const formatEvidence = (entry) => {
   if (entry.startsWith("Paddy Pallin tax invoice ")) return `Paddy Pallin #${entry.replace(/^Paddy Pallin tax invoice /, "")}`;
   if (entry.startsWith("Backpacking Light invoice ")) return `Backpacking Light #${entry.replace(/^Backpacking Light invoice /, "")}`;
   if (entry.startsWith("Ultralight Gear invoice ")) return `Ultralight Gear #${entry.replace(/^Ultralight Gear invoice #?/, "")}`;
+  if (entry.startsWith("99 Bikes tax invoice ")) return `99 Bikes #${entry.replace(/^99 Bikes tax invoice (INV)?/i, "INV")}`;
   if (/^\d{7}$/.test(entry)) return `Paddy Pallin #${entry}`;
   if (entry.startsWith("#")) return `Invoice ${entry}`;
   return `Invoice #${entry}`;

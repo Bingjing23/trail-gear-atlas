@@ -285,5 +285,12 @@
     "sourceUrl": "https://store.adaptoutdoors.com/products/osprey-hikelite-26-pine-leaf-green",
     "downloadUrl": "https://store.adaptoutdoors.com/images/products/H/Hi/hikelite26_s23_side_pineleafgreen-10004801-2.jpg?width=1998&height=1998&quality=85&mode=pad&format=webp&bgcolor=ffffff",
     "matchQuality": "exact"
+  },
+  {
+    "id": "personal-items-74",
+    "imagePath": "/images/personal-items-74.webp",
+    "sourceUrl": "https://shokz.com.au/products/openswim-pro",
+    "downloadUrl": "https://shokz.com.au/cdn/shop/files/OpenSwimPro-Grey.webp?v=1719321983&width=700",
+    "matchQuality": "exact"
   }
 ]
