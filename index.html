@@ -20,9 +20,11 @@
         </a>
         <nav class="desktop-nav" aria-label="Main navigation">
           <a href="#collection">Explore gear</a>
+          <a href="#trail-planner">Pack planner &amp; weights</a>
+          <a href="#trail-log">Trail log</a>
           <a href="#about">About this kit</a>
         </nav>
-        <a class="header-action" href="#collection">Browse the kit <span aria-hidden="true">↗</span></a>
+        <a class="header-action" href="#trail-planner" id="header-pack-pill">🎒 Pack: <span id="header-trail-name">Milford Track</span> · <span id="header-pack-weight">0 g</span> <span aria-hidden="true">↗</span></a>
       </div>
     </header>
 
@@ -56,8 +58,98 @@
       </section>
 
       <section class="overview shell" aria-label="Collection summary">
-        <div class="overview-lead"><span class="section-kicker">THE COLLECTION</span><h2>Every item<br />has a place.</h2></div>
+        <div class="overview-lead"><span class="section-kicker">THE COLLECTION &amp; EXPEDITIONS</span><h2>Every item<br />has a place.</h2></div>
         <div class="overview-stats" id="stats" aria-live="polite"></div>
+      </section>
+
+      <!-- Trail Pack Planner & Weight Calculator -->
+      <section class="trail-planner-section" id="trail-planner" aria-labelledby="planner-title">
+        <div class="shell">
+          <div class="planner-header">
+            <div>
+              <span class="section-kicker">EXPEDITION PACK BUILDER &amp; WEIGHT ANALYTICS</span>
+              <h2 id="planner-title">Pack for the trail.</h2>
+              <p>Choose your upcoming route or outdoor activity, select which gear goes into your pack, and calculate your exact total and base weights in real time.</p>
+            </div>
+            <div class="trail-selector-bar">
+              <div class="trail-select-wrap">
+                <span>ACTIVE EXPEDITION</span>
+                <select id="active-trail-select" aria-label="Select active trail to plan pack"></select>
+              </div>
+              <button class="btn-primary" id="btn-create-trail" type="button">+ New Trail</button>
+            </div>
+          </div>
+
+          <!-- Active Trail Banner -->
+          <div class="active-trail-banner" id="active-trail-banner">
+            <div class="active-trail-info">
+              <div class="trail-meta-tags">
+                <span class="trail-status-pill" id="banner-status-pill">Planned · Next Destination</span>
+                <span id="banner-region">Fiordland National Park, New Zealand</span>
+                <span>•</span>
+                <span id="banner-distance">53.5 km</span>
+                <span>•</span>
+                <span id="banner-duration">4 Days</span>
+                <span>•</span>
+                <span id="banner-date">Target: Nov 2026</span>
+              </div>
+              <h3 id="banner-trail-name">Milford Track</h3>
+              <p class="active-trail-notes" id="banner-notes"></p>
+            </div>
+            <div class="active-trail-actions">
+              <button class="btn-secondary" id="btn-edit-active-trail" type="button">✏️ Edit Details</button>
+              <button class="btn-secondary" id="btn-toggle-complete-trail" type="button">✓ Mark as Completed</button>
+              <button class="btn-secondary" id="btn-clear-pack" type="button">Empty Pack</button>
+            </div>
+          </div>
+
+          <!-- Weight Dashboard -->
+          <div class="weight-dashboard">
+            <div class="weight-card primary">
+              <span class="weight-card-label">TOTAL PACK WEIGHT</span>
+              <div class="weight-huge"><span id="metric-total-g">0</span><small>g</small></div>
+              <div class="weight-subtext" id="metric-total-kg">0.00 kg total carried load</div>
+            </div>
+            <div class="weight-card">
+              <span class="weight-card-label">BASE WEIGHT (EXCL. CONSUMABLES)</span>
+              <div class="weight-huge"><span id="metric-base-g">0</span><small>g</small></div>
+              <div class="weight-subtext" id="metric-base-kg">0.00 kg pack base weight</div>
+            </div>
+            <div class="weight-card">
+              <span class="weight-card-label">PACK LOAD SUMMARY</span>
+              <div class="weight-huge"><span id="metric-item-count">0</span><small>/ 75</small></div>
+              <div class="weight-subtext" id="metric-consumable-summary">0 g consumables (food, fuel, tabs)</div>
+            </div>
+          </div>
+
+          <!-- Category Breakdown Bar -->
+          <div class="category-weight-bar-wrap">
+            <div class="category-weight-bar-header">
+              <span>GEAR SYSTEM WEIGHT DISTRIBUTION</span>
+              <span id="category-bar-total-label">0 g Total</span>
+            </div>
+            <div class="category-weight-bar" id="category-progress-bar"></div>
+            <div class="category-weight-legend" id="category-legend"></div>
+          </div>
+
+          <!-- Missing weights alert -->
+          <div class="missing-weights-alert" id="missing-weights-alert" hidden>
+            <span aria-hidden="true">⚠️</span>
+            <span id="missing-weights-text">2 packed items do not have listed weights and are not included in the totals.</span>
+          </div>
+
+          <!-- Packed Items Drawer -->
+          <div class="packed-items-wrap">
+            <div class="packed-items-header">
+              <h4 id="packed-items-title">Packed Gear (<span id="packed-items-count">0</span> items)</h4>
+              <div style="display:flex; gap:10px; flex-wrap:wrap;">
+                <a class="btn-primary" href="#collection">Browse &amp; Add Gear Below ↓</a>
+                <button class="btn-secondary" id="btn-export-pack" type="button">Share / Export Pack</button>
+              </div>
+            </div>
+            <div id="packed-items-list"></div>
+          </div>
+        </div>
       </section>
 
       <section class="collection" id="collection" aria-labelledby="collection-title">
@@ -83,6 +175,28 @@
         </div>
       </section>
 
+      <!-- Trail Log Section -->
+      <section class="trail-log-section" id="trail-log" aria-labelledby="log-title">
+        <div class="shell">
+          <div class="trail-log-header">
+            <div>
+              <span class="section-kicker">TRAIL ARCHIVE &amp; FIELD LOG</span>
+              <h2 id="log-title">Trails recorded &amp; planned.</h2>
+              <p>Log past wilderness expeditions, preserve what gear you carried and what it weighed, and manage your upcoming trail aspirations.</p>
+            </div>
+            <button class="btn-primary" id="btn-log-new-trail" type="button">+ Record a Trail</button>
+          </div>
+
+          <div class="trail-log-filters">
+            <button class="log-filter-btn active" data-filter="all" type="button">All Expeditions (<span id="count-all-trails">0</span>)</button>
+            <button class="log-filter-btn" data-filter="completed" type="button">Completed Hikes (<span id="count-completed-trails">0</span>)</button>
+            <button class="log-filter-btn" data-filter="planned" type="button">Upcoming &amp; Planned (<span id="count-planned-trails">0</span>)</button>
+          </div>
+
+          <div class="trail-cards-grid" id="trail-log-grid"></div>
+        </div>
+      </section>
+
       <section class="about" id="about" aria-labelledby="about-title">
         <div class="shell about-inner">
           <div><span class="section-kicker">ABOUT THE RECORD</span><h2 id="about-title">A living gear list.</h2></div>
@@ -92,5 +206,81 @@
     </main>
 
     <footer class="site-footer"><div class="shell footer-inner"><span class="footer-brand">TRAIL GEAR <em>ATLAS</em></span><span>PERSONAL HIKING KIT · UPDATED NOVEMBER 2026</span><a href="#top">BACK TO TOP ↑</a></div></footer>
+
+    <!-- Sticky Quick-Pack Floating Bar -->
+    <div class="sticky-pack-bar hidden" id="sticky-pack-bar">
+      <div class="sticky-pack-info">
+        <span class="sticky-pack-trail">🎒 <span id="sticky-trail-name">Milford Track</span></span>
+        <span class="sticky-pack-stats"><strong id="sticky-item-count">0</strong> items · <strong id="sticky-weight">0 g</strong></span>
+      </div>
+      <a class="sticky-pack-link" href="#trail-planner">View Pack &amp; Weights ↑</a>
+    </div>
+
+    <!-- Modal: Create / Edit Trail -->
+    <div class="modal-overlay" id="trail-modal" role="dialog" aria-modal="true" aria-labelledby="modal-trail-title">
+      <div class="modal-box">
+        <button class="modal-close-btn" id="modal-trail-close" type="button" aria-label="Close dialog">✕</button>
+        <h3 id="modal-trail-title">Plan an Expedition</h3>
+        <p class="modal-desc">Define a route, set target distance, and start packing gears from your inventory.</p>
+
+        <form id="trail-form">
+          <input type="hidden" id="form-trail-id" value="" />
+          <div class="form-grid">
+            <div class="form-field full">
+              <label for="form-trail-name">Trail / Activity Name *</label>
+              <input type="text" id="form-trail-name" required placeholder="e.g. Milford Track, Overland Track" />
+            </div>
+            <div class="form-field">
+              <label for="form-trail-destination">Destination / Region</label>
+              <input type="text" id="form-trail-destination" placeholder="e.g. Fiordland, New Zealand" />
+            </div>
+            <div class="form-field">
+              <label for="form-trail-status">Status</label>
+              <select id="form-trail-status">
+                <option value="planned">Planned (下一站 / 计划中)</option>
+                <option value="in-progress">In Progress (进行中)</option>
+                <option value="completed">Completed (已完成)</option>
+              </select>
+            </div>
+            <div class="form-field">
+              <label for="form-trail-distance">Distance (km)</label>
+              <input type="number" id="form-trail-distance" step="0.1" placeholder="e.g. 53.5" />
+            </div>
+            <div class="form-field">
+              <label for="form-trail-duration">Duration (Days)</label>
+              <input type="number" id="form-trail-duration" step="1" placeholder="e.g. 4" />
+            </div>
+            <div class="form-field full">
+              <label for="form-trail-date">Date / Trip Period</label>
+              <input type="text" id="form-trail-date" placeholder="e.g. November 2026, or Oct 2026" />
+            </div>
+            <div class="form-field full">
+              <label for="form-trail-notes">Field Notes &amp; Route Description</label>
+              <textarea id="form-trail-notes" rows="3" placeholder="Terrain conditions, weather precautions, pass elevation, etc."></textarea>
+            </div>
+          </div>
+          <div class="modal-actions">
+            <button class="btn-secondary" type="button" id="modal-trail-cancel">Cancel</button>
+            <button class="btn-primary" type="submit">Save Trail</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Modal: Export Pack List -->
+    <div class="modal-overlay" id="export-modal" role="dialog" aria-modal="true" aria-labelledby="modal-export-title">
+      <div class="modal-box">
+        <button class="modal-close-btn" id="modal-export-close" type="button" aria-label="Close dialog">✕</button>
+        <h3 id="modal-export-title">Export Pack List</h3>
+        <p class="modal-desc">Share your pack breakdown, weights, and items formatted for your trail notes.</p>
+        <div class="form-field full">
+          <textarea id="export-text-area" rows="12" readonly style="font-family:monospace; font-size:12px; line-height:1.5;"></textarea>
+        </div>
+        <div class="modal-actions">
+          <button class="btn-secondary" type="button" id="modal-export-close-btn">Close</button>
+          <button class="btn-primary" type="button" id="btn-copy-export">Copy to Clipboard</button>
+        </div>
+      </div>
+    </div>
   </body>
 </html>
