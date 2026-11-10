@@ -157,10 +157,13 @@
               <div class="weight-huge"><span id="metric-total-g">0</span><small id="metric-total-unit">g</small></div>
               <div class="weight-subtext" id="metric-total-kg">0.00 kg carried load on back</div>
             </div>
-            <div class="weight-card">
+            <div class="weight-card" id="metric-card-base">
               <span class="weight-card-label">BASE WEIGHT (EXCL. CONSUMABLES &amp; WORN) · 基准重量</span>
               <div class="weight-huge"><span id="metric-base-g">0</span><small id="metric-base-unit">g</small></div>
               <div class="weight-subtext" id="metric-base-kg">0.00 kg pack base weight</div>
+              <div class="base-tier-badge-wrap" id="metric-base-tier-wrap">
+                <span class="base-tier-pill" id="metric-base-tier">ULTRALIGHT</span>
+              </div>
             </div>
             <div class="weight-card" id="metric-card-worn">
               <span class="weight-card-label">WORN ON BODY · 随身穿戴 (非背负)</span>
@@ -484,21 +487,115 @@
         <h3 id="modal-gear-title">Add Gear Item</h3>
         <p class="modal-desc">Add a piece of gear to your master inventory with weight, price, specs, and brand link.</p>
 
-        <!-- Quick Auto-fill from Popular Brand Gear Catalog -->
-        <div class="catalog-quickfill-box" id="catalog-quickfill-box">
-          <div class="catalog-quickfill-header">
-            <span class="catalog-kicker">✨ POPULAR BRAND CATALOG · 热门品牌库秒级速填</span>
-            <span class="catalog-badge">70+ Popular Items</span>
+        <!-- 3-Tier Gear Entry Modes (方案A/方案B/手动自建) -->
+        <div class="gear-entry-modes" id="gear-entry-modes">
+          <div class="entry-mode-bar">
+            <div class="entry-mode-segmented" role="tablist" aria-label="Gear Entry Modes">
+              <button type="button" class="entry-mode-tab active" data-mode="catalog" id="tab-mode-catalog" role="tab" aria-selected="true">
+                <span class="mode-tab-icon">⚡</span>
+                <span class="mode-tab-text"><strong>方案 A</strong> 热门大牌速选</span>
+              </button>
+              <button type="button" class="entry-mode-tab" data-mode="scraper" id="tab-mode-scraper" role="tab" aria-selected="false">
+                <span class="mode-tab-icon">🔗</span>
+                <span class="mode-tab-text"><strong>方案 B</strong> 小众网址/规格抓取</span>
+              </button>
+              <button type="button" class="entry-mode-tab" data-mode="manual" id="tab-mode-manual" role="tab" aria-selected="false">
+                <span class="mode-tab-icon">✍️</span>
+                <span class="mode-tab-text"><strong>手动新建</strong> 空白建档</span>
+              </button>
+            </div>
           </div>
-          <div class="catalog-search-wrap">
-            <svg viewBox="0 0 24 24" aria-hidden="true" width="16" height="16" fill="none" stroke="#718274" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.35-4.35"></path></svg>
-            <input type="text" id="catalog-search-input" placeholder="Type brand or gear name (e.g. Speedgoat, WindMaster, PocketRocket, Duplex, NeoAir, Toaks...)" autocomplete="off" />
-            <button type="button" id="catalog-clear-btn" hidden aria-label="Clear catalog search">✕</button>
+
+          <!-- Panel A: Popular Brand Catalog Quick-fill -->
+          <div class="entry-mode-panel active" id="panel-mode-catalog" role="tabpanel" aria-labelledby="tab-mode-catalog">
+            <div class="catalog-quickfill-box" id="catalog-quickfill-box">
+              <div class="catalog-quickfill-header">
+                <span class="catalog-kicker">✨ POPULAR BRAND CATALOG · 热门品牌库秒级速填</span>
+                <span class="catalog-badge">70+ Popular Items</span>
+              </div>
+              <div class="catalog-search-wrap">
+                <svg viewBox="0 0 24 24" aria-hidden="true" width="16" height="16" fill="none" stroke="#718274" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.35-4.35"></path></svg>
+                <input type="text" id="catalog-search-input" placeholder="输入品牌或型号（如 Speedgoat, WindMaster, PocketRocket, Duplex, NeoAir, Toaks...）" autocomplete="off" />
+                <button type="button" id="catalog-clear-btn" hidden aria-label="Clear catalog search">✕</button>
+              </div>
+              <!-- Brand quick pills -->
+              <div class="catalog-brand-pills" id="catalog-brand-pills">
+                <span class="brand-pills-label">热门推荐:</span>
+                <button type="button" class="brand-pill" data-brand="Hoka">Hoka</button>
+                <button type="button" class="brand-pill" data-brand="Zpacks">Zpacks</button>
+                <button type="button" class="brand-pill" data-brand="Durston">Durston</button>
+                <button type="button" class="brand-pill" data-brand="Soto">Soto</button>
+                <button type="button" class="brand-pill" data-brand="Nemo">Nemo</button>
+                <button type="button" class="brand-pill" data-brand="Therm-a-Rest">NeoAir</button>
+                <button type="button" class="brand-pill" data-brand="Toaks">Toaks</button>
+                <button type="button" class="brand-pill" data-brand="Patagonia">Patagonia</button>
+                <button type="button" class="brand-pill" data-brand="Sawyer">Sawyer</button>
+              </div>
+              <div class="catalog-suggestions-dropdown" id="catalog-suggestions" hidden></div>
+              <div class="catalog-autofilled-banner" id="catalog-autofilled-banner" hidden>
+                <span class="autofill-check">✓</span>
+                <span>已从 <strong><span id="autofilled-item-name"></span></strong> 自动回填！可在下方继续调整尺码、价格或实测备注。</span>
+              </div>
+            </div>
           </div>
-          <div class="catalog-suggestions-dropdown" id="catalog-suggestions" hidden></div>
-          <div class="catalog-autofilled-banner" id="catalog-autofilled-banner" hidden>
-            <span class="autofill-check">✓</span>
-            <span>Auto-filled from <strong><span id="autofilled-item-name"></span></strong>! Adjust your size, price, or notes below.</span>
+
+          <!-- Panel B: Smart Link / Specs Scraper for Niche Brands -->
+          <div class="entry-mode-panel" id="panel-mode-scraper" role="tabpanel" aria-labelledby="tab-mode-scraper" hidden>
+            <div class="scraper-box">
+              <div class="scraper-header">
+                <span class="catalog-kicker">🔗 NICHE PRODUCT LINK &amp; SPECS SCRAPER · 小众网站与规格抓取</span>
+                <span class="catalog-badge">Smart Auto-Detect</span>
+              </div>
+              <p class="scraper-desc">粘贴小众品牌/独立电商（如 Zpacks, Durston, Garage Grown Gear, REI, 品牌官网等）的商品链接或参数文本：</p>
+              <div class="scraper-input-group">
+                <div class="scraper-url-wrap">
+                  <svg viewBox="0 0 24 24" aria-hidden="true" width="16" height="16" fill="none" stroke="#607665" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
+                  <input type="url" id="scraper-url-input" placeholder="粘贴商品详情页网址 (https://...)" autocomplete="off" />
+                  <button type="button" id="scraper-clear-url-btn" hidden aria-label="Clear URL">✕</button>
+                </div>
+                <div class="scraper-snippet-toggle-wrap">
+                  <button type="button" class="btn-text-toggle" id="btn-toggle-snippet">+ 展开粘贴规格/重量文本 (选填)</button>
+                </div>
+                <div class="scraper-snippet-wrap" id="scraper-snippet-wrap" hidden>
+                  <textarea id="scraper-text-input" rows="2" placeholder="可选：在此粘贴商品规格文本 (例如: Weight: 28.5 oz / 808 g, Price: $240 USD, Double wall)..."></textarea>
+                </div>
+                <div class="scraper-actions">
+                  <button type="button" class="btn-primary btn-scrape-exec" id="btn-do-scrape">⚡ 智能解析并提取数据</button>
+                  <span class="scraper-status" id="scraper-status-indicator" hidden></span>
+                </div>
+              </div>
+
+              <!-- Preview Card of Extracted Gear -->
+              <div class="scraper-preview-card" id="scraper-preview-card" hidden>
+                <div class="scraper-preview-thumb-wrap">
+                  <img id="scraper-preview-img" src="" alt="Parsed product" onerror="this.style.display='none'" />
+                  <div class="scraper-preview-placeholder" id="scraper-preview-ph">GEAR</div>
+                </div>
+                <div class="scraper-preview-info">
+                  <div class="scraper-preview-title" id="scraper-preview-name">Product Name</div>
+                  <div class="scraper-preview-meta">
+                    <span class="scraper-preview-brand" id="scraper-preview-brand">Brand</span>
+                    <span>•</span>
+                    <span class="scraper-preview-cat" id="scraper-preview-cat">Category</span>
+                    <span class="scraper-preview-weight" id="scraper-preview-weight">⚖️ -- g</span>
+                    <span class="scraper-preview-price" id="scraper-preview-price"></span>
+                  </div>
+                  <div class="scraper-preview-url" id="scraper-preview-url"></div>
+                </div>
+                <button type="button" class="btn-primary btn-apply-scraper" id="btn-apply-scraper">✓ 填入表单</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Panel C: Manual Form Notification -->
+          <div class="entry-mode-panel" id="panel-mode-manual" role="tabpanel" aria-labelledby="tab-mode-manual" hidden>
+            <div class="manual-guide-box">
+              <span class="manual-guide-icon">✍️</span>
+              <div class="manual-guide-text">
+                <strong>自由手动录入模式</strong>
+                <p>适合 DIY 自制装备、实体店自购、旧款绝版或无需网购链接的个人户外物品。请直接在下方表单中填写各项参数。</p>
+              </div>
+            </div>
           </div>
         </div>
 

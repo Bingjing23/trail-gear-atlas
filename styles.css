@@ -3044,3 +3044,397 @@
   margin-right: 6px;
 }
 
+/* ==========================================================================
+   UI, TYPOGRAPHY, INTERACTIONS & 3-TIER GEAR ENTRY POLISH
+   ========================================================================== */
+
+/* 1. Tabular Numbers on Weights, Prices, and Counts */
+.weight-huge,
+.card-weight,
+.item-weight-val,
+.donut-center-main,
+.sticky-pack-stats,
+.stat strong,
+.trail-meta-tags span,
+.category-legend-weight,
+.analytics-total-badge,
+.stepper-count,
+.wishlist-stat-num {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
+}
+
+/* 2. Base Weight Ultralight Tier Classification */
+.base-tier-badge-wrap {
+  margin-top: 10px;
+}
+.base-tier-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  padding: 3px 10px;
+  border-radius: 999px;
+  text-transform: uppercase;
+  transition: all 0.2s ease;
+}
+.base-tier-pill.ultralight {
+  background: #e8f5e9;
+  color: #1b5e20;
+  border: 1px solid #a5d6a7;
+}
+.base-tier-pill.lightweight {
+  background: #fff8e1;
+  color: #f57f17;
+  border: 1px solid #ffe082;
+}
+.base-tier-pill.traditional {
+  background: #f1f5f9;
+  color: #475569;
+  border: 1px solid #cbd5e1;
+}
+
+/* 3. 3-Tier Gear Entry Modes (方案A/方案B/手动自建) */
+.gear-entry-modes {
+  margin-bottom: 20px;
+}
+.entry-mode-bar {
+  margin-bottom: 12px;
+}
+.entry-mode-segmented {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  background: #e9f0e6;
+  padding: 4px;
+  border-radius: 6px;
+  gap: 4px;
+  border: 1px solid #d4e2d0;
+}
+.entry-mode-tab {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 8px 10px;
+  border: none;
+  background: transparent;
+  border-radius: 4px;
+  color: #556857;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.16s ease;
+}
+.entry-mode-tab:hover {
+  color: var(--forest);
+  background: rgba(255, 255, 255, 0.65);
+}
+.entry-mode-tab.active {
+  background: #ffffff;
+  color: var(--forest);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  font-weight: 700;
+}
+.mode-tab-icon {
+  font-size: 14px;
+}
+.mode-tab-text strong {
+  font-weight: 800;
+  color: var(--forest);
+}
+
+/* Brand Quick Pills in Popular Catalog Mode */
+.catalog-brand-pills {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px dashed #dbe6d8;
+}
+.brand-pills-label {
+  font-size: 10px;
+  font-weight: 800;
+  color: #6a7c6c;
+  letter-spacing: 0.04em;
+}
+.brand-pill {
+  background: #ffffff;
+  border: 1px solid #c9d8c6;
+  border-radius: 12px;
+  padding: 2px 9px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #3b5340;
+  cursor: pointer;
+  transition: all 0.12s ease;
+}
+.brand-pill:hover,
+.brand-pill.active {
+  background: var(--forest);
+  color: #ffffff;
+  border-color: var(--forest);
+}
+
+/* 4. Scraper Box in Panel B */
+.scraper-box {
+  background: #f7faf6;
+  border: 1px solid #d3e2d1;
+  border-radius: 6px;
+  padding: 16px 18px;
+  margin-bottom: 20px;
+}
+.scraper-desc {
+  font-size: 12px;
+  color: #5b6f5d;
+  margin: 4px 0 14px;
+  line-height: 1.5;
+}
+.scraper-url-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+}
+.scraper-url-wrap svg {
+  position: absolute;
+  left: 12px;
+  pointer-events: none;
+}
+#scraper-url-input {
+  width: 100%;
+  padding: 10px 36px 10px 38px;
+  font-size: 13px;
+  font-family: var(--sans);
+  border: 1px solid #c4d4c2;
+  border-radius: 4px;
+  background: #fff;
+  transition: all 0.15s ease;
+}
+#scraper-url-input:focus {
+  border-color: var(--forest);
+  outline: 2px solid rgba(45, 68, 56, 0.18);
+}
+#scraper-clear-url-btn {
+  position: absolute;
+  right: 10px;
+  border: none;
+  background: transparent;
+  color: #889689;
+  cursor: pointer;
+  font-size: 13px;
+  padding: 4px;
+}
+.btn-text-toggle {
+  background: none;
+  border: none;
+  color: #4b6851;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  padding: 2px 0 8px;
+  text-decoration: underline;
+}
+.scraper-snippet-wrap textarea {
+  width: 100%;
+  box-sizing: border-box;
+  font-size: 12px;
+  font-family: var(--sans);
+  border: 1px solid #c4d4c2;
+  border-radius: 4px;
+  padding: 8px 10px;
+  background: #fff;
+  margin-bottom: 10px;
+}
+.scraper-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.btn-scrape-exec {
+  background: var(--forest);
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 9px 18px;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.btn-scrape-exec:hover {
+  background: #254d3f;
+  transform: translateY(-1px);
+}
+.scraper-status {
+  font-size: 11px;
+  font-weight: 600;
+  color: #48634e;
+}
+.scraper-preview-card {
+  margin-top: 14px;
+  padding: 12px 14px;
+  background: #ffffff;
+  border: 1.5px solid #a8c7a3;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+}
+.scraper-preview-thumb-wrap {
+  width: 48px;
+  height: 48px;
+  background: #f1f4ef;
+  border-radius: 4px;
+  border: 1px solid #dce5da;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.scraper-preview-thumb-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.scraper-preview-placeholder {
+  font-size: 10px;
+  font-weight: 800;
+  color: #7b8d7d;
+}
+.scraper-preview-info {
+  flex: 1;
+  min-width: 0;
+}
+.scraper-preview-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--ink);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.scraper-preview-meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: #5d7060;
+  margin-top: 3px;
+  flex-wrap: wrap;
+}
+.scraper-preview-weight {
+  background: #e8f2e5;
+  color: #21542b;
+  font-weight: 800;
+  padding: 1px 6px;
+  border-radius: 3px;
+}
+.scraper-preview-url {
+  font-size: 10px;
+  color: #8c9e8e;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-top: 2px;
+}
+.btn-apply-scraper {
+  background: #235d39;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 8px 16px;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.15s ease;
+}
+.btn-apply-scraper:hover {
+  background: #1b492d;
+  transform: translateY(-1px);
+}
+
+/* 5. Manual Form Helper Box */
+.manual-guide-box {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #fbfbfa;
+  border: 1px dashed #ced8cc;
+  border-radius: 6px;
+  padding: 14px 18px;
+  margin-bottom: 20px;
+}
+.manual-guide-icon {
+  font-size: 22px;
+  flex-shrink: 0;
+}
+.manual-guide-text strong {
+  font-size: 13px;
+  color: var(--ink);
+  display: block;
+}
+.manual-guide-text p {
+  font-size: 12px;
+  color: #647566;
+  margin: 2px 0 0;
+  line-height: 1.4;
+}
+
+/* 6. Refined Card Hover & Micro-interactions */
+.gear-card {
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.2s ease !important;
+}
+.gear-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 28px -4px rgba(23, 52, 46, 0.09), 0 4px 10px -2px rgba(23, 52, 46, 0.04);
+  border-color: #bdceba;
+}
+.gear-card:hover .product-image {
+  transform: scale(1.03);
+  transition: transform 0.25s ease;
+}
+.product-image {
+  transition: transform 0.25s ease;
+}
+button:active {
+  transform: scale(0.98);
+}
+.stepper-btn {
+  transition: all 0.12s ease;
+}
+.stepper-btn:hover {
+  background: var(--forest) !important;
+  color: #ffffff !important;
+}
+
+/* 7. Donut Chart Interactive Glow and Hover */
+.donut-segment {
+  transition: stroke-width 0.2s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s ease, filter 0.2s ease;
+  cursor: pointer;
+}
+.donut-segment:hover,
+.donut-segment.hovered {
+  stroke-width: 38 !important;
+  opacity: 1 !important;
+  filter: drop-shadow(0 0 6px rgba(0,0,0,0.25));
+}
+.category-legend-item {
+  transition: background 0.15s ease, transform 0.15s ease;
+  cursor: pointer;
+  border-radius: 4px;
+  padding: 6px 8px;
+}
+.category-legend-item:hover,
+.category-legend-item.highlighted {
+  background: #e8efe5;
+  transform: translateX(3px);
+}
+
+
