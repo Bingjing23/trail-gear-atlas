@@ -332,6 +332,76 @@ try {
   fs.writeFileSync(topPath, Buffer.from(topScreenshot.data, "base64"));
   console.log(`[Screenshot] Saved top hero preview to ${topPath}`);
 
+  // -------------------------------------------------------------
+  // TEST 7: K2 Base Camp & Paddy Pallin Catalog Search & Autofill
+  // -------------------------------------------------------------
+  console.log("\n--- TEST 7: K2 Base Camp & Paddy Pallin Catalog Search ---");
+  // Open gear modal
+  await evalInPage(`
+    (function() {
+      document.querySelector("#btn-hero-add-gear")?.click();
+    })()
+  `);
+  await new Promise((r) => setTimeout(r, 400));
+
+  // Search "One Planet" in catalog
+  await evalInPage(`
+    (function() {
+      const input = document.querySelector("#catalog-search-input");
+      input.value = "One Planet";
+      input.dispatchEvent(new Event("input", { bubbles: true }));
+    })()
+  `);
+  await new Promise((r) => setTimeout(r, 400));
+
+  const onePlanetResults = await evalInPage(`
+    Array.from(document.querySelectorAll("#catalog-suggestions .catalog-suggestion-name")).map(el => el.textContent)
+  `);
+  recordTest("Search for One Planet returns K2/Paddy Pallin models", onePlanetResults.some(name => name.includes("McMillan") || name.includes("Strezlecki")), `Found: ${onePlanetResults.join(", ")}`);
+
+  // Search "K2 Base Camp" to test retailer filtering
+  await evalInPage(`
+    (function() {
+      const input = document.querySelector("#catalog-search-input");
+      input.value = "K2 Base Camp";
+      input.dispatchEvent(new Event("input", { bubbles: true }));
+    })()
+  `);
+  await new Promise((r) => setTimeout(r, 400));
+
+  const k2ResultsCount = await evalInPage(`
+    document.querySelectorAll("#catalog-suggestions .catalog-suggestion-item").length
+  `);
+  const hasK2Badge = await evalInPage(`
+    Boolean(document.querySelector("#catalog-suggestions .catalog-suggestion-retailer"))
+  `);
+  recordTest("Retailer search 'K2 Base Camp' returns items with retailer badge", k2ResultsCount > 0 && hasK2Badge, `Count: ${k2ResultsCount}, Badge visible: ${hasK2Badge}`);
+
+  // Click on the first suggestion to test autofill
+  await evalInPage(`
+    (function() {
+      const firstItem = document.querySelector("#catalog-suggestions .catalog-suggestion-item");
+      if (firstItem) firstItem.click();
+    })()
+  `);
+  await new Promise((r) => setTimeout(r, 400));
+
+  const autofilledName = await evalInPage(`document.querySelector("#form-gear-name").value`);
+  const autofilledWeight = await evalInPage(`document.querySelector("#form-gear-weight").value`);
+  const autofilledPrice = await evalInPage(`document.querySelector("#form-gear-price").value`);
+  const autofilledNotes = await evalInPage(`document.querySelector("#form-gear-notes").value`);
+  recordTest("Selecting item autofills Name, Weight, Price & Retailer Note", Boolean(autofilledName && autofilledWeight && autofilledPrice && autofilledNotes.includes("Stocked at")), `Item: "${autofilledName}", Weight: ${autofilledWeight}g, Price: $${autofilledPrice}, Notes: "${autofilledNotes}"`);
+
+  // Capture modal screenshot with autofilled K2 / Paddy Pallin gear
+  const modalScreenshot = await send("Page.captureScreenshot", { format: "png" });
+  const modalPath = path.join(ARTIFACT_DIR, "k2-paddy-catalog-autofill-preview.png");
+  fs.writeFileSync(modalPath, Buffer.from(modalScreenshot.data, "base64"));
+  console.log(`[Screenshot] Saved catalog modal preview to ${modalPath}`);
+
+  // Close modal
+  await evalInPage(`document.querySelector("#gear-modal-close")?.click()`);
+  await new Promise((r) => setTimeout(r, 200));
+
 } catch (err) {
   console.error("Test Suite Runtime Error:", err);
   process.exitCode = 1;
