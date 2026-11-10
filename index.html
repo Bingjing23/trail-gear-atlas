@@ -26,6 +26,14 @@
           <a href="#about">About this kit</a>
         </nav>
         <div class="header-trail-controls">
+          <div class="unit-toggle-pill" role="group" aria-label="Weight measurement unit switcher">
+            <button class="unit-toggle-btn active" id="btn-unit-metric" type="button" data-unit="metric" title="Metric units (grams and kilograms)">
+              g / kg
+            </button>
+            <button class="unit-toggle-btn" id="btn-unit-imperial" type="button" data-unit="imperial" title="Imperial units (ounces and pounds)">
+              oz / lb
+            </button>
+          </div>
           <a class="header-action" href="#trail-planner" id="header-pack-pill" title="View active pack details and weight breakdown">
             <span class="header-pack-dot"></span>
             <span>🎒 <span id="header-trail-name">Milford Track</span></span>
@@ -142,38 +150,86 @@
             </div>
           </div>
 
-          <!-- Weight Dashboard (4-Metric Analytics Grid including Wishlist Simulation) -->
+          <!-- Weight Dashboard (5-Metric Ultralight Analytics Grid) -->
           <div class="weight-dashboard">
             <div class="weight-card primary">
-              <span class="weight-card-label">TOTAL PACK WEIGHT</span>
-              <div class="weight-huge"><span id="metric-total-g">0</span><small>g</small></div>
-              <div class="weight-subtext" id="metric-total-kg">0.00 kg total carried load</div>
+              <span class="weight-card-label">PACK CARRIED LOAD · 背负总重</span>
+              <div class="weight-huge"><span id="metric-total-g">0</span><small id="metric-total-unit">g</small></div>
+              <div class="weight-subtext" id="metric-total-kg">0.00 kg carried load on back</div>
             </div>
             <div class="weight-card">
-              <span class="weight-card-label">BASE WEIGHT (EXCL. CONSUMABLES)</span>
-              <div class="weight-huge"><span id="metric-base-g">0</span><small>g</small></div>
+              <span class="weight-card-label">BASE WEIGHT (EXCL. CONSUMABLES &amp; WORN) · 基准重量</span>
+              <div class="weight-huge"><span id="metric-base-g">0</span><small id="metric-base-unit">g</small></div>
               <div class="weight-subtext" id="metric-base-kg">0.00 kg pack base weight</div>
             </div>
-            <div class="weight-card">
-              <span class="weight-card-label">PACK LOAD SUMMARY</span>
-              <div class="weight-huge"><span id="metric-item-count">0</span><small>items</small></div>
-              <div class="weight-subtext" id="metric-consumable-summary">0 g consumables (food, fuel, tabs)</div>
+            <div class="weight-card" id="metric-card-worn">
+              <span class="weight-card-label">WORN ON BODY · 随身穿戴 (非背负)</span>
+              <div class="weight-huge"><span id="metric-worn-g">0</span><small id="metric-worn-unit">g</small></div>
+              <div class="weight-subtext" id="metric-worn-sub">0.00 kg shoes, clothes &amp; poles</div>
+            </div>
+            <div class="weight-card" id="metric-card-skinout">
+              <span class="weight-card-label">SKIN-OUT TOTAL · 全身行头总重</span>
+              <div class="weight-huge"><span id="metric-skinout-g">0</span><small id="metric-skinout-unit">g</small></div>
+              <div class="weight-subtext" id="metric-skinout-sub">0.00 kg carried load + worn on body</div>
             </div>
             <div class="weight-card wishlist-card" id="metric-card-wishlist">
               <span class="weight-card-label">WISHLIST TRIAL LOAD · 想买试重</span>
-              <div class="weight-huge"><span id="metric-wishlist-g">+0</span><small>g</small></div>
+              <div class="weight-huge"><span id="metric-wishlist-g">+0</span><small id="metric-wishlist-unit">g</small></div>
               <div class="weight-subtext" id="metric-wishlist-summary">0 prospective items on trial</div>
             </div>
           </div>
 
-          <!-- Category Breakdown Bar -->
-          <div class="category-weight-bar-wrap">
-            <div class="category-weight-bar-header">
-              <span>GEAR SYSTEM WEIGHT DISTRIBUTION</span>
-              <span id="category-bar-total-label">0 g Total</span>
+          <!-- Category Weight Analytics Card (Donut Chart & Linear Bar) -->
+          <div class="category-analytics-card">
+            <div class="analytics-card-header">
+              <div class="analytics-title-group">
+                <span class="section-kicker">GEAR SYSTEM WEIGHT DISTRIBUTION · 装备系统重量分布</span>
+                <h3 class="analytics-headline">Category Breakdown</h3>
+              </div>
+              <div class="analytics-view-controls">
+                <div class="chart-toggle-pill" role="tablist" aria-label="Chart type toggle">
+                  <button class="chart-toggle-btn active" id="btn-chart-donut" type="button" role="tab" aria-selected="true" title="LighterPack-style interactive donut chart">
+                    🍩 Donut Chart
+                  </button>
+                  <button class="chart-toggle-btn" id="btn-chart-bar" type="button" role="tab" aria-selected="false" title="Horizontal stacked category bar">
+                    📊 Linear Bar
+                  </button>
+                </div>
+                <div class="analytics-total-badge" id="category-bar-total-label">0 g Total</div>
+              </div>
             </div>
-            <div class="category-weight-bar" id="category-progress-bar"></div>
-            <div class="category-weight-legend" id="category-legend"></div>
+
+            <!-- Donut Chart View -->
+            <div class="donut-chart-view" id="donut-chart-view">
+              <div class="donut-chart-container">
+                <div class="donut-svg-wrap">
+                  <svg class="donut-svg" id="category-donut-svg" viewBox="0 0 260 260" role="img" aria-label="Gear category distribution donut chart">
+                    <circle cx="130" cy="130" r="90" fill="transparent" stroke="#e3eae0" stroke-width="32"></circle>
+                  </svg>
+                  <div class="donut-center-info" id="donut-center-info">
+                    <span class="donut-center-sub">BASE WEIGHT</span>
+                    <strong class="donut-center-main" id="donut-center-weight">0 g</strong>
+                    <span class="donut-center-cat" id="donut-center-category">Hover category slice</span>
+                  </div>
+                </div>
+                <div class="donut-legend-wrap">
+                  <div class="donut-legend-grid" id="category-legend"></div>
+                  <div class="donut-worn-callout" id="donut-worn-callout">
+                    <span class="callout-icon">👕</span>
+                    <div class="callout-text">
+                      <strong>Worn Weight: <span id="donut-worn-val">0 g</span></strong>
+                      <span>Excluded from pack carried load (<span id="donut-worn-count">0</span> items)</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Linear Bar View -->
+            <div class="linear-bar-view" id="linear-bar-view" hidden>
+              <div class="category-weight-bar" id="category-progress-bar"></div>
+              <div class="category-weight-legend" id="category-bar-legend"></div>
+            </div>
           </div>
 
           <!-- Missing weights alert -->
@@ -185,10 +241,24 @@
           <!-- Packed Items Drawer -->
           <div class="packed-items-wrap">
             <div class="packed-items-header">
-              <h4 id="packed-items-title">Packed Gear (<span id="packed-items-count">0</span> items)</h4>
-              <div style="display:flex; gap:10px; flex-wrap:wrap;">
+              <div>
+                <h4 id="packed-items-title">Packed Gear (<span id="packed-items-count">0</span> items)</h4>
+                <div class="packed-header-sub">
+                  <span>Mark items as <strong>👕 Worn</strong> to exclude from base weight, or <strong>👥 Shared</strong> to split partner weight.</span>
+                </div>
+              </div>
+              <div class="packed-header-actions">
                 <a class="btn-primary" href="#collection">Browse &amp; Add Gear Below ↓</a>
-                <button class="btn-secondary" id="btn-export-pack" type="button">Share / Export Pack</button>
+                <button class="btn-secondary" id="btn-export-csv" type="button" title="Export pack to standard LighterPack CSV format">
+                  📥 Export LighterPack CSV
+                </button>
+                <label class="btn-secondary btn-file-label" id="lbl-import-csv" title="Import LighterPack CSV into this pack">
+                  📤 Import LighterPack CSV
+                  <input type="file" id="csv-file-input" accept=".csv,text/csv" style="display:none;" />
+                </label>
+                <button class="btn-secondary" id="btn-export-pack" type="button" title="View formatted Markdown / text summary">
+                  📋 View Markdown List
+                </button>
               </div>
             </div>
             <div id="packed-items-list"></div>
@@ -393,7 +463,8 @@
         </div>
         <div class="modal-actions">
           <button class="btn-secondary" type="button" id="modal-export-close-btn">Close</button>
-          <button class="btn-primary" type="button" id="btn-copy-export">Copy to Clipboard</button>
+          <button class="btn-secondary" type="button" id="btn-export-csv-modal">📥 Download LighterPack CSV</button>
+          <button class="btn-primary" type="button" id="btn-copy-export">Copy Markdown</button>
         </div>
       </div>
     </div>
