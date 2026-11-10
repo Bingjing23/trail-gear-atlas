@@ -484,6 +484,24 @@
         <h3 id="modal-gear-title">Add Gear Item</h3>
         <p class="modal-desc">Add a piece of gear to your master inventory with weight, price, specs, and brand link.</p>
 
+        <!-- Quick Auto-fill from Popular Brand Gear Catalog -->
+        <div class="catalog-quickfill-box" id="catalog-quickfill-box">
+          <div class="catalog-quickfill-header">
+            <span class="catalog-kicker">✨ POPULAR BRAND CATALOG · 热门品牌库秒级速填</span>
+            <span class="catalog-badge">70+ Popular Items</span>
+          </div>
+          <div class="catalog-search-wrap">
+            <svg viewBox="0 0 24 24" aria-hidden="true" width="16" height="16" fill="none" stroke="#718274" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.35-4.35"></path></svg>
+            <input type="text" id="catalog-search-input" placeholder="Type brand or gear name (e.g. Speedgoat, WindMaster, PocketRocket, Duplex, NeoAir, Toaks...)" autocomplete="off" />
+            <button type="button" id="catalog-clear-btn" hidden aria-label="Clear catalog search">✕</button>
+          </div>
+          <div class="catalog-suggestions-dropdown" id="catalog-suggestions" hidden></div>
+          <div class="catalog-autofilled-banner" id="catalog-autofilled-banner" hidden>
+            <span class="autofill-check">✓</span>
+            <span>Auto-filled from <strong><span id="autofilled-item-name"></span></strong>! Adjust your size, price, or notes below.</span>
+          </div>
+        </div>
+
         <form id="gear-form">
           <input type="hidden" id="form-gear-id" value="" />
           <div class="form-grid">
