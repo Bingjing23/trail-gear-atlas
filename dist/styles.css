@@ -3438,3 +3438,215 @@ button:active {
 }
 
 
+
+
+/* ==========================================================================
+   Modernized Compact App Hero & Clean Design Polish
+   ========================================================================== */
+.app-compact-hero {
+  background: linear-gradient(135deg, #17342e 0%, #1e453d 60%, #17342e 100%);
+  color: #f6f5ec;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 24px 0 28px;
+}
+.hero-compact-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 32px;
+  flex-wrap: wrap;
+}
+.hero-brand-summary {
+  flex: 1;
+  min-width: 280px;
+}
+.hero-brand-tag {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  color: #a3c9a8;
+  margin-bottom: 6px;
+  text-transform: uppercase;
+}
+.hero-brand-summary h1 {
+  font-family: var(--serif, Georgia, serif);
+  font-weight: 400;
+  font-size: 32px;
+  line-height: 1.15;
+  margin: 0 0 6px;
+  color: #ffffff;
+  letter-spacing: -0.02em;
+}
+.hero-brand-summary p {
+  font-size: 13px;
+  color: #c1d2c5;
+  margin: 0;
+  line-height: 1.5;
+  max-width: 620px;
+}
+.hero-quick-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.hero-btn-add {
+  background: #22c55e !important;
+  color: #064e3b !important;
+  font-weight: 700 !important;
+  font-size: 13px !important;
+  padding: 10px 18px !important;
+  border-radius: 6px !important;
+  border: none !important;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  transition: all 0.15s ease;
+}
+.hero-btn-add:hover {
+  background: #16a34a !important;
+  color: #ffffff !important;
+  transform: translateY(-1px);
+}
+.hero-stat-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 20px;
+  padding: 8px 14px;
+  font-size: 12px;
+  color: #e2ede4;
+  white-space: nowrap;
+}
+.hero-stat-pill strong {
+  color: #ffffff;
+  font-weight: 700;
+}
+
+/* ==========================================================================
+   Custom Gear Badges & Card Typography Polish
+   ========================================================================== */
+.item-custom-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: #e0f2fe;
+  color: #0369a1;
+  border: 1px solid #bae6fd;
+  font-weight: 700;
+  font-size: 11px;
+  padding: 2px 7px;
+  border-radius: 4px;
+  margin-right: 6px;
+  letter-spacing: 0.02em;
+}
+.gear-card.custom-item-card {
+  border-color: #7dd3fc;
+  background: linear-gradient(180deg, #f0f9ff 0%, #ffffff 40px);
+}
+
+/* Larger, crisper card typography */
+.gear-card h4.card-title {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+  font-weight: 600 !important;
+  font-size: 16px !important;
+  line-height: 1.35 !important;
+  color: #1a2e26 !important;
+  margin: 10px 0 6px !important;
+  letter-spacing: -0.01em;
+}
+.gear-card .card-brand {
+  font-size: 11px !important;
+  letter-spacing: 0.12em !important;
+  font-weight: 700 !important;
+  color: #556b5b !important;
+  margin: 12px 0 2px !important;
+}
+
+/* Clear, modern metrics row */
+.card-metrics {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  background: #f4f7f4;
+  border: 1px solid #e1e7e0;
+  border-radius: 6px;
+  padding: 10px 12px;
+  margin-top: 14px;
+  gap: 12px;
+}
+.card-metrics .metric {
+  display: flex;
+  flex-direction: column;
+}
+.card-metrics .metric+.metric {
+  border-left: 1px solid #dfe6de;
+  padding-left: 12px;
+}
+.card-metrics .metric-lbl {
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.08em !important;
+  color: #617366 !important;
+  margin-bottom: 2px !important;
+}
+.card-metrics .metric-val {
+  font-size: 16px !important;
+  font-weight: 700 !important;
+  font-variant-numeric: tabular-nums !important;
+  color: #17342e !important;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+}
+.card-metrics .metric-val.missing {
+  font-size: 12px !important;
+  font-weight: 500 !important;
+  color: #8fa093 !important;
+}
+
+/* Touch-friendly stepper controls */
+.stepper-btn {
+  width: 32px !important;
+  height: 32px !important;
+  min-width: 32px !important;
+  border-radius: 4px !important;
+  font-size: 15px !important;
+  font-weight: 700 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+.stepper-qty {
+  font-size: 14px !important;
+  font-weight: 700 !important;
+  font-variant-numeric: tabular-nums !important;
+  min-width: 24px !important;
+  text-align: center !important;
+}
+.card-detail-btn {
+  height: 34px !important;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  border-radius: 5px !important;
+  margin-top: 10px !important;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .app-compact-hero {
+    padding: 18px 0 20px;
+  }
+  .hero-compact-inner {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+  .hero-quick-actions {
+    width: 100%;
+    justify-content: flex-start;
+  }
+}

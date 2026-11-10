@@ -49,37 +49,25 @@
     </header>
 
     <main id="top">
-      <section class="hero" aria-labelledby="hero-title">
-        <div class="hero-inner shell">
-          <div class="hero-copy">
-            <div class="eyebrow"><span class="eyebrow-line"></span> A PERSONAL FIELD INDEX <span class="eyebrow-index">01 / 05</span></div>
-            <h1 id="hero-title">The gear<br />behind <em>the miles.</em></h1>
-            <p>A clear record of what is in the pack, what it weighs, and its recorded price. Built for planning the next trail, one item at a time.</p>
-            <a class="hero-button" href="#collection">Explore the collection <span aria-hidden="true">↗</span></a>
+      <!-- Modern Compact App Hero & Status -->
+      <section class="app-compact-hero" aria-label="Expedition status and quick actions">
+        <div class="shell hero-compact-inner">
+          <div class="hero-brand-summary">
+            <span class="hero-brand-tag">ULTRALIGHT PACK BUILDER · 极简轻量化装备库</span>
+            <h1>Trail Gear Atlas</h1>
+            <p>精确记录每件装备的实际重量、价格与打包状态。支持随身穿戴扣减、心愿单试重与 LighterPack 格式同步。</p>
           </div>
-          <div class="hero-art" aria-hidden="true">
-            <div class="art-orbit art-orbit-one"></div>
-            <div class="art-orbit art-orbit-two"></div>
-            <div class="art-sun"></div>
-            <svg class="landscape" viewBox="0 0 700 520" preserveAspectRatio="xMidYMid slice" role="presentation">
-              <path class="ridge ridge-back" d="M0 340 C90 305 146 335 225 260 C280 208 326 221 386 177 C449 133 492 195 557 173 C620 152 653 174 700 145 L700 520 L0 520 Z" />
-              <path class="ridge ridge-mid" d="M0 377 C100 335 153 355 220 320 C283 286 324 306 393 254 C475 193 511 273 583 226 C624 202 662 213 700 198 L700 520 L0 520 Z" />
-              <path class="ridge ridge-front" d="M0 425 C102 387 150 419 231 369 C304 323 362 370 438 329 C505 293 582 336 700 282 L700 520 L0 520 Z" />
-              <path class="trail-line" d="M456 520 C394 472 371 451 391 427 C416 398 485 411 504 381 C527 347 484 323 489 297" />
-            </svg>
-            <div class="art-coordinate">TRAIL KIT<br />FIELD INDEX</div>
-            <div class="art-caption"><span class="art-caption-dot"></span> FIELD NOTES / 2026</div>
+          <div class="hero-quick-actions">
+            <button class="btn-primary hero-btn-add" id="btn-hero-add-gear" type="button">+ 添加装备 / Add Gear</button>
+            <a class="btn-secondary" href="#collection">浏览装备库 ↓</a>
+            <div class="hero-stat-pill" id="hero-stat-summary">
+              <strong><span id="hero-stat-items">81</span> 件装备</strong>
+              <span>·</span>
+              <strong><span id="hero-stat-trails">3</span> 条规划路线</strong>
+            </div>
           </div>
         </div>
-        <div class="hero-bottom shell">
-          <span>GEAR, WEIGHT &amp; VALUE — ALL IN ONE PLACE</span>
-          <span class="scroll-cue">SCROLL TO EXPLORE <span aria-hidden="true">↓</span></span>
-        </div>
-      </section>
-
-      <section class="overview shell" aria-label="Collection summary">
-        <div class="overview-lead"><span class="section-kicker">THE COLLECTION &amp; EXPEDITIONS</span><h2>Every item<br />has a place.</h2></div>
-        <div class="overview-stats" id="stats" aria-live="polite"></div>
+        <div id="stats" hidden></div>
       </section>
 
       <!-- Trail Pack Planner & Weight Calculator -->
@@ -87,43 +75,15 @@
         <div class="shell">
           <div class="planner-header">
             <div>
-              <span class="section-kicker">EXPEDITION PACK BUILDER &amp; WEIGHT ANALYTICS</span>
-              <h2 id="planner-title">Pack for the trail.</h2>
-              <p>Choose your upcoming route or outdoor activity, select which gear goes into your pack, and calculate your exact total and base weights in real time.</p>
+              <span class="section-kicker">EXPEDITION PACK BUILDER · 路线打包与负重分析</span>
+              <h2 id="planner-title">路线打包与负重分析</h2>
             </div>
             <div class="trail-selector-bar">
               <div class="trail-select-wrap">
-                <span>ACTIVE EXPEDITION</span>
+                <span>当前路线 / ROUTE</span>
                 <select id="active-trail-select" aria-label="Select active trail to plan pack"></select>
               </div>
-              <button class="btn-primary" id="btn-create-trail" type="button">+ New Trail</button>
-            </div>
-          </div>
-
-          <!-- 3-Step Guided Packing Workflow -->
-          <div class="planner-workflow-guide" aria-label="How to plan your trail pack">
-            <div class="workflow-step active">
-              <span class="step-num">1</span>
-              <div>
-                <strong>Active Trail:</strong>
-                <span id="guide-active-trail">Milford Track</span>
-              </div>
-            </div>
-            <div class="workflow-arrow" aria-hidden="true">→</div>
-            <div class="workflow-step">
-              <span class="step-num">2</span>
-              <div>
-                <strong>Select Gear &amp; Quantities</strong>
-                <span>Click [+] / [-] on cards below</span>
-              </div>
-            </div>
-            <div class="workflow-arrow" aria-hidden="true">→</div>
-            <div class="workflow-step">
-              <span class="step-num">3</span>
-              <div>
-                <strong>Monitor Carried Load</strong>
-                <span>Base weight vs consumables</span>
-              </div>
+              <button class="btn-primary" id="btn-create-trail" type="button">+ 新建路线</button>
             </div>
           </div>
 
