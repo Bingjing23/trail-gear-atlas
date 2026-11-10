@@ -324,6 +324,14 @@ const elements = {
   formGearNotes: document.querySelector("#form-gear-notes"),
   btnSubmitGear: document.querySelector("#btn-submit-gear"),
 
+  // Popular Brand Catalog Quick-fill
+  catalogQuickfillBox: document.querySelector("#catalog-quickfill-box"),
+  catalogSearchInput: document.querySelector("#catalog-search-input"),
+  catalogClearBtn: document.querySelector("#catalog-clear-btn"),
+  catalogSuggestions: document.querySelector("#catalog-suggestions"),
+  catalogAutofilledBanner: document.querySelector("#catalog-autofilled-banner"),
+  autofilledItemName: document.querySelector("#autofilled-item-name"),
+
   // View mode switcher & Wishlist elements
   tabViewOwned: document.querySelector("#tab-view-owned"),
   tabViewWishlist: document.querySelector("#tab-view-wishlist"),
@@ -2156,10 +2164,136 @@ function closeExportModal() {
   elements.exportModal?.classList.remove("open");
 }
 
+let popularCatalog = [];
+
+async function loadPopularCatalog() {
+  if (popularCatalog.length > 0) return popularCatalog;
+  try {
+    const res = await fetch("./catalog.json", { cache: "no-store" });
+    if (res.ok) {
+      popularCatalog = await res.json();
+    }
+  } catch (err) {
+    console.warn("Could not load popular gear catalog", err);
+  }
+  return popularCatalog;
+}
+
+function initCatalogSearch() {
+  const input = elements.catalogSearchInput;
+  const dropdown = elements.catalogSuggestions;
+  const clearBtn = elements.catalogClearBtn;
+  const banner = elements.catalogAutofilledBanner;
+  if (!input || !dropdown) return;
+
+  async function handleSearch() {
+    const query = input.value.trim().toLowerCase();
+    if (!query) {
+      dropdown.hidden = true;
+      clearBtn.hidden = true;
+      return;
+    }
+
+    clearBtn.hidden = false;
+    const catalog = await loadPopularCatalog();
+    if (!catalog.length) return;
+
+    const matches = catalog.filter((item) => {
+      const text = `${item.brand || ""} ${item.name || ""} ${item.category || ""} ${item.itemType || ""}`.toLowerCase();
+      return text.includes(query);
+    }).slice(0, 8);
+
+    if (!matches.length) {
+      dropdown.innerHTML = `<div style="padding:14px; text-align:center; font-size:12px; color:#78887b;">
+        No matching popular gear found for "<strong>${escapeHtml(input.value)}</strong>".<br/>
+        <small style="color:#8f9d92;">You can enter the product details manually below.</small>
+      </div>`;
+      dropdown.hidden = false;
+      return;
+    }
+
+    dropdown.innerHTML = matches.map((item) => {
+      const weightDisplay = Number.isFinite(item.unitWeightG) ? formatWeight(item.unitWeightG) : "";
+      const thumb = item.imagePath
+        ? `<img class="catalog-suggestion-thumb" src="${escapeHtml(item.imagePath)}" alt="${escapeHtml(item.name)}" onerror="this.style.display='none'" />`
+        : `<div class="catalog-suggestion-thumb" style="display:grid;place-items:center;font-size:9px;color:#809080;">GEAR</div>`;
+
+      return `<div class="catalog-suggestion-item" data-catalog-id="${escapeHtml(item.id)}">
+        ${thumb}
+        <div class="catalog-suggestion-details">
+          <div class="catalog-suggestion-name">${escapeHtml(item.name)}</div>
+          <div class="catalog-suggestion-meta">
+            <span>${escapeHtml(item.brand || "Brand")}</span>
+            <span>•</span>
+            <span>${escapeHtml(item.category || "")}</span>
+            ${weightDisplay ? `<span class="catalog-suggestion-weight">⚖️ ${weightDisplay}</span>` : ""}
+          </div>
+        </div>
+      </div>`;
+    }).join("");
+
+    dropdown.hidden = false;
+  }
+
+  input.addEventListener("input", handleSearch);
+  input.addEventListener("focus", () => {
+    if (input.value.trim().length > 0) handleSearch();
+  });
+
+  clearBtn.addEventListener("click", () => {
+    input.value = "";
+    dropdown.hidden = true;
+    clearBtn.hidden = true;
+    input.focus();
+  });
+
+  dropdown.addEventListener("click", (e) => {
+    const itemEl = e.target.closest(".catalog-suggestion-item");
+    if (!itemEl) return;
+    const catId = itemEl.dataset.catalogId;
+    const item = popularCatalog.find((c) => c.id === catId);
+    if (!item) return;
+
+    elements.formGearName.value = item.name || "";
+    elements.formGearBrand.value = item.brand || "";
+    if (item.category && elements.formGearCategory) {
+      elements.formGearCategory.value = item.category;
+    }
+    elements.formGearType.value = item.itemType || "";
+    elements.formGearWeight.value = Number.isFinite(item.unitWeightG) ? item.unitWeightG : "";
+    if (Number.isFinite(item.unitPriceAud)) {
+      elements.formGearPrice.value = item.unitPriceAud;
+      elements.formGearCurrency.value = "AUD";
+    }
+    elements.formGearWebsite.value = item.websiteUrl || "";
+    elements.formGearImage.value = item.imagePath || "";
+    elements.formGearSummary.value = item.summary || "";
+
+    const specsLines = Object.entries(item.specs || {}).map(([k, v]) => `${k}: ${v}`).join("\n");
+    elements.formGearSpecs.value = specsLines;
+    elements.formGearFeatures.value = (item.features || []).join("\n");
+
+    dropdown.hidden = true;
+    if (banner && elements.autofilledItemName) {
+      elements.autofilledItemName.textContent = item.name;
+      banner.hidden = false;
+    }
+
+    showToast(`✨ Auto-filled from <strong>${escapeHtml(item.name)}</strong>!<br/>Adjust size, purchase price, or personal notes below.`);
+  });
+
+  document.addEventListener("click", (e) => {
+    if (!e.target.closest(".catalog-quickfill-box")) {
+      dropdown.hidden = true;
+    }
+  });
+}
+
 function openGearModal(item = null, defaultStatus = null) {
   if (!elements.gearModal || !elements.gearForm) return;
   elements.gearForm.reset();
   if (item) {
+    if (elements.catalogQuickfillBox) elements.catalogQuickfillBox.hidden = true;
     elements.modalGearTitle.textContent = "Edit Gear Item (编辑装备)";
     elements.formGearId.value = item.id;
     elements.formGearName.value = item.name || item.itemType || "";
@@ -2199,6 +2333,14 @@ function openGearModal(item = null, defaultStatus = null) {
     elements.formGearNotes.value = item.notes || "";
     elements.btnSubmitGear.textContent = "Save Changes (保存修改)";
   } else {
+    if (elements.catalogQuickfillBox) {
+      elements.catalogQuickfillBox.hidden = false;
+      if (elements.catalogSearchInput) elements.catalogSearchInput.value = "";
+      if (elements.catalogSuggestions) elements.catalogSuggestions.hidden = true;
+      if (elements.catalogClearBtn) elements.catalogClearBtn.hidden = true;
+      if (elements.catalogAutofilledBanner) elements.catalogAutofilledBanner.hidden = true;
+      loadPopularCatalog();
+    }
     const isWishlistAdd = defaultStatus === "想买" || currentViewMode === "wishlist";
     elements.modalGearTitle.textContent = isWishlistAdd ? "Add Wishlist Item (添加想买装备)" : "Add New Gear Item (新增装备到清单)";
     elements.formGearId.value = "";
@@ -2269,6 +2411,7 @@ async function init() {
     defaultInventory = data.map((item) => ({ ...item, statusKey: normalizeStatus(item.status) }));
     loadInventory(defaultInventory);
     loadTrails();
+    initCatalogSearch();
 
     if (window.location.hash === "#wishlist") {
       currentViewMode = "wishlist";

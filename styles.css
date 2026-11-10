@@ -2389,6 +2389,171 @@
   width: min(100%, 740px);
 }
 
+/* Catalog Quick-Fill in Gear Modal */
+.catalog-quickfill-box {
+  background: #f5f8f4;
+  border: 1px solid #d2dfd0;
+  border-radius: 4px;
+  padding: 14px 16px;
+  margin-bottom: 20px;
+  position: relative;
+}
+.catalog-quickfill-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+.catalog-kicker {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--forest);
+}
+.catalog-badge {
+  font-size: 10px;
+  font-weight: 700;
+  color: #3b5a45;
+  background: #e2ede0;
+  padding: 2px 8px;
+  border-radius: 12px;
+}
+.catalog-search-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.catalog-search-wrap svg {
+  position: absolute;
+  left: 12px;
+  pointer-events: none;
+}
+#catalog-search-input {
+  width: 100%;
+  padding: 9px 36px 9px 36px;
+  font-size: 13px;
+  font-family: var(--sans);
+  border: 1px solid #c4d4c2;
+  border-radius: 3px;
+  background: #fff;
+  transition: all 0.15s ease;
+}
+#catalog-search-input:focus {
+  border-color: var(--forest);
+  outline: 2px solid rgba(45, 68, 56, 0.18);
+}
+#catalog-clear-btn {
+  position: absolute;
+  right: 10px;
+  border: none;
+  background: transparent;
+  color: #889689;
+  cursor: pointer;
+  font-size: 13px;
+  padding: 4px;
+}
+#catalog-clear-btn:hover {
+  color: var(--ink);
+}
+.catalog-suggestions-dropdown {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  max-height: 280px;
+  overflow-y: auto;
+  background: #fff;
+  border: 1px solid #c9d8c7;
+  border-radius: 4px;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.14);
+  z-index: 100;
+}
+.catalog-suggestions-dropdown[hidden] {
+  display: none !important;
+}
+.catalog-suggestion-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  border-bottom: 1px solid #edf1eb;
+  cursor: pointer;
+  transition: background 0.12s ease;
+}
+.catalog-suggestion-item:last-child {
+  border-bottom: none;
+}
+.catalog-suggestion-item:hover,
+.catalog-suggestion-item.highlighted {
+  background: #f1f6ef;
+}
+.catalog-suggestion-thumb {
+  width: 38px;
+  height: 38px;
+  border-radius: 2px;
+  background: #f0f3ee;
+  object-fit: contain;
+  padding: 2px;
+  border: 1px solid #e0e8de;
+  flex-shrink: 0;
+}
+.catalog-suggestion-details {
+  flex: 1;
+  min-width: 0;
+}
+.catalog-suggestion-name {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ink);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.catalog-suggestion-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  color: #697a6d;
+  margin-top: 2px;
+}
+.catalog-suggestion-weight {
+  font-weight: 700;
+  color: var(--forest);
+  background: #e8f0e6;
+  padding: 1px 6px;
+  border-radius: 2px;
+}
+.catalog-autofilled-banner {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #eef7ed;
+  border: 1px solid #c3e2c0;
+  color: #275628;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 8px 12px;
+  border-radius: 3px;
+  margin-top: 10px;
+}
+.catalog-autofilled-banner[hidden] {
+  display: none !important;
+}
+.autofill-check {
+  display: inline-grid;
+  place-items: center;
+  width: 18px;
+  height: 18px;
+  background: #348e36;
+  color: #fff;
+  border-radius: 50%;
+  font-size: 11px;
+  font-weight: 800;
+  flex-shrink: 0;
+}
+
 /* Card Type and Size Badges */
 .card-type-and-size {
   display: flex;

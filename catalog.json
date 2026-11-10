@@ -1,0 +1,1598 @@
+[
+  {
+    "id": "cat-sleep-01",
+    "brand": "Big Agnes",
+    "name": "Copper Spur HV UL2 Ultralight Tent",
+    "category": "Sleep & Shelter",
+    "itemType": "tent",
+    "unitWeightG": 1420,
+    "unitPriceAud": 899.99,
+    "websiteUrl": "https://www.bigagnes.com/products/copper-spur-hv-ul2",
+    "imagePath": "https://cdn.shopify.com/s/files/1/0088/8750/0885/products/THVCS220-Copper-Spur-HV-UL2-Olive-Green-Angle_1200x.jpg",
+    "summary": "Gold standard 3-season freestanding ultralight double-wall backpacking tent with dual vestibules.",
+    "specs": {
+      "Capacity": "2 Person",
+      "Trail Weight": "1.22 kg (Packed: 1.42 kg)",
+      "Floor Area": "2.69 m² (29 sq ft)",
+      "Head Height": "102 cm (40 in)",
+      "Poles": "DAC Featherlite NFL and NSL pole system",
+      "Fly / Floor": "Silicone-treated proprietary ultralight double ripstop nylon with 1200mm PU coating"
+    },
+    "features": [
+      "Freestanding design pitched quickly with color-coded webbing and buckles",
+      "Dual awning-style vestibules provide shade and rain protection",
+      "Proprietary TipLok Tent Buckle stabilizes pole tips and secures rainfly",
+      "3D bin mezzanine storage for oversized apparel and trail essentials"
+    ]
+  },
+  {
+    "id": "cat-sleep-02",
+    "brand": "Big Agnes",
+    "name": "Tiger Wall UL2 Solution Dye Tent",
+    "category": "Sleep & Shelter",
+    "itemType": "tent",
+    "unitWeightG": 1130,
+    "unitPriceAud": 799.99,
+    "websiteUrl": "https://www.bigagnes.com/products/tiger-wall-ul2-solution-dye",
+    "imagePath": "https://cdn.shopify.com/s/files/1/0088/8750/0885/products/TTWUL221-Tiger-Wall-UL2-Solution-Dye-Angle_1200x.jpg",
+    "summary": "Semi-freestanding sub-1kg class ultralight double-wall tent using eco-friendly solution-dyed fabric.",
+    "specs": {
+      "Capacity": "2 Person",
+      "Trail Weight": "992 g (Packed: 1.13 kg)",
+      "Floor Area": "2.6 m² (28 sq ft)",
+      "Head Height": "99 cm (39 in)",
+      "Poles": "Single-hub DAC Featherlite NFL pole system",
+      "Fabric": "Solution-dyed water-repellent silicone treated ripstop nylon"
+    },
+    "features": [
+      "Solution-dyed fabric drastically reduces water and energy consumption in manufacturing",
+      "Dual doors and dual vestibules with storm flaps over dry-entry zips",
+      "Single-pole architecture maximizes headroom while slashing weight",
+      "Interior gear loft loops and structured oversized ceiling pockets"
+    ]
+  },
+  {
+    "id": "cat-sleep-03",
+    "brand": "Nemo Equipment",
+    "name": "Hornet OSMO 2P Ultralight Tent",
+    "category": "Sleep & Shelter",
+    "itemType": "tent",
+    "unitWeightG": 1020,
+    "unitPriceAud": 699.95,
+    "websiteUrl": "https://www.nemoequipment.com/products/hornet-osmo",
+    "imagePath": "https://www.nemoequipment.com/cdn/shop/files/hornet-osmo-2p-angle.jpg",
+    "summary": "Top-rated ultralight semi-freestanding shelter made from proprietary 100% recycled OSMO poly-nylon fabric.",
+    "specs": {
+      "Capacity": "2 Person",
+      "Trail Weight": "948 g (Packed: 1.02 kg)",
+      "Floor Area": "2.5 m² (27.5 sq ft)",
+      "Floor Dimensions": "215 x 130/108 cm",
+      "Poles": "DAC Featherlite NFL aluminum",
+      "Fabric": "OSMO Ripstop (1500 mm waterproof, 4x longer water repellency, 3x less wet-stretch)"
+    },
+    "features": [
+      "Proprietary OSMO fabric resists stretching when wet and dries exceptionally fast",
+      "Patent-pending Flybar volumizing pole clip creates 10% more interior headroom",
+      "Nightlight Pocket diffuses headlamp glow into warm overhead tent lantern lighting",
+      "Divvy Cube rectangular stuff sack allows sharing weight between hiking partners"
+    ]
+  },
+  {
+    "id": "cat-sleep-04",
+    "brand": "Durston Gear",
+    "name": "X-Mid 1 Solid Ultralight Trekking Pole Tent",
+    "category": "Sleep & Shelter",
+    "itemType": "tent",
+    "unitWeightG": 795,
+    "unitPriceAud": 440,
+    "websiteUrl": "https://durstongear.com/products/x-mid-1-tent-ultralight-backpacking",
+    "imagePath": "https://durstongear.com/cdn/shop/files/X-Mid-1-Solid-Hero.jpg",
+    "summary": "Patented geometry trekking-pole shelter offering stormproof 4-stake pitch, full double wall, and generous vestibules.",
+    "specs": {
+      "Capacity": "1 Person",
+      "Fly Weight": "490 g | Inner: 305 g | Total: 795 g",
+      "Setup": "Pitched with 2 trekking poles (118-120 cm)",
+      "Floor Dimensions": "230 x 81 cm (90 x 32 in)",
+      "Fabric": "Custom 15D Sil/PE Polyester (100% sag-free when wet, 2500mm rating)"
+    },
+    "features": [
+      "Diagonal ridgepole geometry provides immense interior headroom without corner struts",
+      "100% polyester fabric does not absorb water or sag overnight in heavy rainfall",
+      "Simple 4-stake rectangular footprint with no mandatory guyouts",
+      "Fly-first pitch keeps interior mesh bone dry during setup in pouring rain"
+    ]
+  },
+  {
+    "id": "cat-sleep-05",
+    "brand": "Durston Gear",
+    "name": "X-Mid 2 Ultralight 2-Person Tent",
+    "category": "Sleep & Shelter",
+    "itemType": "tent",
+    "unitWeightG": 1040,
+    "unitPriceAud": 550,
+    "websiteUrl": "https://durstongear.com/products/x-mid-2-tent-ultralight-backpacking",
+    "imagePath": "https://durstongear.com/cdn/shop/files/X-Mid-2-Tent-Pitch.jpg",
+    "summary": "Two-person trekking-pole palace with dual massive vestibules, zero-sag polyester fabric, and sub-1.1kg weight.",
+    "specs": {
+      "Capacity": "2 Person",
+      "Trail Weight": "1,040 g",
+      "Floor Dimensions": "230 x 127 cm (Fits two wide regular sleeping pads)",
+      "Poles Required": "2 trekking poles adjusted to 122-125 cm",
+      "Fabric": "15D Silpoly 2500mm Hydrostatic Head"
+    },
+    "features": [
+      "Easily accommodates two 25-inch wide rectangular sleeping pads side-by-side",
+      "Dual oversized vestibules fit 65L packs and boots with room for sheltered cooking",
+      "Offset poles prevent obstruction of entry and exit doorways",
+      "Magnetic door fly holdbacks for clean, quick ventilation"
+    ]
+  },
+  {
+    "id": "cat-sleep-06",
+    "brand": "Zpacks",
+    "name": "Duplex Classic Ultralight Dyneema Tent",
+    "category": "Sleep & Shelter",
+    "itemType": "tent",
+    "unitWeightG": 525,
+    "unitPriceAud": 1050,
+    "websiteUrl": "https://zpacks.com/products/duplex-tent",
+    "imagePath": "https://zpacks.com/cdn/shop/products/Duplex-Olive-Drab.jpg",
+    "summary": "Legendary Triple Crown thru-hiking shelter constructed from featherlight Dyneema Composite Fabric (DCF).",
+    "specs": {
+      "Capacity": "2 Person (Spacious solo / UL pair)",
+      "Total Weight": "525 g (18.5 oz)",
+      "Floor Dimensions": "229 x 114 cm (90 x 45 in)",
+      "Center Height": "122 cm (48 in)",
+      "Material": "0.55 oz/sqyd Dyneema Composite Fabric (DCF)"
+    },
+    "features": [
+      "100% waterproof Dyneema Composite Fabric does not stretch, sag, or wet out",
+      "Integrated bathtub floor suspended with shock cord eliminates seams on ground level",
+      "Overlapping storm doors allow 4-way ventilation adjustment based on wind direction",
+      "Pitches taut with 2 trekking poles and 6 to 8 stakes"
+    ]
+  },
+  {
+    "id": "cat-sleep-07",
+    "brand": "MSR",
+    "name": "Hubba Hubba 2 Ultralight Backpacking Tent",
+    "category": "Sleep & Shelter",
+    "itemType": "tent",
+    "unitWeightG": 1300,
+    "unitPriceAud": 799,
+    "websiteUrl": "https://www.msrgear.com/tents/backpacking-tents/hubba-hubba-2-person-backpacking-tent/10316.html",
+    "imagePath": "https://www.msrgear.com/dw/image/v2/BDKF_PRD/on/demandware.static/-/Sites-cascadedesigns-master/default/dw1d9600d1/msr/tents/10316/10316_01.jpg",
+    "summary": "World-famous freestanding three-season shelter featuring Easton Syclone virtually unbreakable composite poles.",
+    "specs": {
+      "Capacity": "2 Person",
+      "Minimum Weight": "1.30 kg (Packed: 1.47 kg)",
+      "Floor Area": "2.7 m² (29 sq ft)",
+      "Interior Peak Height": "101 cm",
+      "Poles": "Easton Syclone composite carbon-glass fiber poles",
+      "Rainfly / Floor": "20D ripstop nylon 1200mm DuraShield polyurethane & silicone"
+    },
+    "features": [
+      "Easton Syclone poles flex under extreme gale force winds and bounce right back",
+      "True rectangular floor plan prevents tapering at the feet for roomy elbow room",
+      "StayDry doors with built-in rain gutters prevent water dripping into tent during entry",
+      "Unified hubbed pole system for lightning-fast pitching"
+    ]
+  },
+  {
+    "id": "cat-sleep-08",
+    "brand": "3F UL Gear",
+    "name": "Lanshan 1 Pro Ultralight Single-Wall Tent",
+    "category": "Sleep & Shelter",
+    "itemType": "tent",
+    "unitWeightG": 690,
+    "unitPriceAud": 220,
+    "websiteUrl": "https://3fulgear.com/product/ultralight-tent/lanshan1-pro/",
+    "imagePath": "https://3fulgear.com/wp-content/uploads/2021/03/Lanshan-1-Pro-Khaki.jpg",
+    "summary": "Unbeatable budget-to-weight ratio single-wall trekking pole tent made of 20D double silicon-coated nylon.",
+    "specs": {
+      "Capacity": "1 Person",
+      "Total Weight": "690 g (Excluding stakes and lines)",
+      "Dimensions": "230 x 80/110 x 120 cm",
+      "Poles": "Requires 1 trekking pole set to 120-125 cm",
+      "Fabric": "20D 2-sided Silicon Nylon (5000mm hydrostatic head)"
+    },
+    "features": [
+      "Sub-700g ultralight pyramid design at an accessible entry price point",
+      "2-sided silicone coating offers superior tear strength and UV durability",
+      "High bathtub floor protects against ground splashing in downpours",
+      "Apex air vent with kickstand wire for cross condensation management"
+    ]
+  },
+  {
+    "id": "cat-sleep-09",
+    "brand": "Therm-a-Rest",
+    "name": "NeoAir XLite NXT Ultralight Sleeping Pad",
+    "category": "Sleep & Shelter",
+    "itemType": "sleep mat",
+    "unitWeightG": 370,
+    "unitPriceAud": 349.95,
+    "websiteUrl": "https://www.thermarest.com/sleeping-pads/fast-and-light/neoair-xlite-nxt-sleeping-pad/neoair-xlite-nxt.html",
+    "imagePath": "https://www.thermarest.com/dw/image/v2/BDKF_PRD/on/demandware.static/-/Sites-cascadedesigns-master/default/dw1ca050d2/thermarest/sleeping-pads/11627/11627_01.jpg",
+    "summary": "The definitive ultralight 3-season air mattress: 7.6 cm thick, 4.5 R-value, and 83% quieter than previous versions.",
+    "specs": {
+      "R-Value": "4.5 (ASTM F3340-18 tested for 3+ season freezing conditions)",
+      "Thickness": "7.6 cm (3.0 in)",
+      "Weight": "Regular: 370 g (13 oz) · Regular Wide: 440 g",
+      "Packed Size": "23 x 10 cm (9 x 4 in)",
+      "Valve": "WingLock Valve with one-way inflation check and rapid dump"
+    },
+    "features": [
+      "ThermaCapture technology and Triangular Core Matrix trap body heat silently",
+      "3 inches of premium stable contour support for side sleepers without bottoming out",
+      "WingLock valve provides 3x faster inflation than classic twist valves",
+      "Pump sack, stuff sack, and field repair kit included"
+    ]
+  },
+  {
+    "id": "cat-sleep-10",
+    "brand": "Therm-a-Rest",
+    "name": "Z Lite Sol Closed-Cell Foam Sleeping Pad",
+    "category": "Sleep & Shelter",
+    "itemType": "sleep mat",
+    "unitWeightG": 410,
+    "unitPriceAud": 89.95,
+    "websiteUrl": "https://www.thermarest.com/sleeping-pads/fast-and-light/z-lite-sol-sleeping-pad/z-lite-sol.html",
+    "imagePath": "https://www.thermarest.com/dw/image/v2/BDKF_PRD/on/demandware.static/-/Sites-cascadedesigns-master/default/dw7e53f0cf/thermarest/sleeping-pads/06670/06670_01.jpg",
+    "summary": "Virtually indestructible accordion-folding foam pad with reflective ThermaCapture coating.",
+    "specs": {
+      "R-Value": "2.0 (ASTM F3340-18)",
+      "Thickness": "2.0 cm (0.75 in)",
+      "Weight": "410 g (14 oz)",
+      "Dimensions": "183 x 51 cm (72 x 20 in)",
+      "Material": "Cross-linked molded closed-cell polyethylene foam"
+    },
+    "features": [
+      "100% puncture-proof: can never deflate or leak on rough granite, cacti, or thorns",
+      "ThermaCapture reflective coating radiates radiant body heat back to your back",
+      "Dual-density foam structure features softer top for comfort and denser bottom for durability",
+      "Accordion folding design doubles as camp seat, yoga mat, or pack backpanel stiffener"
+    ]
+  },
+  {
+    "id": "cat-sleep-11",
+    "brand": "Sea to Summit",
+    "name": "Ether Light XT Insulated Air Mat",
+    "category": "Sleep & Shelter",
+    "itemType": "sleep mat",
+    "unitWeightG": 490,
+    "unitPriceAud": 289,
+    "websiteUrl": "https://seatosummit.com.au/products/ether-light-xt-insulated-air-sleeping-mat",
+    "imagePath": "https://seatosummit.com.au/cdn/shop/products/AMELXTINS_1.jpg",
+    "summary": "Plush 10cm extra-thick air sprung cell mat tailored for comfortable side-sleepers in 3-season cold.",
+    "specs": {
+      "R-Value": "3.2 (ASTM F3340-18)",
+      "Thickness": "10 cm (4.0 in)",
+      "Weight": "Regular: 490 g | Large: 625 g",
+      "Insulation": "Thermolite hollow fiber insulation and Exkin Platinum reflective barrier",
+      "Fabric": "30D / 40D anti-microbial liquid-extruded TPU nylon"
+    },
+    "features": [
+      "Air Sprung Cells deform independently to conform to hips and shoulders like a pocket spring mattress",
+      "Airstream Pump sack integrated into stuff sack for rapid, effortless breath-free inflation",
+      "Multi-function high flow-rate valve allows micro-adjustment of firmness",
+      "PillowLock system adheres Sea to Summit Aeros pillows directly to the mat"
+    ]
+  },
+  {
+    "id": "cat-sleep-12",
+    "brand": "Enlightened Equipment",
+    "name": "Revelation 20°F (-6°C) Down Quilt",
+    "category": "Sleep & Shelter",
+    "itemType": "quilt",
+    "unitWeightG": 625,
+    "unitPriceAud": 549,
+    "websiteUrl": "https://enlightenedequipment.com/revelation-custom/",
+    "imagePath": "https://enlightenedequipment.com/content/images/revelation-hero.jpg",
+    "summary": "The benchmark ultralight backpacking quilt with zippered convertible footbox and pad attachment straps.",
+    "specs": {
+      "Temperature Rating": "20°F / -6°C Limit",
+      "Weight": "625 g (Regular / Regular width)",
+      "Insulation": "850+ fill power DownTek water-repellent duck down (410g fill)",
+      "Shell / Lining": "10D Ultralight Ripstop Nylon with DWR",
+      "Footbox": "Convertible 20\" YKK zipper with shock cord cinch drawcord"
+    },
+    "features": [
+      "Eliminates wasted compressed back insulation by connecting directly to your sleeping pad",
+      "Convertible footbox opens flat into blanket for warm summer evenings or cinches tight for sub-zero frosts",
+      "Elastic pad straps and snap buckles prevent draft intrusion during side-sleeping turns",
+      "Continuous U-shaped baffles allow manually shifting down insulation between top and sides"
+    ]
+  },
+  {
+    "id": "cat-sleep-13",
+    "brand": "Black Ice",
+    "name": "G400 Alpine Down Sleeping Bag",
+    "category": "Sleep & Shelter",
+    "itemType": "sleep bag",
+    "unitWeightG": 780,
+    "unitPriceAud": 220,
+    "websiteUrl": "https://blackicegear.com/",
+    "imagePath": "https://blackicegear.com/images/g400-blue.jpg",
+    "summary": "Crowd-favorite value 800FP goose down mummy bag for 3-season alpine camping and high-altitude hut treks.",
+    "specs": {
+      "Comfort Rating": "5°C | Limit: 0°C | Extreme: -10°C",
+      "Weight": "780 g (Size M) / 810 g (Size L)",
+      "Fill": "400 g of 800+ Loft 90/10 White Goose Down (Teflon DWR treated)",
+      "Shell": "15D GramArt ultralight DWR ripstop nylon",
+      "Zippers": "YKK #5 dual-direction glow-in-the-dark pullers"
+    },
+    "features": [
+      "Trapezoidal footbox contours natural relaxed feet posture without down compression",
+      "3D insulated draft collar and full zipper baffle seal in core chest heat",
+      "Teflon-treated down resists clumping in humid high-condensation conditions",
+      "Includes ultra-compact compression dry bag and oversized mesh storage sack"
+    ]
+  },
+  {
+    "id": "cat-sleep-14",
+    "brand": "Sea to Summit",
+    "name": "Aeros Ultralight Inflatable Camp Pillow",
+    "category": "Sleep & Shelter",
+    "itemType": "pillow",
+    "unitWeightG": 60,
+    "unitPriceAud": 49.95,
+    "websiteUrl": "https://seatosummit.com.au/products/aeros-ultralight-pillow",
+    "imagePath": "https://seatosummit.com.au/cdn/shop/products/APILULREG_1.jpg",
+    "summary": "Pocket-sized 60g contoured inflatable backpacking pillow that fits inside any pack hood.",
+    "specs": {
+      "Dimensions": "36 x 26 x 12 cm (Regular)",
+      "Weight": "60 g (2.1 oz)",
+      "Packed Size": "5.5 x 7.5 cm (Tiny apple size)",
+      "Material": "20D laminated polyester with soft-touch face"
+    },
+    "features": [
+      "Curved internal baffles create contours that cradle head centered all night",
+      "Scalloped bottom edge centers pillow over shoulders whether sleeping on back or side",
+      "Pillow Lock compatible to prevent sliding off Sea to Summit mats",
+      "Inflates in just 2 to 3 breaths via multi-function miniature valve"
+    ]
+  },
+  {
+    "id": "cat-packs-01",
+    "brand": "Hyperlite Mountain Gear",
+    "name": "2400 Southwest 40L Dyneema Backpack",
+    "category": "Packs & Essentials",
+    "itemType": "backpack",
+    "unitWeightG": 850,
+    "unitPriceAud": 580,
+    "websiteUrl": "https://www.hyperlitemountaingear.com/products/2400-southwest",
+    "imagePath": "https://www.hyperlitemountaingear.com/cdn/shop/products/2400-Southwest-White-Front.jpg",
+    "summary": "Rugged waterproof Dyneema Composite Fabric backpack with solid exterior pockets for bushwhacking.",
+    "specs": {
+      "Volume": "40 L internal + 9.8 L external pockets",
+      "Weight": "850 g (Medium)",
+      "Load Capacity": "Up to 18 kg (40 lbs)",
+      "Frame": "Dual removable contoured aluminum stays with integrated 1/4\" foam pad",
+      "Material": "DCH50 Dyneema Composite Fabric (50D polyester face)"
+    },
+    "features": [
+      "Solid Hardline with Dyneema exterior pockets prevent snagging on scrub, rocks, and thorn bushes",
+      "100% waterproof taped seam construction keeps gear bone dry in torrential downpours",
+      "Roll-top closure allows compressing down for weekend overnights or expanding for 5-day expeditions",
+      "Contoured hipbelt with large water-resistant zippered pockets for phone and snacks"
+    ]
+  },
+  {
+    "id": "cat-packs-02",
+    "brand": "Durston Gear",
+    "name": "Kakwa 55L Ultralight Backpack",
+    "category": "Packs & Essentials",
+    "itemType": "backpack",
+    "unitWeightG": 875,
+    "unitPriceAud": 440,
+    "websiteUrl": "https://durstongear.com/products/kakwa-55-ultralight-backpack",
+    "imagePath": "https://durstongear.com/cdn/shop/files/Kakwa55-Hero.jpg",
+    "summary": "Ergonomically engineered load-hauler built from Ultra 200X fabric with hollow carbon fiber frame.",
+    "specs": {
+      "Volume": "55 L internal + 15 L external",
+      "Weight": "875 g (Medium)",
+      "Max Load Rating": "20 kg (45 lbs) comfortable carry",
+      "Frame": "Hollow core carbon fiber inverted U-frame directly connected to hipbelt",
+      "Fabric": "Challenge Ultra 200X (UHMWPE face with recycled film backing)"
+    },
+    "features": [
+      "Ultra 200X fabric provides 3x the tear strength and 5x the abrasion resistance of 500D Cordura",
+      "Direct-to-hipbelt frame architecture transfers heavy pack weight directly onto pelvic structure",
+      "Patented shoulder strap pockets fit 500ml water bottles or large smartphones securely",
+      "Quick-cinch side pockets allow drawing 1L bottles while moving without taking pack off"
+    ]
+  },
+  {
+    "id": "cat-packs-03",
+    "brand": "Osprey",
+    "name": "Exos 48 Ventilated Ultralight Backpack",
+    "category": "Packs & Essentials",
+    "itemType": "backpack",
+    "unitWeightG": 1260,
+    "unitPriceAud": 349.95,
+    "websiteUrl": "https://www.osprey.com/au/en/exos-48-exos48s22-550",
+    "imagePath": "https://www.osprey.com/images/product/hero/exos48s22_f22_side_tungstengreen.jpg",
+    "summary": "Supreme suspended mesh backpanel ventilation with durable internal frame for warm climate trekking.",
+    "specs": {
+      "Volume": "48 Liters",
+      "Weight": "1.26 kg (S/M) / 1.30 kg (L/XL)",
+      "Backpanel": "AirSpeed suspended mesh tensioned trampoline suspension",
+      "Frame": "4 mm LightWire peripheral alloy frame",
+      "Fabric": "100D High Tenacity Ripstop Recycled Nylon with PFC-free DWR"
+    },
+    "features": [
+      "AirSpeed trampoline suspension keeps air flowing freely across entire back to eliminate sweat build-up",
+      "Removable floating top lid with integrated FlapJacket cover for lidless ultralight mode",
+      "Stow-on-the-Go trekking pole attachment loops stow poles without stopping",
+      "ExoForm harness and seamless hipbelt with dual zippered trail snack pockets"
+    ]
+  },
+  {
+    "id": "cat-packs-04",
+    "brand": "Osprey",
+    "name": "Talon 22 Alpine Daypack",
+    "category": "Packs & Essentials",
+    "itemType": "backpack",
+    "unitWeightG": 870,
+    "unitPriceAud": 219.95,
+    "websiteUrl": "https://www.osprey.com/au/en/talon-22-talon22s21-789",
+    "imagePath": "https://www.osprey.com/images/product/hero/talon22s21_s21_side_stealthblack.jpg",
+    "summary": "The benchmark daypack for technical scrambles, summit pushes, and fast-and-light day hikes.",
+    "specs": {
+      "Volume": "22 Liters",
+      "Weight": "870 g",
+      "Backpanel": "AirScape die-cut foam with breathable mesh overlay",
+      "Hydration": "External hydration reservoir sleeve for 3L bladders"
+    },
+    "features": [
+      "Close-to-body AirScape harness keeps center of gravity stable on technical ridge scrambles",
+      "LidLock helmet carry attachment for alpine bike and climbing ascents",
+      "Dual stretch mesh side pockets and dual zippered hipbelt pockets",
+      "Ice axe and trekking pole bungee attachments with protective tuck-away loops"
+    ]
+  },
+  {
+    "id": "cat-packs-05",
+    "brand": "Black Diamond",
+    "name": "Distance Carbon FLZ Trekking Poles",
+    "category": "Packs & Essentials",
+    "itemType": "trekking poles",
+    "unitWeightG": 340,
+    "unitPriceAud": 279.99,
+    "websiteUrl": "https://www.blackdiamondequipment.com/en_US/product/distance-carbon-flz-trekking-poles/",
+    "imagePath": "https://www.blackdiamondequipment.com/on/demandware.static/-/Sites-bdel/default/dw76ef5077/products/mountain/trekking-poles/112534_0000_distance_carbon_flz.jpg",
+    "summary": "Ultralight 100% carbon fiber 3-section Z-pole folding system with FlickLock length adjustability.",
+    "specs": {
+      "Weight (Pair)": "340 g (110-125 cm)",
+      "Collapsed Length": "37 cm (14.5 in)",
+      "Usable Length": "110 - 125 cm",
+      "Shaft": "100% high-tensile carbon fiber construction",
+      "Adjustment": "FlickLock Pro forged aluminum quick cam-lock"
+    },
+    "features": [
+      "Speed Cone deployment snaps all three sections rigidly into place in under 2 seconds",
+      "FlickLock Pro offers 15 cm of fine adjustment to pitch trekking pole tents perfectly",
+      "Breathable, moisture-wicking EVA foam grip with mini extension for sidehill traversing",
+      "Interchangeable carbide and non-marking rubber tips included"
+    ]
+  },
+  {
+    "id": "cat-packs-06",
+    "brand": "Petzl",
+    "name": "Actik Core 600 Lumen Rechargeable Headlamp",
+    "category": "Packs & Essentials",
+    "itemType": "headlamp",
+    "unitWeightG": 88,
+    "unitPriceAud": 129.95,
+    "websiteUrl": "https://www.petzl.com/US/en/Sport/Headlamps/ACTIK-CORE",
+    "imagePath": "https://www.petzl.com/s/petzl/images/products/ACTIK-CORE/E065AA00-ACTIK-CORE-red.jpg",
+    "summary": "Versatile 600-lumen hybrid headlamp with rechargeable CORE battery and emergency red night-vision mode.",
+    "specs": {
+      "Max Brightness": "600 Lumens",
+      "Weight": "88 g",
+      "Beam Distance": "Up to 115 meters",
+      "Power": "Petzl 1250 mAh CORE USB rechargeable battery OR 3x AAA batteries (Hybrid Concept)",
+      "Water Resistance": "IPX4 weather resistant"
+    },
+    "features": [
+      "Dual beam patterns (flood or mixed) adapt to close camp chores or rapid night navigation",
+      "Continuous red lighting preserves natural night vision without blinding tent companions",
+      "Phosphorescent reflector ring helps locate headlamp instantly in dark tent pitch",
+      "Reflective headband with integrated SOS safety whistle"
+    ]
+  },
+  {
+    "id": "cat-packs-07",
+    "brand": "Nitecore",
+    "name": "NU25 UL Dual-Beam USB-C Headlamp",
+    "category": "Packs & Essentials",
+    "itemType": "headlamp",
+    "unitWeightG": 45,
+    "unitPriceAud": 69.95,
+    "websiteUrl": "https://flashlight.nitecore.com/product/nu25ul",
+    "imagePath": "https://flashlight.nitecore.com/Uploads/Product/image/20221019/20221019154707_34479.jpg",
+    "summary": "Featherweight 45g thru-hiker staple headlamp with 400 lumens and dual cord ultralight headband.",
+    "specs": {
+      "Max Output": "400 Lumens",
+      "Total Weight": "45 g (1.59 oz including headband)",
+      "Battery": "Built-in 650 mAh Li-ion battery with USB-C port",
+      "Waterproof": "IP66 rated"
+    },
+    "features": [
+      "Minimalist dual-shockcord headband drastically reduces volume and sweat absorption",
+      "Equipped with spotlight, floodlight (high CRI >90), and auxiliary red LED",
+      "USB-C rechargeable directly from powerbank with power level indicator LEDs",
+      "Lockout mode prevents accidental activation inside tight backpack hip pockets"
+    ]
+  },
+  {
+    "id": "cat-packs-08",
+    "brand": "Nitecore",
+    "name": "NB10000 Gen 3 Carbon Fiber 10,000mAh Power Bank",
+    "category": "Packs & Essentials",
+    "itemType": "power bank",
+    "unitWeightG": 150,
+    "unitPriceAud": 119.95,
+    "websiteUrl": "https://charger.nitecore.com/product/nb10000_gen3",
+    "imagePath": "https://charger.nitecore.com/Uploads/Product/image/20240321/20240321151624_57608.jpg",
+    "summary": "The world's lightest 10,000mAh carbon fiber power bank: 22.5W dual USB-C fast charging at 150g.",
+    "specs": {
+      "Capacity": "10,000 mAh 3.85V (38.5 Wh) airline safe",
+      "Weight": "150 g (5.29 oz)",
+      "Output": "Dual USB-C ports (Up to 22.5W QC/PD fast charging)",
+      "Casing": "Carbon fiber reinforced polymer (CFRP) with corner bumper protection",
+      "Water Resistance": "IPX5 rainproof rating"
+    },
+    "features": [
+      "40% lighter and smaller than conventional 10,000mAh aluminum power banks",
+      "Dual USB-C ports support pass-through charging and low-current mode for watches/earbuds",
+      "Engineered to withstand sub-zero cold mountain weather without rapid voltage drops",
+      "Airline flight approved for carry-on luggage across all international airlines"
+    ]
+  },
+  {
+    "id": "cat-packs-09",
+    "brand": "Garmin",
+    "name": "inReach Mini 2 Satellite Communicator",
+    "category": "Packs & Essentials",
+    "itemType": "satellite communicator",
+    "unitWeightG": 100,
+    "unitPriceAud": 599,
+    "websiteUrl": "https://www.garmin.com/en-AU/p/765374",
+    "imagePath": "https://res.garmin.com/en/products/010-02602-00/v/cf-lg.jpg",
+    "summary": "Lifesaving two-way satellite messenger with 100% global Iridium coverage, TracBack, and 30-day battery life.",
+    "specs": {
+      "Weight": "100 g (3.5 oz)",
+      "Battery Life": "Up to 30 days in 10-minute tracking mode",
+      "Network": "100% Global Iridium satellite constellation",
+      "Water Rating": "IPX7 waterproof",
+      "Display": "Sunlight-readable monochrome MIP (176 x 176 pixels)"
+    },
+    "features": [
+      "Two-way SMS text messaging with family and tracking map even in deep slot canyons with zero cell service",
+      "Dedicated interactive SOS button triggers 24/7 Garmin Response emergency search and rescue",
+      "TracBack routing guides you step-by-step back to where you started if you lose the trail",
+      "Pairs with Garmin Explore smartphone app for offline topographic map navigation"
+    ]
+  },
+  {
+    "id": "cat-packs-10",
+    "brand": "Victorinox",
+    "name": "Classic SD Swiss Army Knife",
+    "category": "Packs & Essentials",
+    "itemType": "multi-tool",
+    "unitWeightG": 21,
+    "unitPriceAud": 39.95,
+    "websiteUrl": "https://victorinox.com.au/products/classic-sd-red",
+    "imagePath": "https://victorinox.com.au/cdn/shop/products/0.6223-classic-sd-red.jpg",
+    "summary": "The ultimate 21g multi-functional pocket tool with precision scissors, blade, file, tweezers, and toothpick.",
+    "specs": {
+      "Weight": "21 g (0.74 oz)",
+      "Length": "58 mm (2.3 in)",
+      "Functions": "7 tools: Blade, scissors, nail file, screwdriver 2.5mm, key ring, toothpick, tweezers"
+    },
+    "features": [
+      "Razor-sharp micro scissors are ideal for trimming moleskin blister tape and gear repair patches",
+      "Precision stainless steel tweezers for extracting ticks, splinters, and cactus thorns",
+      "Tough Swiss stainless steel construction with compact key-ring profile"
+    ]
+  },
+  {
+    "id": "cat-cook-01",
+    "brand": "Soto",
+    "name": "WindMaster Stove with Micro Regulator & 4Flex",
+    "category": "Cooking & Hydration",
+    "itemType": "stove",
+    "unitWeightG": 87,
+    "unitPriceAud": 139.95,
+    "websiteUrl": "https://sotooutdoors.com/products/windmaster-stove-with-4flex-pot-support",
+    "imagePath": "https://sotooutdoors.com/cdn/shop/products/OD-1RXN_4Flex_1.jpg",
+    "summary": "Award-winning concave burner design with Micro Regulator for sub-zero cold output and gale-force wind resistance.",
+    "specs": {
+      "Weight": "67 g (Stove alone) / 87 g (With 4Flex pot support)",
+      "Output": "11,000 BTU / 3,260 W",
+      "Boil Time": "2.5 minutes for 500 ml water",
+      "Burn Time": "Approx. 1.5 hours with 250g canister",
+      "Ignition": "Internal stealth piezo igniter"
+    },
+    "features": [
+      "Concave burner head creates built-in windscreen that stays lit in harsh alpine gusts",
+      "Micro Regulator valve maintains consistent heat output as gas canister chills near freezing",
+      "Subtle simmer control allows gentle stew cooking without scorching pot bottoms",
+      "Detachable 4Flex support supports large pots and kettles with rock-solid stability"
+    ]
+  },
+  {
+    "id": "cat-cook-02",
+    "brand": "MSR",
+    "name": "PocketRocket 2 Ultralight Stove",
+    "category": "Cooking & Hydration",
+    "itemType": "stove",
+    "unitWeightG": 73,
+    "unitPriceAud": 89.95,
+    "websiteUrl": "https://www.msrgear.com/stoves/canister-stoves/pocketrocket-2-stove/09884.html",
+    "imagePath": "https://www.msrgear.com/dw/image/v2/BDKF_PRD/on/demandware.static/-/Sites-cascadedesigns-master/default/dw11bf20ff/msr/stoves/09884/09884_01.jpg",
+    "summary": "Classic, reliable workhorse backpacking canister stove packing down into palm-sized protective hardshell case.",
+    "specs": {
+      "Weight": "73 g (2.6 oz)",
+      "Boil Time": "1 liter in 3.5 minutes",
+      "Packed Size": "8.6 x 5.0 x 5.0 cm"
+    },
+    "features": [
+      "WindClip tri-directional windshield pushes flame outward even in crosswinds",
+      "Folding serrated pot supports accommodate wide variety of pot sizes securely",
+      "Includes ultra-lightweight hard-shell carry case"
+    ]
+  },
+  {
+    "id": "cat-cook-03",
+    "brand": "Toaks",
+    "name": "Titanium 750ml Pot with Bail Handle",
+    "category": "Cooking & Hydration",
+    "itemType": "cookpot",
+    "unitWeightG": 110,
+    "unitPriceAud": 79.95,
+    "websiteUrl": "https://www.toaksoutdoor.com/products/pot-750-bh",
+    "imagePath": "https://www.toaksoutdoor.com/cdn/shop/products/POT-750-BH_1.jpg",
+    "summary": "Pure ultralight Grade 1 titanium pot that fits a 100g gas canister and micro stove inside.",
+    "specs": {
+      "Capacity": "750 ml (25.4 oz)",
+      "Weight": "Pot alone: 90 g | With lid: 110 g",
+      "Dimensions": "Internal: 95 mm dia x 110 mm height",
+      "Material": "Pure Grade 1 Titanium (0.3mm wall)"
+    },
+    "features": [
+      "Detachable bail handle allows hanging over campfires or cooking on canister stoves",
+      "Volume measurement graduations stamped in ml and oz on internal pot wall",
+      "Lid with steam vent holes and lockable upright grip loop",
+      "Nests 100g isobutane canister, Soto Windmaster, and mini lighter seamlessly"
+    ]
+  },
+  {
+    "id": "cat-cook-04",
+    "brand": "Sawyer",
+    "name": "Sawyer Squeeze Water Filtration System",
+    "category": "Cooking & Hydration",
+    "itemType": "water filter",
+    "unitWeightG": 85,
+    "unitPriceAud": 79.95,
+    "websiteUrl": "https://www.sawyer.com/products/squeeze-water-filtration-system",
+    "imagePath": "https://cdn.shopify.com/s/files/1/0270/8665/1476/products/SP129_Squeeze_Hero.jpg",
+    "summary": "The thru-hiker standard 0.1 micron absolute hollow-fiber membrane filter with lifetime warranty.",
+    "specs": {
+      "Filter Rating": "0.1 Micron Absolute",
+      "Weight": "85 g (3.0 oz)",
+      "Filter Life": "Up to 100,000 gallons guaranteed",
+      "Compatibility": "Standard 28mm bottle threads (Smartwater, Platypus, CNOC)"
+    },
+    "features": [
+      "Removes 99.99999% of all bacteria (salmonella, cholera, E. coli) and 99.9999% of protozoa (giardia, cryptosporidium)",
+      "Screws directly onto popular lightweight Smartwater bottles or squeeze pouches",
+      "Can be backflushed indefinitely in the field using included syringe for rapid flow rate restoration"
+    ]
+  },
+  {
+    "id": "cat-cook-05",
+    "brand": "Katadyn",
+    "name": "BeFree 1.0L Tactical Microfilter Water Bottle",
+    "category": "Cooking & Hydration",
+    "itemType": "water filter",
+    "unitWeightG": 63,
+    "unitPriceAud": 89.95,
+    "websiteUrl": "https://www.katadyn.com/en/ch/8019641-katadyn-befree-1.0l-tactical",
+    "imagePath": "https://www.katadyn.com/static/catalogs/katadyn/products/8019641/1.jpg",
+    "summary": "Blazing fast 2L/min flow rate collapsible soft flask filter: simply shake or swish to clean on the trail.",
+    "specs": {
+      "Weight": "63 g (2.3 oz)",
+      "Capacity": "1.0 Liter flexible TPU flask by Hydrapak",
+      "Flow Rate": "Up to 2 Liters per minute",
+      "Filtration": "0.1 micron EZ-Clean hollow-fiber membrane"
+    },
+    "features": [
+      "EZ-Clean Membrane cleans in seconds by simply shaking the flask in lake/stream water",
+      "Wide 42mm mouth makes scooping water from shallow alpine trickles effortless",
+      "Collapses completely flat into a pocket when empty"
+    ]
+  },
+  {
+    "id": "cat-cook-06",
+    "brand": "CNOC Outdoors",
+    "name": "Vecto 2L Water Container 28mm Thread",
+    "category": "Cooking & Hydration",
+    "itemType": "water bladder",
+    "unitWeightG": 76,
+    "unitPriceAud": 44.95,
+    "websiteUrl": "https://cnocoutdoors.com/products/vecto-28mm",
+    "imagePath": "https://cnocoutdoors.com/cdn/shop/products/Vecto-2L-Orange.jpg",
+    "summary": "Patented wide slider back-opening reservoir that makes scooping dirty water instant and connects to Sawyer filters.",
+    "specs": {
+      "Capacity": "2.0 Liters",
+      "Weight": "76 g",
+      "Thread": "Standard 28 mm (Sawyer / HydroBlu / Platypus compatible)",
+      "Breaking Point": "Tested up to 100 kg (220 lbs) crush resistance"
+    },
+    "features": [
+      "Wide dual-opening design with slider clamp scoops 2L of water in a single swipe",
+      "Tough FDA-approved BPA-free TPU handles hot water up to 60°C",
+      "Connects directly to Sawyer Squeeze for effortless hands-free gravity filtration"
+    ]
+  },
+  {
+    "id": "cat-cook-07",
+    "brand": "Sea to Summit",
+    "name": "Frontier Ultralight Long Handle Spoon",
+    "category": "Cooking & Hydration",
+    "itemType": "spoon",
+    "unitWeightG": 17,
+    "unitPriceAud": 24.95,
+    "websiteUrl": "https://seatosummit.com.au/products/frontier-ultralight-long-handle-spoon",
+    "imagePath": "https://seatosummit.com.au/cdn/shop/products/Frontier-UL-Long-Spoon.jpg",
+    "summary": "Extra-long hard-anodized aircraft aluminum spoon for reaching deep freeze-dried pouch corners without food on knuckles.",
+    "specs": {
+      "Weight": "17 g (0.6 oz)",
+      "Length": "21.5 cm",
+      "Material": "Hard-anodized aircraft-grade 7075-T6 aluminum"
+    },
+    "features": [
+      "Sleek polished bowl profile feels natural and smooth in mouth",
+      "Long handle reaches all the way to bottom of deep freeze-dried meal pouches cleanly",
+      "Rigid ribbed structural shaft prevents bending while digging through thick porridge"
+    ]
+  },
+  {
+    "id": "cat-food-01",
+    "brand": "Real Meals",
+    "name": "Butter Chicken with Jasmine Rice (Backcountry Dinner)",
+    "category": "Food & Nutrition",
+    "itemType": "trail meal",
+    "unitWeightG": 175,
+    "unitPriceAud": 18.95,
+    "websiteUrl": "https://realmeals.co.nz/products/butter-chicken",
+    "imagePath": "https://realmeals.co.nz/cdn/shop/files/ButterChicken-Hero.png",
+    "summary": "New Zealand gourmet freeze-dried dinner with real chicken breast and aromatic curry spices.",
+    "specs": {
+      "Dry Net Weight": "175 g (Rehydrated: Approx. 500 g)",
+      "Energy": "2,820 kJ (675 kcal)",
+      "Protein": "38.2 g per pouch",
+      "Preparation": "Add 320 ml boiling water, seal and let stand for 10-12 minutes"
+    },
+    "features": [
+      "Cooked from scratch before freeze-drying to preserve restaurant-quality flavor and texture",
+      "High protein and complex carbs restore depleted muscle glycogen after steep climbs",
+      "Heavy-duty stand-up barrier pouch eats directly from bag without cleaning pots"
+    ]
+  },
+  {
+    "id": "cat-food-02",
+    "brand": "Radix Nutrition",
+    "name": "Ultra Meal 800kcal Mexican Style Chilli with Beef",
+    "category": "Food & Nutrition",
+    "itemType": "trail meal",
+    "unitWeightG": 168,
+    "unitPriceAud": 16.9,
+    "websiteUrl": "https://radixnutrition.com.au/products/ultra-meal-800-mexican-chilli-beef",
+    "imagePath": "https://radixnutrition.com.au/cdn/shop/files/Mexican-Chilli-800.png",
+    "summary": "High-density 800-calorie expedition nutrition meal packed with 30+ plant ingredients and 32g protein.",
+    "specs": {
+      "Dry Net Weight": "168 g",
+      "Energy": "3,350 kJ (800 kcal)",
+      "Protein": "32 g | Healthy Fats: 45 g | Carbs: 64 g",
+      "Water Required": "250 ml hot water (Ready in 5 minutes)"
+    },
+    "features": [
+      "Industry-leading 4.8 kcal/gram calorie density saves pack space and weight",
+      "Natural whole-food ingredients with 80+ essential vitamins, minerals, and polyphenols",
+      "Quick 5-minute hydration reduces canister fuel consumption"
+    ]
+  },
+  {
+    "id": "cat-food-03",
+    "brand": "Mountain House",
+    "name": "Beef Stroganoff with Noodles Freeze Dried Meal",
+    "category": "Food & Nutrition",
+    "itemType": "trail meal",
+    "unitWeightG": 120,
+    "unitPriceAud": 19.5,
+    "websiteUrl": "https://mountainhouse.com/products/beef-stroganoff-with-noodles",
+    "imagePath": "https://mountainhouse.com/cdn/shop/products/beef-stroganoff.jpg",
+    "summary": "All-time favorite backcountry comfort meal with tender beef, egg noodles, and savory mushroom sour cream sauce.",
+    "specs": {
+      "Dry Net Weight": "120 g (2 Servings)",
+      "Energy": "560 kcal",
+      "Shelf Life": "Guaranteed 30-year taste assurance"
+    },
+    "features": [
+      "Classic American outdoor meal proven across 50 years of wilderness expeditions",
+      "Fast rehydration in 9 minutes with boiling water",
+      "Zero artificial preservatives or trans fats"
+    ]
+  },
+  {
+    "id": "cat-food-04",
+    "brand": "Nuun",
+    "name": "Sport Electrolyte Hydration Drink Tablets (10 Tabs)",
+    "category": "Food & Nutrition",
+    "itemType": "hydration tablets",
+    "unitWeightG": 54,
+    "unitPriceAud": 13.95,
+    "websiteUrl": "https://nuunlife.com/products/nuun-sport",
+    "imagePath": "https://nuunlife.com/cdn/shop/products/nuun-sport-lemon-lime.jpg",
+    "summary": "Effervescent electrolyte drink tablets formulated to prevent muscle cramping in high heat.",
+    "specs": {
+      "Weight": "54 g tube (10 tablets)",
+      "Electrolytes per tab": "Sodium 300mg, Potassium 150mg, Magnesium 25mg, Calcium 13mg",
+      "Sugar": "Only 1g sugar / 15 kcal per serving"
+    },
+    "features": [
+      "Optimal balance of essential mineral salts prevents debilitating heat cramps",
+      "Clean, non-sticky taste that doesn't foul hydration bladders",
+      "Compact waterproof tube travels easily in shoulder strap pocket"
+    ]
+  },
+  {
+    "id": "cat-cloth-01",
+    "brand": "Hoka",
+    "name": "Speedgoat 5 Trail Running Shoes",
+    "category": "Clothing & Footwear",
+    "itemType": "trail running shoes",
+    "unitWeightG": 582,
+    "unitPriceAud": 259.99,
+    "websiteUrl": "https://www.hoka.com/en/au/men-trail/speedgoat-5/1123157.html",
+    "imagePath": "https://www.hoka.com/dw/image/v2/BDLL_PRD/on/demandware.static/-/Sites-HOKA-AU-Library/default/dw83a7f05c/images/products/1123157-BFMC_1.jpg",
+    "summary": "The reigning king of thru-hiking footwear: maximal CMEVA cushioning with Vibram Megagrip traction lugs.",
+    "specs": {
+      "Weight (Pair)": "582 g (Men's US 9)",
+      "Drop": "4 mm (Heel: 33 mm / Toe: 29 mm)",
+      "Outsole": "Vibram Megagrip with 5 mm Traction Lug pattern",
+      "Upper": "Double jacquard recycled engineered mesh"
+    },
+    "features": [
+      "Vibram Megagrip rubber compound grips wet river rocks, slippery moss, and dry gravel effortlessly",
+      "Maximal plush cushioning reduces foot fatigue over 30+ km high-mileage days",
+      "Late-stage Meta-Rocker facilitates smooth forward stride transitions",
+      "Flexible toe box accommodates natural foot swelling on multi-day tracks"
+    ]
+  },
+  {
+    "id": "cat-cloth-02",
+    "brand": "Altra",
+    "name": "Lone Peak 8 Zero-Drop Trail Shoes",
+    "category": "Clothing & Footwear",
+    "itemType": "trail running shoes",
+    "unitWeightG": 620,
+    "unitPriceAud": 239.99,
+    "websiteUrl": "https://www.altrarunning.com.au/products/mens-lone-peak-8",
+    "imagePath": "https://www.altrarunning.com.au/cdn/shop/files/AL0A85NC-000_1.jpg",
+    "summary": "Trail icon featuring signature FootShape toe box for natural splay and balanced 0mm drop cushion.",
+    "specs": {
+      "Weight (Pair)": "620 g (US 9)",
+      "Drop": "0 mm Balanced Cushioning (Stack height: 25 mm)",
+      "Outsole": "MaxTrac rubber with TrailClaw canted lugs",
+      "Midsole": "Altra EGO responsive compound with StoneGuard rock plate"
+    },
+    "features": [
+      "FootShape toe box gives toes room to spread out naturally for blister prevention",
+      "Zero drop platform aligns heel and forefoot at equal distance from ground for natural posture",
+      "Built-in GaiterTrap heel velcro tab secures trail debris gaiters without clips",
+      "Laser-cut drainage ports expel water quickly after creek crossings"
+    ]
+  },
+  {
+    "id": "cat-cloth-03",
+    "brand": "Patagonia",
+    "name": "Torrentshell 3L Waterproof Rain Jacket",
+    "category": "Clothing & Footwear",
+    "itemType": "rain jacket",
+    "unitWeightG": 394,
+    "unitPriceAud": 279.95,
+    "websiteUrl": "https://www.patagonia.com.au/products/mens-torrentshell-3-layer-jacket-85241-blk",
+    "imagePath": "https://www.patagonia.com.au/cdn/shop/products/85241_BLK.jpg",
+    "summary": "Uncompromising 3-layer H2No Performance Standard waterproof/breathable storm protection with pit zips.",
+    "specs": {
+      "Weight": "394 g (13.9 oz)",
+      "Membrane": "3-layer 3.3-oz 50-denier Econyl 100% recycled nylon ripstop",
+      "Waterproof / Breathable": "H2No Performance Standard with biobased polyether membrane and DWR",
+      "Ventilation": "Dual two-way underarm pit zips with welted storm flaps"
+    },
+    "features": [
+      "3-layer construction ensures lining never feels clammy against bare arms in humid rainstorms",
+      "Underarm pit zips vent steam rapidly during strenuous uphill climbs",
+      "Adjustable hood with laminated visor rolls down and stows with cord-and-hook system",
+      "Self-stuffs into left handwarmer pocket with carabiner clip-in loop"
+    ]
+  },
+  {
+    "id": "cat-cloth-04",
+    "brand": "Patagonia",
+    "name": "Capilene Cool Daily Sun Hoodie",
+    "category": "Clothing & Footwear",
+    "itemType": "sun hoodie",
+    "unitWeightG": 180,
+    "unitPriceAud": 99.95,
+    "websiteUrl": "https://www.patagonia.com.au/products/mens-capilene-cool-daily-hoody-45310-blk",
+    "imagePath": "https://www.patagonia.com.au/cdn/shop/products/45310_BLK.jpg",
+    "summary": "Silky soft moisture-wicking sun hoodie with HeiQ Mint odor control and UPF sun protection.",
+    "specs": {
+      "Weight": "180 g (6.3 oz)",
+      "Fabric": "100% recycled polyester jersey with miDori bioSoft and HeiQ Mint odor control",
+      "Protection": "Generous deep hood covers head and ears under ball caps"
+    },
+    "features": [
+      "Ultra-soft technical fabric keeps skin cool in scorching direct alpine sun",
+      "HeiQ Mint plant-based odor control stays fresh across multiple days on trail",
+      "Deep stretch hood fits comfortably over ballcaps for 360-degree neck shielding"
+    ]
+  },
+  {
+    "id": "cat-cloth-05",
+    "brand": "Arc'teryx",
+    "name": "Atom LT Hoody Insulated Jacket",
+    "category": "Clothing & Footwear",
+    "itemType": "insulated jacket",
+    "unitWeightG": 375,
+    "unitPriceAud": 380,
+    "websiteUrl": "https://arcteryx.com/au/en/shop/mens/atom-hoody",
+    "imagePath": "https://images.arcteryx.com/details/1350x1710/Atom-Hoody-Black.jpg",
+    "summary": "The definitive alpine mid-layer: Coreloft Compact 60 synthetic insulation with breathable fleece side panels.",
+    "specs": {
+      "Weight": "375 g (13.2 oz)",
+      "Insulation": "Coreloft Compact 60 (60 g/m²) retains warmth when wet",
+      "Shell": "Tyono 20D with FC0-DWR water repellent treatment",
+      "Side Panels": "Stretch fleece side panels for ventilation and freedom of movement"
+    },
+    "features": [
+      "Coreloft synthetic insulation maintains thermal loft even if soaked by rain or sweat",
+      "Breathable air-permeable fleece side panels release excess heat during intense uphill ascents",
+      "Insulated StormHood with rear single-pull drawcord adjuster fits snugly",
+      "Packs down tiny into its own sleeve for compact stowage"
+    ]
+  },
+  {
+    "id": "cat-cloth-06",
+    "brand": "Darn Tough",
+    "name": "Hiker Micro Crew Midweight Cushion Socks",
+    "category": "Clothing & Footwear",
+    "itemType": "hiking socks",
+    "unitWeightG": 75,
+    "unitPriceAud": 44.95,
+    "websiteUrl": "https://darntough.com.au/products/mens-hiker-micro-crew-midweight-hiking-socks",
+    "imagePath": "https://darntough.com.au/cdn/shop/products/1944-black.jpg",
+    "summary": "Guaranteed for life merino wool trail socks that eliminate blisters, bunching, and premature wear.",
+    "specs": {
+      "Weight": "75 g (Pair)",
+      "Blend": "61% Merino Wool, 36% Nylon, 3% Lycra Spandex",
+      "Cushioning": "Midweight underfoot loop cushion",
+      "Height": "Micro crew (Sits just above trail running shoes / boots)"
+    },
+    "features": [
+      "High-density fine-gauge knitting prevents friction hot spots and blisters",
+      "Merino wool naturally regulates foot temperature and resists bacterial odors for days",
+      "True Seamless toe closure eliminates uncomfortable ridge seams inside toe box",
+      "Unconditional lifetime warranty: wear them out and get a replacement free"
+    ]
+  },
+  {
+    "id": "cat-personal-01",
+    "brand": "The TentLab",
+    "name": "The Deuce of Spades #2 Ultralight Trowel",
+    "category": "Personal Items",
+    "itemType": "cathole trowel",
+    "unitWeightG": 17,
+    "unitPriceAud": 34.95,
+    "websiteUrl": "https://thetentlab.com/Deuce/DeuceofSpadespage.html",
+    "imagePath": "https://thetentlab.com/images/Deuce_hero.jpg",
+    "summary": "Aircraft-grade 7075-T6 aluminum 17g cathole trowel designed to cut through stubborn roots and rocky soil.",
+    "specs": {
+      "Weight": "17 g (0.6 oz)",
+      "Dimensions": "17.3 x 6.5 cm",
+      "Material": "US-made 7075-T6 tempered aluminum"
+    },
+    "features": [
+      "Can be used upside down to chop through roots and pry rocks loose in hard soil",
+      "Adheres strictly to Leave No Trace principles for digging 15-20cm sanitary catholes",
+      "Featherlight 17g footprint slips seamlessly inside any toilet kit pouch"
+    ]
+  },
+  {
+    "id": "cat-personal-02",
+    "brand": "Sea to Summit",
+    "name": "Ultra-Sil Dry Sack 13L",
+    "category": "Personal Items",
+    "itemType": "dry sack",
+    "unitWeightG": 40,
+    "unitPriceAud": 29.95,
+    "websiteUrl": "https://seatosummit.com.au/products/ultra-sil-dry-sack",
+    "imagePath": "https://seatosummit.com.au/cdn/shop/products/Ultra-Sil-Dry-Sack-13L.jpg",
+    "summary": "Silicone-impregnated 30D Cordura dry sack for weatherproofing down quilts and dry camp clothing.",
+    "specs": {
+      "Capacity": "13 Liters (Ideal for down sleeping bag or clothing layers)",
+      "Weight": "40 g (1.4 oz)",
+      "Fabric": "Ultra-Sil 30D siliconized Cordura nylon with 2,000mm PU coating"
+    },
+    "features": [
+      "Hypalon roll-top closure with field-repairable buckle",
+      "Double stitched, tape-sealed waterproof seams",
+      "Translucent fabric allows identifying contents without opening"
+    ]
+  },
+  {
+    "id": "cat-personal-03",
+    "brand": "Adventure Medical Kits",
+    "name": "Ultralight & Watertight .5 Medical Kit",
+    "category": "Personal Items",
+    "itemType": "first aid kit",
+    "unitWeightG": 102,
+    "unitPriceAud": 44.95,
+    "websiteUrl": "https://www.adventuremedicalkits.com/medical-kits/ultralight-watertight/ultralight-watertight-5.html",
+    "imagePath": "https://www.adventuremedicalkits.com/media/catalog/product/0/1/0125-0294_hero.jpg",
+    "summary": "Waterproof two-stage sealed first aid kit designed for 1-2 hikers on 1-2 day wilderness trips.",
+    "specs": {
+      "Weight": "102 g (3.6 oz)",
+      "Dimensions": "16 x 14 x 4 cm",
+      "Pouch": "DryFlex waterproof inner bag with silnylon exterior"
+    },
+    "features": [
+      "Pre-cut moleskin patches for instant trail blister treatment",
+      "Antiseptic wipes, butterfly closures, triple antibiotic ointment, and ibuprofen/antihistamines",
+      "100% waterproof DryFlex inner pouch survives submerged river crossings"
+    ]
+  },
+  {
+    "id": "cat-personal-04",
+    "brand": "Sawyer",
+    "name": "Picaridin Premium Insect Repellent Lotion 60ml",
+    "category": "Personal Items",
+    "itemType": "insect repellent",
+    "unitWeightG": 70,
+    "unitPriceAud": 19.95,
+    "websiteUrl": "https://sawyer.com/products/picaridin-insect-repellent",
+    "imagePath": "https://cdn.shopify.com/s/files/1/0270/8665/1476/products/SP543.jpg",
+    "summary": "Gear-safe 20% Picaridin lotion providing 14-hour defense against mosquitoes and ticks without damaging synthetic gear.",
+    "specs": {
+      "Volume": "60 ml (2 fl oz)",
+      "Weight": "70 g",
+      "Active Ingredient": "20% Picaridin"
+    },
+    "features": [
+      "Unlike DEET, Picaridin will NOT melt or dissolve synthetic nylon, Gore-Tex, watch faces, or sunglasses",
+      "Provides up to 14 hours of continuous protection against mosquitoes and ticks",
+      "Virtually odorless and non-greasy lotion absorbs smoothly into skin"
+    ]
+  },
+  {
+    "id": "cat-sleep-15",
+    "brand": "Western Mountaineering",
+    "name": "UltraLite 20°F (-7°C) Alpine Down Sleeping Bag",
+    "category": "Sleep & Shelter",
+    "itemType": "sleep bag",
+    "unitWeightG": 820,
+    "unitPriceAud": 899,
+    "websiteUrl": "https://www.westernmountaineering.com/sleeping-bags/extreme-lite-series/ultralite/",
+    "imagePath": "https://www.westernmountaineering.com/wp-content/uploads/2017/04/ultralite-front.jpg",
+    "summary": "Handcrafted in the USA with 850+ fill goose down and full 3D insulated draft collar.",
+    "specs": {
+      "Rating": "20°F / -7°C",
+      "Weight": "820 g (6'0\")",
+      "Insulation": "850+ Fill Power Eastern European Goose Down (450g fill)",
+      "Shell": "12D ExtremeLite breathable ripstop nylon"
+    },
+    "features": [
+      "Full down collar and continuous baffles allow shifting down between top and bottom",
+      "Full-length YKK #5 coil zipper with stiff anti-snag webbing guard",
+      "Industry-leading warmth-to-weight ratio for serious high-altitude mountaineering"
+    ]
+  },
+  {
+    "id": "cat-sleep-16",
+    "brand": "Sea to Summit",
+    "name": "Spark SpI Ultralight 40°F (5°C) Down Sleeping Bag",
+    "category": "Sleep & Shelter",
+    "itemType": "sleep bag",
+    "unitWeightG": 340,
+    "unitPriceAud": 449,
+    "websiteUrl": "https://seatosummit.com.au/products/spark-ultralight-sleeping-bag",
+    "imagePath": "https://seatosummit.com.au/cdn/shop/products/Spark-Sp1.jpg",
+    "summary": "Gram-counter's dream 340g summer/hut sleeping bag with 850+ Loft Ultra-Dry Down.",
+    "specs": {
+      "Comfort Rating": "9°C Comfort | 5°C Limit",
+      "Weight": "340 g (Regular)",
+      "Fill": "180 g of 850+ Loft goose down",
+      "Shell": "10D nylon shell with 7D lining"
+    },
+    "features": [
+      "Ultra-Dry Down water-repellent treatment protects against condensation",
+      "Vertical chest baffles prevent down shifting across chest during side sleeping",
+      "Packs down smaller than a 1-liter water bottle"
+    ]
+  },
+  {
+    "id": "cat-sleep-17",
+    "brand": "Gossamer Gear",
+    "name": "The One Ultralight 1-Person Tent",
+    "category": "Sleep & Shelter",
+    "itemType": "tent",
+    "unitWeightG": 503,
+    "unitPriceAud": 499,
+    "websiteUrl": "https://www.gossamergear.com/products/the-one",
+    "imagePath": "https://www.gossamergear.com/cdn/shop/products/TheOne-Hero.jpg",
+    "summary": "Sub-550g single-wall palace with full bathtub floor and integrated side entry.",
+    "specs": {
+      "Weight": "503 g (Shelter alone)",
+      "Setup": "Pitches with 2 trekking poles (125 cm)",
+      "Material": "Custom 10D waterproof sil/PU nylon (1800mm)"
+    },
+    "features": [
+      "Spacious headroom with full bug mesh interior and floating floor",
+      "Generous vestibule fits muddy pack and boots completely dry",
+      "Factory-taped seams with reflective guy lines pre-attached"
+    ]
+  },
+  {
+    "id": "cat-packs-11",
+    "brand": "Gregory",
+    "name": "Baltoro 65 Heavy Load Expedition Backpack",
+    "category": "Packs & Essentials",
+    "itemType": "backpack",
+    "unitWeightG": 2220,
+    "unitPriceAud": 499.95,
+    "websiteUrl": "https://www.gregorypacks.com/packs-bags/backpacking-packs/baltoro-65/142440XXXX.html",
+    "imagePath": "https://www.gregorypacks.com/dw/image/v2/BDKF_PRD/on/demandware.static/-/Sites-cascadedesigns-master/default/dw83a1f10/gregory/baltoro65.jpg",
+    "summary": "The definitive heavy-load expedition hauler with FreeFloat A3 dynamic pivoting suspension.",
+    "specs": {
+      "Volume": "65 Liters",
+      "Weight": "2.22 kg",
+      "Max Carry Weight": "23 kg (50 lbs)",
+      "Suspension": "FreeFloat A3 dynamic hipbelt with 3D shoulder harness"
+    },
+    "features": [
+      "Pivoting hipbelt rotates naturally with pelvic movement over uneven scree slopes",
+      "Front U-zip access opens like a duffel bag to reach bottom gear without unpacking top",
+      "Includes waterproof SideWinder quick-draw water bottle holster and fitted raincover"
+    ]
+  },
+  {
+    "id": "cat-packs-12",
+    "brand": "Leki",
+    "name": "Makalu FX Carbon Folding Trekking Poles",
+    "category": "Packs & Essentials",
+    "itemType": "trekking poles",
+    "unitWeightG": 500,
+    "unitPriceAud": 299.95,
+    "websiteUrl": "https://leki.com.au/products/makalu-fx-carbon",
+    "imagePath": "https://leki.com.au/cdn/shop/products/Makalu-FX-Carbon.jpg",
+    "summary": "Indestructible carbon folding poles with Aergon Air hollow ergonomic grips.",
+    "specs": {
+      "Weight (Pair)": "500 g",
+      "Pack Size": "40 cm",
+      "Adjustment": "Speed Lock 2+ certified alloy clamp",
+      "Material": "PRC 1000 carbon upper sections with aluminum lower shaft"
+    },
+    "features": [
+      "Aergon Air grip with 8-degree incline angle keeps wrist in natural relaxed position",
+      "Lock Security Strap Skin 4.0 breathable ultra-soft webbing",
+      "Folding push-button system collapses poles down in one quick click"
+    ]
+  },
+  {
+    "id": "cat-packs-13",
+    "brand": "Petzl",
+    "name": "Bindi Ultralight 200 Lumen Headlamp",
+    "category": "Packs & Essentials",
+    "itemType": "headlamp",
+    "unitWeightG": 35,
+    "unitPriceAud": 89.95,
+    "websiteUrl": "https://www.petzl.com/US/en/Sport/Headlamps/BINDI",
+    "imagePath": "https://www.petzl.com/s/petzl/images/products/BINDI/E102AA00-BINDI-black.jpg",
+    "summary": "Featherlight 35g emergency and fast-hiking headlamp that charges via micro-USB.",
+    "specs": {
+      "Brightness": "200 Lumens",
+      "Weight": "35 g (1.2 oz)",
+      "Battery": "680 mAh rechargeable Li-ion"
+    },
+    "features": [
+      "Can be worn on forehead or around neck like a minimalist pendant light",
+      "Three lighting modes (proximity, movement, and distance vision) plus red LED",
+      "Compact enough to disappear inside a pocket without noticeable bulk"
+    ]
+  },
+  {
+    "id": "cat-cook-08",
+    "brand": "Jetboil",
+    "name": "Flash Personal Cooking System 1.0L",
+    "category": "Cooking & Hydration",
+    "itemType": "stove system",
+    "unitWeightG": 371,
+    "unitPriceAud": 229.95,
+    "websiteUrl": "https://jetboil.com.au/products/flash-cooking-system",
+    "imagePath": "https://jetboil.com.au/cdn/shop/products/Flash-Carbon.jpg",
+    "summary": "Lightning-fast 100-second boil system with color-changing heat indicator cozy.",
+    "specs": {
+      "Capacity": "1.0 Liter FluxRing cup",
+      "Boil Time": "100 seconds for 500 ml water",
+      "Weight": "371 g"
+    },
+    "features": [
+      "FluxRing heat exchanger captures maximum energy to boil in 100 seconds flat",
+      "Thermochromatic heat indicator turns orange when boiling point is achieved",
+      "Push-button piezo ignition and bottom cup doubles as measuring bowl"
+    ]
+  },
+  {
+    "id": "cat-cook-09",
+    "brand": "MSR",
+    "name": "PocketRocket Deluxe Micro Regulator Stove",
+    "category": "Cooking & Hydration",
+    "itemType": "stove",
+    "unitWeightG": 83,
+    "unitPriceAud": 139.95,
+    "websiteUrl": "https://www.msrgear.com/stoves/canister-stoves/pocketrocket-deluxe-stove/10958.html",
+    "imagePath": "https://www.msrgear.com/dw/image/v2/BDKF_PRD/on/demandware.static/-/Sites-cascadedesigns-master/default/dw9e1f50ff/msr/stoves/10958/10958_01.jpg",
+    "summary": "Upgraded PocketRocket with push-start piezo, pressure regulator, and broad burner head.",
+    "specs": {
+      "Weight": "83 g (2.9 oz)",
+      "Boil Time": "1L in 3.3 minutes",
+      "Features": "Pressure regulator valve for cold weather consistency"
+    },
+    "features": [
+      "Internal pressure regulator boils fast even in low gas pressure and cold temperatures",
+      "Push-button piezo ignition protected inside burner head",
+      "Broader burner lip distributes flame evenly across wider frying pans and pots"
+    ]
+  },
+  {
+    "id": "cat-cook-10",
+    "brand": "Platypus",
+    "name": "QuickDraw 1.0L Microfilter System",
+    "category": "Cooking & Hydration",
+    "itemType": "water filter",
+    "unitWeightG": 63,
+    "unitPriceAud": 89.95,
+    "websiteUrl": "https://www.platy.com/filtration/quickdraw-microfilter-system/11458.html",
+    "imagePath": "https://www.platy.com/dw/image/v2/BDKF_PRD/on/demandware.static/-/Sites-cascadedesigns-master/default/dw12f0a0bb/platypus/filtration/11458/11458_01.jpg",
+    "summary": "Fast 3L/min flow rate squeeze filter with dual-thread design fitting Smartwater bottles.",
+    "specs": {
+      "Flow Rate": "Up to 3 Liters per minute",
+      "Weight": "Filter alone: 63 g",
+      "Filtration": "0.2 micron hollow fiber membrane"
+    },
+    "features": [
+      "Dual-thread I/O connects to both 28mm plastic bottles and wide Platypus dirty reservoirs",
+      "Integrity check allows testing in the field if filter was damaged by freezing drops",
+      "DrinkCap cap with flip-top spout for clean on-the-move sipping"
+    ]
+  },
+  {
+    "id": "cat-cook-11",
+    "brand": "Nalgene",
+    "name": "1L (32oz) Ultralite Wide Mouth HDPE Water Bottle",
+    "category": "Cooking & Hydration",
+    "itemType": "water bottle",
+    "unitWeightG": 106,
+    "unitPriceAud": 22.95,
+    "websiteUrl": "https://nalgene.com/product/32oz-wide-mouth-ultralite-water-bottle/",
+    "imagePath": "https://nalgene.com/wp-content/uploads/2020/09/2179-0032_01.jpg",
+    "summary": "Half the weight of classic Tritan bottles, completely shatterproof, and hot water compatible.",
+    "specs": {
+      "Capacity": "1000 ml (32 oz)",
+      "Weight": "106 g",
+      "Material": "High Density Polyethylene (HDPE) BPA/BPS free"
+    },
+    "features": [
+      "Handles boiling water for use as a winter hot-water bottle inside sleeping bag footbox",
+      "Wide 63mm mouth accommodates ice cubes and screw-on backcountry water filters",
+      "Graduated markings in ounces and milliliters for exact meal rehydration"
+    ]
+  },
+  {
+    "id": "cat-food-05",
+    "brand": "Backpacker's Pantry",
+    "name": "Pad Thai with Chicken Freeze-Dried Meal",
+    "category": "Food & Nutrition",
+    "itemType": "trail meal",
+    "unitWeightG": 198,
+    "unitPriceAud": 21,
+    "websiteUrl": "https://backpackerspantry.com/products/pad-thai-with-chicken",
+    "imagePath": "https://backpackerspantry.com/cdn/shop/products/Pad-Thai-Chicken.jpg",
+    "summary": "Rice noodles, tender white chicken meat, and roasted crushed peanuts in sweet savory lime sauce.",
+    "specs": {
+      "Dry Weight": "198 g (2 Servings)",
+      "Calories": "760 kcal",
+      "Protein": "42 g"
+    },
+    "features": [
+      "Includes real roasted peanut packet for authentic crunchy noodle topping",
+      "Gluten-free certified recipe packed with electrolytes",
+      "Ready in 15-20 minutes with boiling water"
+    ]
+  },
+  {
+    "id": "cat-food-06",
+    "brand": "Peak Refuel",
+    "name": "Sweet Pork & Rice High-Protein Freeze-Dried Dinner",
+    "category": "Food & Nutrition",
+    "itemType": "trail meal",
+    "unitWeightG": 153,
+    "unitPriceAud": 23.95,
+    "websiteUrl": "https://peakrefuel.com/products/sweet-pork-rice",
+    "imagePath": "https://peakrefuel.com/cdn/shop/products/Sweet-Pork-Rice.jpg",
+    "summary": "100% premium real pulled pork in brown sugar BBQ glaze with white rice (850 kcal, 40g protein).",
+    "specs": {
+      "Dry Weight": "153 g",
+      "Energy": "850 kcal",
+      "Protein": "40 g",
+      "Water Needed": "Just 250 ml water"
+    },
+    "features": [
+      "Non-GMO premium real USDA pork cuts (never mechanically separated meat)",
+      "Requires less water than competitor meals for faster rehydration and fuel savings",
+      "Made and packaged in the USA"
+    ]
+  },
+  {
+    "id": "cat-food-07",
+    "brand": "Clif Bar",
+    "name": "Chocolate Chip Energy Bar",
+    "category": "Food & Nutrition",
+    "itemType": "energy bar",
+    "unitWeightG": 68,
+    "unitPriceAud": 4.5,
+    "websiteUrl": "https://www.clifbar.com/products/clif-bar/chocolate-chip",
+    "imagePath": "https://www.clifbar.com/images/products/chocolate-chip.png",
+    "summary": "Plant-based energy bar crafted with organic rolled oats and rich chocolate chips.",
+    "specs": {
+      "Weight": "68 g per bar",
+      "Energy": "250 kcal (10g plant protein)",
+      "Ingredients": "Organic rolled oats, organic tapioca syrup, soy protein"
+    },
+    "features": [
+      "Complex carbohydrates provide slow sustained release energy on steep mountain passes",
+      "Non-melting chocolate holds up inside sun-baked backpack lids",
+      "Non-GMO and made with 70% organic ingredients"
+    ]
+  },
+  {
+    "id": "cat-food-08",
+    "brand": "GU Energy",
+    "name": "Energy Gel Salted Caramel (with Amino Acids & Caffeine)",
+    "category": "Food & Nutrition",
+    "itemType": "energy gel",
+    "unitWeightG": 32,
+    "unitPriceAud": 3.95,
+    "websiteUrl": "https://guenergy.com/products/energy-gel?variant=salted-caramel",
+    "imagePath": "https://guenergy.com/cdn/shop/products/salted-caramel.png",
+    "summary": "Fast-acting 100-calorie energy boost packet formulated with BCAAs and caffeine for tough climbs.",
+    "specs": {
+      "Weight": "32 g packet",
+      "Calories": "100 kcal",
+      "Caffeine": "20 mg",
+      "Sodium": "125 mg"
+    },
+    "features": [
+      "Dual-source carbs (maltodextrin and fructose) absorbed through non-competing pathways",
+      "Branched-chain amino acids protect muscles against catabolic fatigue",
+      "Tear-tab opens easily with teeth while holding trekking poles"
+    ]
+  },
+  {
+    "id": "cat-cloth-07",
+    "brand": "Salomon",
+    "name": "Speedcross 6 Mud & Technical Trail Shoes",
+    "category": "Clothing & Footwear",
+    "itemType": "trail running shoes",
+    "unitWeightG": 596,
+    "unitPriceAud": 239.99,
+    "websiteUrl": "https://salomon.com.au/products/speedcross-6",
+    "imagePath": "https://salomon.com.au/cdn/shop/products/Speedcross-6-Black.jpg",
+    "summary": "Aggressive deep chevron chevron lugs engineered to shed mud and grip loose alpine scree.",
+    "specs": {
+      "Weight (Pair)": "596 g (US 9)",
+      "Drop": "10 mm",
+      "Outsole": "Mud Contagrip with deep chevron lugs",
+      "Lacing": "Quicklace one-pull tightening system"
+    },
+    "features": [
+      "Deep arrow lugs bite securely into steep muddy descents and wet pine needle forest floors",
+      "Sensifit upper construction cradles foot from midsole to lacing system for glove-like lockdown",
+      "Quicklace Kevlar lace tightens with single pull and stows away in tongue lace pocket"
+    ]
+  },
+  {
+    "id": "cat-cloth-08",
+    "brand": "Arc'teryx",
+    "name": "Beta LT Gore-Tex Hardshell Jacket",
+    "category": "Clothing & Footwear",
+    "itemType": "rain jacket",
+    "unitWeightG": 395,
+    "unitPriceAud": 650,
+    "websiteUrl": "https://arcteryx.com/au/en/shop/mens/beta-lt-jacket",
+    "imagePath": "https://images.arcteryx.com/details/1350x1710/Beta-LT-Black.jpg",
+    "summary": "Premium 3-layer Gore-Tex all-mountain alpine storm shell with helmet-compatible StormHood.",
+    "specs": {
+      "Weight": "395 g (13.9 oz)",
+      "Fabric": "3L Gore-Tex with Tricot backer technology",
+      "Zippers": "WaterTight front zip and pit zips",
+      "Fit": "Trim fit with e3D ergonomic pattern"
+    },
+    "features": [
+      "Guaranteed to Keep You Dry Gore-Tex membrane withstands days of torrential mountain rain",
+      "Pit zips dump body heat instantly when climbing Mackinnon Pass in high humidity",
+      "Helmet-compatible StormHood adjusts with single gloved hand pull",
+      "Die-cut Velcro cuff adjusters seal out freezing wind drafts"
+    ]
+  },
+  {
+    "id": "cat-cloth-09",
+    "brand": "Montbell",
+    "name": "Versalite Ultralight Gore-Tex Infinium Rain Jacket",
+    "category": "Clothing & Footwear",
+    "itemType": "rain jacket",
+    "unitWeightG": 182,
+    "unitPriceAud": 349,
+    "websiteUrl": "https://en.montbell.jp/products/goods/disp.php?product_id=2301361",
+    "imagePath": "https://en.montbell.jp/products/goods/images/disp/2301361.jpg",
+    "summary": "Record-shattering 182g fully featured rain jacket with Gore-Tex Infinium Windstopper technology and pit zips.",
+    "specs": {
+      "Weight": "182 g (6.4 oz)",
+      "Fabric": "2-layer Gore-Tex Infinium Windstopper (30,000mm waterproof / 43,000g breathability)",
+      "Face": "Ballistic Airlight 10D ripstop nylon"
+    },
+    "features": [
+      "K-Mono Cut construction reduces seam lines by over 50% to prevent water leakage points",
+      "Underarm pit zips provide active cooling on steep climbs at sub-200g total weight",
+      "Smart Seam Technology and Aqua-Tect water-resistant zippers"
+    ]
+  },
+  {
+    "id": "cat-cloth-10",
+    "brand": "Patagonia",
+    "name": "Houdini Ultralight Wind Jacket",
+    "category": "Clothing & Footwear",
+    "itemType": "wind jacket",
+    "unitWeightG": 105,
+    "unitPriceAud": 149.95,
+    "websiteUrl": "https://www.patagonia.com.au/products/mens-houdini-jacket-24142-blk",
+    "imagePath": "https://www.patagonia.com.au/cdn/shop/products/24142_BLK.jpg",
+    "summary": "105g featherweight windshell that blocks howling ridge breezes and packs down into palm size.",
+    "specs": {
+      "Weight": "105 g (3.7 oz)",
+      "Fabric": "1.2-oz 100% recycled nylon ripstop with PFC-free DWR finish",
+      "Packability": "Stuffs into its own zippered chest pocket"
+    },
+    "features": [
+      "Blocks wind chill on exposed mountain ridges without overheating like heavy hardshells",
+      "Water-resistant DWR finish sheds light misty drizzle and snow flurries",
+      "Single-pull adjustable hood and half-elastic cuffs for streamlined weather seal"
+    ]
+  },
+  {
+    "id": "cat-cloth-11",
+    "brand": "Mountain Hardwear",
+    "name": "Ghost Whisperer/2 Ultralight Down Hoody",
+    "category": "Clothing & Footwear",
+    "itemType": "down jacket",
+    "unitWeightG": 249,
+    "unitPriceAud": 449.99,
+    "websiteUrl": "https://www.mountainhardwear.com/p/mens-ghost-whisperer%2F2-hoody-1870831.html",
+    "imagePath": "https://mountainhardwear.scene7.com/is/image/MountainHardwear/1870831_010_f_om",
+    "summary": "The quintessential ultralight down jacket: 800-fill RDS certified down at an unbelievable 249 grams.",
+    "specs": {
+      "Weight": "249 g (8.8 oz)",
+      "Insulation": "800-fill RDS-certified down",
+      "Shell": "Whisperer 10D x 10D Ripstop 100% recycled nylon",
+      "Stowage": "Packs into its own internal pocket with carabiner clip loop"
+    },
+    "features": [
+      "First baffle at both cuffs is filled with synthetic insulation to prevent wetting out at wrist",
+      "Elastic binding on hood and cuffs seals in precious body warmth",
+      "Unmatched warmth-to-weight ratio for camp evening chores and cold alpine mornings"
+    ]
+  },
+  {
+    "id": "cat-personal-05",
+    "brand": "GSI Outdoors",
+    "name": "Cathole Sanitation Trowel",
+    "category": "Personal Items",
+    "itemType": "cathole trowel",
+    "unitWeightG": 88,
+    "unitPriceAud": 14.95,
+    "websiteUrl": "https://gsioutdoors.com/products/cathole-sanitation-trowel",
+    "imagePath": "https://gsioutdoors.com/cdn/shop/products/64010_CatholeTrowel_Hero.jpg",
+    "summary": "Durable recycled polycarbonate trowel with depth gauge markings for Leave No Trace ethics.",
+    "specs": {
+      "Weight": "88 g (3.1 oz)",
+      "Length": "26 cm",
+      "Material": "100% Recycled Polycarbonate"
+    },
+    "features": [
+      "Molded depth gauge stamped on blade ensures digging minimum 15cm cathole depth",
+      "Serrated blade edges slice cleanly through stubborn roots and turf",
+      "Lanyard hole for clipping to external pack daisy chains"
+    ]
+  },
+  {
+    "id": "cat-personal-06",
+    "brand": "Nylofume",
+    "name": "Ultralight Waterproof Pack Liner Bag",
+    "category": "Personal Items",
+    "itemType": "pack liner",
+    "unitWeightG": 28,
+    "unitPriceAud": 8.95,
+    "websiteUrl": "https://zpacks.com/products/nylofume-pack-liner",
+    "imagePath": "https://zpacks.com/cdn/shop/products/Nylofume-Bag.jpg",
+    "summary": "The thru-hiker secret weapon: 28g odor-proof, gas-proof, 100% waterproof heavy-duty pack liner.",
+    "specs": {
+      "Weight": "28 g (1.0 oz)",
+      "Dimensions": "91 x 50 cm (Fits up to 65L packs)",
+      "Material": "Nylofume co-extruded nylon polymer"
+    },
+    "features": [
+      "100% waterproof protection for down sleeping bag and dry clothes even if backpack is submerged",
+      "Odor-impermeable barrier keeps bears and rodents from smelling scented trail items",
+      "Far tougher and more puncture-resistant than trash compactor bags or garbage sacks"
+    ]
+  },
+  {
+    "id": "cat-personal-07",
+    "brand": "Sea to Summit",
+    "name": "Wilderness Wipes Compact Trail Towels (12 Pack)",
+    "category": "Personal Items",
+    "itemType": "wet wipes",
+    "unitWeightG": 110,
+    "unitPriceAud": 8.95,
+    "websiteUrl": "https://seatosummit.com.au/products/wilderness-wipes",
+    "imagePath": "https://seatosummit.com.au/cdn/shop/products/Wilderness-Wipes-12.jpg",
+    "summary": "Extra thick, pH-balanced compostable Viscose cleansing wipes for waterless trail showers.",
+    "specs": {
+      "Weight": "110 g (12 pack)",
+      "Wipe Size": "16 x 20 cm",
+      "Formula": "Enriched with Aloe Vera and Vitamin E (Alcohol-free)"
+    },
+    "features": [
+      "Removes sweat, trail dirt, and salt grime without sticky residue",
+      "100% compostable Viscose fiber breaks down naturally according to Leave No Trace standards",
+      "Resealable moisture-lock packaging keeps wipes fresh throughout multi-week expeditions"
+    ]
+  },
+  {
+    "id": "cat-personal-08",
+    "brand": "BSN Medical",
+    "name": "Leucotape P High-Adhesive Blister Prevention Tape 2m",
+    "category": "Personal Items",
+    "itemType": "blister tape",
+    "unitWeightG": 35,
+    "unitPriceAud": 14.95,
+    "websiteUrl": "https://www.leucotape.com/",
+    "imagePath": "https://m.media-amazon.com/images/I/71R2H3hF8wL._AC_SL1500_.jpg",
+    "summary": "The ultimate zinc oxide adhesive tape that sticks to sweaty skin for days to completely stop blister friction.",
+    "specs": {
+      "Weight": "35 g (2-meter travel roll)",
+      "Width": "3.8 cm (1.5 in)",
+      "Adhesive": "Aggressive porous zinc oxide rubber adhesive"
+    },
+    "features": [
+      "Sticks through stream crossings, muddy boots, and heavy foot sweat without peeling off",
+      "Applies flat over hot spots on heels and balls of feet to eliminate blister friction",
+      "High tensile strength rayon backing does not stretch under shear force"
+    ]
+  }
+]
