@@ -385,6 +385,7 @@ const elements = {
   metricWishlistUnit: document.querySelector("#metric-wishlist-unit"),
   metricWishlistSummary: document.querySelector("#metric-wishlist-summary"),
   metricCardWishlist: document.querySelector("#metric-card-wishlist"),
+  btnHeroAddGear: document.querySelector("#btn-hero-add-gear"),
 };
 
 const escapeHtml = (value) => String(value ?? "").replace(/[&<>"']/g, (character) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[character]);
@@ -463,26 +464,48 @@ function isConsumable(item) {
   return consumableTypes.has(type);
 }
 
-const INVENTORY_STORAGE_KEY = "trail_gear_atlas_inventory_v5";
+const INVENTORY_STORAGE_KEY = "trail_gear_atlas_inventory_v6";
+const TRAILS_STORAGE_KEY = "trail_gear_atlas_trails_v6";
+const ACTIVE_TRAIL_KEY = "trail_gear_active_trail_id_v6";
+const VIEW_MODE_KEY = "trail_gear_view_mode_v6";
+
 let defaultInventory = [];
 let gear = [];
 let trails = [];
 let activeTrailId = "milford-track";
 let currentLogFilter = "all";
-let currentViewMode = "owned"; // "owned" | "wishlist" | "all"
+let currentViewMode = (typeof window !== "undefined" && window.location.hash === "#wishlist")
+  ? "wishlist"
+  : ((typeof localStorage !== "undefined" && localStorage.getItem(VIEW_MODE_KEY)) || "owned");
 
 function loadInventory(defaultData) {
   try {
-    const raw = localStorage.getItem(INVENTORY_STORAGE_KEY) || localStorage.getItem("trail_gear_atlas_inventory_v4") || localStorage.getItem("trail_gear_atlas_inventory_v3");
+    const raw = localStorage.getItem(INVENTORY_STORAGE_KEY) || localStorage.getItem("trail_gear_atlas_inventory_v5") || localStorage.getItem("trail_gear_atlas_inventory_v4");
     if (raw) {
       const parsed = JSON.parse(raw);
       if (Array.isArray(parsed) && parsed.length > 0) {
         const parsedMap = new Map(parsed.map((item) => [item.id, item]));
-        const merged = [];
+        const customItems = [];
+        const defaultItemsMerged = [];
+
+        // 1. Separate user-added custom items
+        for (const item of parsed) {
+          const isCustom = item.isCustom || item.id?.startsWith("custom-gear-") || item.provenance === "Added by user" || !defaultData.some((d) => d.id === item.id);
+          if (isCustom) {
+            customItems.push({
+              ...item,
+              isCustom: true,
+              statusKey: normalizeStatus(item.status)
+            });
+            parsedMap.delete(item.id);
+          }
+        }
+
+        // 2. Merge default items
         for (const def of defaultData) {
           const userItem = parsedMap.get(def.id);
           if (userItem) {
-            merged.push({
+            defaultItemsMerged.push({
               ...def,
               ...userItem,
               imagePath: def.imagePath,
@@ -490,15 +513,13 @@ function loadInventory(defaultData) {
               websiteUrl: def.websiteUrl || userItem.websiteUrl,
               statusKey: normalizeStatus(userItem.status || def.status),
             });
-            parsedMap.delete(def.id);
           } else {
-            merged.push({ ...def, statusKey: normalizeStatus(def.status) });
+            defaultItemsMerged.push({ ...def, statusKey: normalizeStatus(def.status) });
           }
         }
-        for (const [_, customItem] of parsedMap) {
-          merged.push({ ...customItem, statusKey: normalizeStatus(customItem.status) });
-        }
-        gear = merged;
+
+        // 3. User custom items always placed at the FRONT so they are immediately visible!
+        gear = [...customItems, ...defaultItemsMerged];
         saveInventory();
         return;
       }
@@ -528,11 +549,15 @@ function updateInventoryStats() {
       <div class="stat"><strong>${weighted}</strong><span>Weights recorded</span></div>
     `;
   }
+  const heroItems = document.querySelector("#hero-stat-items");
+  const heroTrails = document.querySelector("#hero-stat-trails");
+  if (heroItems) heroItems.textContent = gear.length;
+  if (heroTrails) heroTrails.textContent = trails.length;
 }
 
 function loadTrails() {
   try {
-    const raw = localStorage.getItem(STORAGE_KEY) || localStorage.getItem("trail_gear_atlas_trails_v4") || localStorage.getItem("trail_gear_atlas_trails_v3");
+    const raw = localStorage.getItem(TRAILS_STORAGE_KEY) || localStorage.getItem(STORAGE_KEY) || localStorage.getItem("trail_gear_atlas_trails_v5") || localStorage.getItem("trail_gear_atlas_trails_v4");
     if (raw) {
       const parsed = JSON.parse(raw);
       if (Array.isArray(parsed) && parsed.length > 0) {
@@ -549,7 +574,8 @@ function loadTrails() {
         if (milford && milford.pack && !("wishlist-03" in milford.pack)) {
           milford.pack["wishlist-03"] = 1;
         }
-        activeTrailId = trails[0]?.id || "milford-track";
+        const savedActive = localStorage.getItem(ACTIVE_TRAIL_KEY);
+        activeTrailId = (savedActive && trails.some(t => t.id === savedActive)) ? savedActive : (trails[0]?.id || "milford-track");
         saveTrails();
         return;
       }
@@ -558,13 +584,16 @@ function loadTrails() {
     console.warn("Failed to parse trails from localStorage", error);
   }
   trails = JSON.parse(JSON.stringify(defaultTrails));
-  activeTrailId = "milford-track";
+  const savedActive = localStorage.getItem(ACTIVE_TRAIL_KEY);
+  activeTrailId = (savedActive && trails.some(t => t.id === savedActive)) ? savedActive : "milford-track";
   saveTrails();
 }
 
 function saveTrails() {
   try {
+    localStorage.setItem(TRAILS_STORAGE_KEY, JSON.stringify(trails));
     localStorage.setItem(STORAGE_KEY, JSON.stringify(trails));
+    localStorage.setItem(ACTIVE_TRAIL_KEY, activeTrailId);
   } catch (error) {
     console.error("Failed to save trails", error);
   }
@@ -1195,6 +1224,8 @@ function renderCard(item, category) {
 
   const isInactive = isInactiveStatus(item.statusKey);
   const isWishlist = item.statusKey === "wishlist";
+  const isCustom = Boolean(item.isCustom || item.id?.startsWith("custom-gear-"));
+  const customBadge = isCustom ? `<span class="item-custom-pill" title="Custom user-added gear item">👤 自建装备</span>` : "";
 
   let packControl = "";
   if (isPacked) {
@@ -1236,6 +1267,7 @@ function renderCard(item, category) {
     ${mediaMarkup(item)}
     <div class="card-top">
       <div class="card-type-and-size">
+        ${customBadge}
         <span class="item-type">${escapeHtml(item.itemType || "Gear")}</span>
         ${item.size ? `<span class="item-size-badge" title="Size / Capacity: ${escapeHtml(item.size)}">${escapeHtml(item.size)}</span>` : ""}
       </div>
@@ -1260,9 +1292,8 @@ function renderCard(item, category) {
     <h4 class="card-title clickable-title" data-detail-id="${escapeHtml(item.id)}" title="Click to view specs &amp; official website">${escapeHtml(item.name || item.itemType || "Unnamed item")}</h4>
     ${specBadge}
     ${note}
-    <div class="card-metrics"><div class="metric"><span>Listed weight</span><strong class="${weight === null ? "missing" : ""}">${formatWeight(weight)}</strong></div><div class="metric"><span>Recorded price</span><strong class="${hasPrice ? "" : "missing"}">${formatPrice(item)}</strong></div></div>
+    <div class="card-metrics"><div class="metric weight-metric"><span class="metric-lbl">⚖️ WEIGHT</span><strong class="metric-val ${weight === null ? "missing" : ""}">${formatWeight(weight)}</strong></div><div class="metric price-metric"><span class="metric-lbl">PRICE</span><strong class="metric-val ${hasPrice ? "" : "missing"}">${formatPrice(item)}</strong></div></div>
     ${quantity}
-    ${source}
     <button class="card-detail-btn" data-detail-id="${escapeHtml(item.id)}" type="button" title="View technical specs, features, and official brand link">
       <span>Specs &amp; Details</span>
       <span class="detail-link-arrow">↗</span>
@@ -1281,6 +1312,11 @@ function sortedItems(items) {
     return copy
       .map((item, index) => ({ item, index }))
       .sort((a, b) => {
+        // Custom user items always come first at the top of the category!
+        const aCustom = Boolean(a.item.isCustom || a.item.id?.startsWith("custom-gear-"));
+        const bCustom = Boolean(b.item.isCustom || b.item.id?.startsWith("custom-gear-"));
+        if (aCustom !== bCustom) return aCustom ? -1 : 1;
+
         const aRank = typeRank.get(String(a.item.itemType || "").trim().toLowerCase()) ?? typeOrder.length;
         const bRank = typeRank.get(String(b.item.itemType || "").trim().toLowerCase()) ?? typeOrder.length;
         return aRank - bRank || a.index - b.index;
@@ -2765,6 +2801,11 @@ async function init() {
 
     if (window.location.hash === "#wishlist") {
       currentViewMode = "wishlist";
+    } else {
+      const savedView = localStorage.getItem(VIEW_MODE_KEY);
+      if (savedView && ["owned", "wishlist", "all"].includes(savedView)) {
+        currentViewMode = savedView;
+      }
     }
 
     updateInventoryStats();
@@ -3375,6 +3416,7 @@ elements.gearForm?.addEventListener("submit", (e) => {
       quantity: 1,
       status,
       statusKey: normalizeStatus(status),
+      isCustom: true,
       websiteUrl: websiteUrl || null,
       imagePath: imagePath || null,
       summary: summary || null,
@@ -3392,6 +3434,18 @@ elements.gearForm?.addEventListener("submit", (e) => {
       targetItem.totalPriceAud = priceVal;
     }
     gear.unshift(targetItem);
+
+    // Switch view mode if needed so user immediately sees newly added item
+    if (targetItem.statusKey === "wishlist" && currentViewMode === "owned") {
+      currentViewMode = "wishlist";
+      localStorage.setItem(VIEW_MODE_KEY, "wishlist");
+      window.location.hash = "#wishlist";
+    } else if (targetItem.statusKey === "owned" && currentViewMode === "wishlist") {
+      currentViewMode = "owned";
+      localStorage.setItem(VIEW_MODE_KEY, "owned");
+      window.location.hash = "#collection";
+    }
+
     showToast(`Added <strong>${escapeHtml(name)}</strong> to inventory.`);
   }
 
@@ -3486,21 +3540,29 @@ elements.logFilterBtns?.forEach((btn) => {
 // View mode tabs & Wishlist navigation
 elements.tabViewOwned?.addEventListener("click", () => {
   currentViewMode = "owned";
+  localStorage.setItem(VIEW_MODE_KEY, "owned");
+  if (window.location.hash === "#wishlist") window.location.hash = "#collection";
   render();
 });
 
 elements.tabViewWishlist?.addEventListener("click", () => {
   currentViewMode = "wishlist";
+  localStorage.setItem(VIEW_MODE_KEY, "wishlist");
+  window.location.hash = "#wishlist";
   render();
 });
 
 elements.tabViewAll?.addEventListener("click", () => {
   currentViewMode = "all";
+  localStorage.setItem(VIEW_MODE_KEY, "all");
+  if (window.location.hash === "#wishlist") window.location.hash = "#collection";
   render();
 });
 
 elements.navWishlist?.addEventListener("click", (e) => {
   currentViewMode = "wishlist";
+  localStorage.setItem(VIEW_MODE_KEY, "wishlist");
+  window.location.hash = "#wishlist";
   render();
   setTimeout(() => {
     document.querySelector("#collection")?.scrollIntoView({ behavior: "smooth" });
@@ -3509,7 +3571,13 @@ elements.navWishlist?.addEventListener("click", (e) => {
 
 elements.btnViewOwnedKit?.addEventListener("click", () => {
   currentViewMode = "owned";
+  localStorage.setItem(VIEW_MODE_KEY, "owned");
+  if (window.location.hash === "#wishlist") window.location.hash = "#collection";
   render();
+});
+
+elements.btnHeroAddGear?.addEventListener("click", () => {
+  openGearModal();
 });
 
 elements.btnAddWishlistGear?.addEventListener("click", () => {
@@ -3519,6 +3587,7 @@ elements.btnAddWishlistGear?.addEventListener("click", () => {
 window.addEventListener("hashchange", () => {
   if (window.location.hash === "#wishlist") {
     currentViewMode = "wishlist";
+    localStorage.setItem(VIEW_MODE_KEY, "wishlist");
     render();
     setTimeout(() => {
       document.querySelector("#collection")?.scrollIntoView({ behavior: "smooth" });
