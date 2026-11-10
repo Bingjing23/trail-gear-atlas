@@ -3650,3 +3650,39 @@ button:active {
     justify-content: flex-start;
   }
 }
+
+/* ==========================================================================
+   K2 Base Camp & Paddy Pallin Retailer Badges & Suggestion Styling
+   ========================================================================== */
+.brand-pill.retailer-brand-pill {
+  background: #f0fdf4 !important;
+  color: #166534 !important;
+  border-color: #86efac !important;
+  font-weight: 700 !important;
+}
+.brand-pill.retailer-brand-pill:hover,
+.brand-pill.retailer-brand-pill.active {
+  background: #166534 !important;
+  color: #ffffff !important;
+  border-color: #166534 !important;
+}
+.catalog-suggestion-retailer {
+  display: inline-flex;
+  align-items: center;
+  background: #f0fdf4;
+  color: #15803d;
+  border: 1px solid #bbf7d0;
+  border-radius: 3px;
+  padding: 1px 6px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+.catalog-suggestion-price {
+  font-weight: 700;
+  color: #17342e;
+  font-size: 11px;
+  background: #f4f6f4;
+  padding: 1px 5px;
+  border-radius: 3px;
+}

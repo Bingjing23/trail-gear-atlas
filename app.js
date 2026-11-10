@@ -2548,9 +2548,9 @@ function initCatalogSearch() {
     if (!catalog.length) return;
 
     const matches = catalog.filter((item) => {
-      const text = `${item.brand || ""} ${item.name || ""} ${item.category || ""} ${item.itemType || ""}`.toLowerCase();
+      const text = `${item.brand || ""} ${item.name || ""} ${item.category || ""} ${item.itemType || ""} ${(item.retailers || []).join(" ")}`.toLowerCase();
       return text.includes(query);
-    }).slice(0, 8);
+    }).slice(0, 12);
 
     if (!matches.length) {
       dropdown.innerHTML = `<div style="padding:14px; text-align:center; font-size:12px; color:#78887b;">
@@ -2563,6 +2563,10 @@ function initCatalogSearch() {
 
     dropdown.innerHTML = matches.map((item) => {
       const weightDisplay = Number.isFinite(item.unitWeightG) ? formatWeight(item.unitWeightG) : "";
+      const priceDisplay = Number.isFinite(item.unitPriceAud) ? `A$${item.unitPriceAud.toFixed(2)}` : "";
+      const retailersDisplay = (item.retailers && item.retailers.length)
+        ? `<span class="catalog-suggestion-retailer" title="Available at: ${escapeHtml(item.retailers.join(', '))}">🏪 ${escapeHtml(item.retailers.join(' · '))}</span>`
+        : "";
       const thumb = item.imagePath
         ? `<img class="catalog-suggestion-thumb" src="${escapeHtml(item.imagePath)}" alt="${escapeHtml(item.name)}" onerror="this.style.display='none'" />`
         : `<div class="catalog-suggestion-thumb" style="display:grid;place-items:center;font-size:9px;color:#809080;">GEAR</div>`;
@@ -2576,6 +2580,8 @@ function initCatalogSearch() {
             <span>•</span>
             <span>${escapeHtml(item.category || "")}</span>
             ${weightDisplay ? `<span class="catalog-suggestion-weight">⚖️ ${weightDisplay}</span>` : ""}
+            ${priceDisplay ? `<span class="catalog-suggestion-price">${priceDisplay}</span>` : ""}
+            ${retailersDisplay}
           </div>
         </div>
       </div>`;
@@ -2638,6 +2644,9 @@ function initCatalogSearch() {
     const specsLines = Object.entries(item.specs || {}).map(([k, v]) => `${k}: ${v}`).join("\n");
     elements.formGearSpecs.value = specsLines;
     elements.formGearFeatures.value = (item.features || []).join("\n");
+    if (item.retailers && item.retailers.length && elements.formGearNotes) {
+      elements.formGearNotes.value = `Stocked at ${item.retailers.join(" & ")}`;
+    }
 
     dropdown.hidden = true;
     if (banner && elements.autofilledItemName) {
