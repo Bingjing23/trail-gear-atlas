@@ -324,6 +324,15 @@ const elements = {
   formGearNotes: document.querySelector("#form-gear-notes"),
   btnSubmitGear: document.querySelector("#btn-submit-gear"),
 
+  // 3-Tier Gear Entry Modes & Scraper
+  gearEntryModes: document.querySelector("#gear-entry-modes"),
+  tabModeCatalog: document.querySelector("#tab-mode-catalog"),
+  tabModeScraper: document.querySelector("#tab-mode-scraper"),
+  tabModeManual: document.querySelector("#tab-mode-manual"),
+  panelModeCatalog: document.querySelector("#panel-mode-catalog"),
+  panelModeScraper: document.querySelector("#panel-mode-scraper"),
+  panelModeManual: document.querySelector("#panel-mode-manual"),
+
   // Popular Brand Catalog Quick-fill
   catalogQuickfillBox: document.querySelector("#catalog-quickfill-box"),
   catalogSearchInput: document.querySelector("#catalog-search-input"),
@@ -331,6 +340,26 @@ const elements = {
   catalogSuggestions: document.querySelector("#catalog-suggestions"),
   catalogAutofilledBanner: document.querySelector("#catalog-autofilled-banner"),
   autofilledItemName: document.querySelector("#autofilled-item-name"),
+  catalogBrandPills: document.querySelector("#catalog-brand-pills"),
+
+  // Niche Brand Link & Specs Scraper
+  scraperUrlInput: document.querySelector("#scraper-url-input"),
+  scraperClearUrlBtn: document.querySelector("#scraper-clear-url-btn"),
+  btnToggleSnippet: document.querySelector("#btn-toggle-snippet"),
+  scraperSnippetWrap: document.querySelector("#scraper-snippet-wrap"),
+  scraperTextInput: document.querySelector("#scraper-text-input"),
+  btnDoScrape: document.querySelector("#btn-do-scrape"),
+  scraperStatusIndicator: document.querySelector("#scraper-status-indicator"),
+  scraperPreviewCard: document.querySelector("#scraper-preview-card"),
+  scraperPreviewImg: document.querySelector("#scraper-preview-img"),
+  scraperPreviewPh: document.querySelector("#scraper-preview-ph"),
+  scraperPreviewName: document.querySelector("#scraper-preview-name"),
+  scraperPreviewBrand: document.querySelector("#scraper-preview-brand"),
+  scraperPreviewCat: document.querySelector("#scraper-preview-cat"),
+  scraperPreviewWeight: document.querySelector("#scraper-preview-weight"),
+  scraperPreviewPrice: document.querySelector("#scraper-preview-price"),
+  scraperPreviewUrl: document.querySelector("#scraper-preview-url"),
+  btnApplyScraper: document.querySelector("#btn-apply-scraper"),
 
   // View mode switcher & Wishlist elements
   tabViewOwned: document.querySelector("#tab-view-owned"),
@@ -1522,6 +1551,24 @@ function renderPlanner() {
       elements.metricBaseKg.textContent = `${metrics.baseWeightKg.toFixed(2)} kg pack base weight`;
     }
 
+    const baseKg = metrics.baseWeightKg;
+    const tierEl = document.querySelector("#metric-base-tier");
+    if (tierEl) {
+      if (metrics.baseWeightG <= 0) {
+        tierEl.className = "base-tier-pill";
+        tierEl.textContent = "EMPTY PACK";
+      } else if (baseKg < 4.536) {
+        tierEl.className = "base-tier-pill ultralight";
+        tierEl.textContent = "🟢 ULTRALIGHT (< 4.5kg)";
+      } else if (baseKg < 9.072) {
+        tierEl.className = "base-tier-pill lightweight";
+        tierEl.textContent = "🟡 LIGHTWEIGHT (4.5-9kg)";
+      } else {
+        tierEl.className = "base-tier-pill traditional";
+        tierEl.textContent = "⚪ TRADITIONAL (> 9kg)";
+      }
+    }
+
     // 3. Worn Weight
     if (elements.metricWornG) {
       if (isImp) {
@@ -2179,6 +2226,272 @@ async function loadPopularCatalog() {
   return popularCatalog;
 }
 
+let currentEntryMode = "catalog";
+let lastScrapedData = null;
+
+function switchEntryMode(mode) {
+  currentEntryMode = mode;
+  const tabs = [elements.tabModeCatalog, elements.tabModeScraper, elements.tabModeManual];
+  const panels = [elements.panelModeCatalog, elements.panelModeScraper, elements.panelModeManual];
+
+  tabs.forEach((tab) => {
+    if (!tab) return;
+    const isMatch = tab.dataset.mode === mode;
+    tab.classList.toggle("active", isMatch);
+    tab.setAttribute("aria-selected", isMatch ? "true" : "false");
+  });
+
+  panels.forEach((p) => {
+    if (!p) return;
+    const isMatch = p.id === `panel-mode-${mode}`;
+    p.hidden = !isMatch;
+    p.classList.toggle("active", isMatch);
+  });
+
+  if (mode === "manual" && elements.formGearName) {
+    elements.formGearName.focus();
+  } else if (mode === "catalog" && elements.catalogSearchInput) {
+    elements.catalogSearchInput.focus();
+  } else if (mode === "scraper" && elements.scraperUrlInput) {
+    elements.scraperUrlInput.focus();
+  }
+}
+
+function initGearEntryModes() {
+  [elements.tabModeCatalog, elements.tabModeScraper, elements.tabModeManual].forEach((tab) => {
+    if (!tab) return;
+    tab.addEventListener("click", () => switchEntryMode(tab.dataset.mode));
+  });
+}
+
+function parseGearFromUrlOrText(rawUrl, rawSnippet = "") {
+  let url = (rawUrl || "").trim();
+  let domain = "";
+  let path = "";
+  try {
+    if (url && !/^https?:\/\//i.test(url)) url = "https://" + url;
+    if (url) {
+      const parsed = new URL(url);
+      domain = parsed.hostname.replace(/^www\./, "").toLowerCase();
+      path = parsed.pathname;
+    }
+  } catch {}
+
+  const brandMap = {
+    "durstongear.com": "Durston Gear",
+    "zpacks.com": "Zpacks",
+    "hyperlitemountaingear.com": "Hyperlite Mountain Gear",
+    "tarptent.com": "Tarptent",
+    "gossamergear.com": "Gossamer Gear",
+    "enlightenedequipment.com": "Enlightened Equipment",
+    "garagegrowngreer.com": "Garage Grown Gear",
+    "patagonia.com": "Patagonia",
+    "arcteryx.com": "Arc'teryx",
+    "blackdiamondequipment.com": "Black Diamond",
+    "seatosummit.com": "Sea to Summit",
+    "rei.com": "REI Co-op",
+    "nemoequipment.com": "NEMO Equipment",
+    "bigagnes.com": "Big Agnes",
+    "thermarest.com": "Therm-a-Rest",
+    "msrgear.com": "MSR",
+    "sotooutdoors.com": "SOTO",
+    "toaksoutdoor.com": "Toaks",
+    "sawyer.com": "Sawyer Products",
+    "hoka.com": "Hoka",
+    "altrarunning.com": "Altra",
+    "radixnutrition.com": "Radix Nutrition"
+  };
+
+  let brand = brandMap[domain] || "";
+  if (!brand && domain) {
+    const parts = domain.split(".");
+    brand = parts[0].charAt(0).toUpperCase() + parts[0].slice(1);
+  }
+
+  let slugName = path.split("/").filter(Boolean).pop() || "";
+  slugName = slugName.replace(/\.[a-z0-9]+$/i, "");
+  let name = slugName.replace(/[-_]+/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
+
+  // Category inference
+  const combined = (name + " " + path + " " + rawSnippet).toLowerCase();
+  let category = "Sleep & Shelter";
+  if (/(tent|tarp|bivy|shelter|sleep|quilt|sleeping bag|pad|mat|pillow|hammock)/i.test(combined)) category = "Sleep & Shelter";
+  else if (/(pack|backpack|haul|mariposa|kakwa|southwest|rucksack|daypack)/i.test(combined)) category = "Packs & Essentials";
+  else if (/(stove|pot|cook|mug|kettle|water|filter|bottle|hydration|flask|squeeze|gas|fuel)/i.test(combined)) category = "Cooking & Hydration";
+  else if (/(meal|food|snack|energy|nutrition|freeze-dried|cal|bar)/i.test(combined)) category = "Food & Nutrition";
+  else if (/(shoe|boot|runner|jacket|fleece|hoodie|shirt|pant|sock|glove|hat|cap|shell)/i.test(combined)) category = "Clothing & Footwear";
+  else if (/(lamp|light|headlamp|powerbank|battery|gps|knife|tool|first-aid|hygiene)/i.test(combined)) category = "Personal Items";
+
+  // Weight parsing
+  let weightG = null;
+  const wtOzMatch = rawSnippet.match(/\b([0-9]+(?:\.[0-9]+)?)\s*(?:oz|ounces)\b/i);
+  const wtGMatch = rawSnippet.match(/\b([0-9]+(?:\.[0-9]+)?)\s*(?:g|grams)\b/i);
+  if (wtGMatch) {
+    weightG = parseFloat(wtGMatch[1]);
+  } else if (wtOzMatch) {
+    weightG = Math.round(parseFloat(wtOzMatch[1]) * 28.3495 * 10) / 10;
+  }
+
+  // Price parsing
+  let price = null;
+  const priceMatch = rawSnippet.match(/(?:[\$¥€£]|AUD|USD|CNY)\s*([0-9]+(?:\.[0-9]+)?)/i);
+  if (priceMatch) price = parseFloat(priceMatch[1]);
+
+  return {
+    name: name || (domain ? `${brand} Product` : "Custom Outdoor Gear"),
+    brand: brand || "Brand",
+    category,
+    weightG,
+    price,
+    url: url || "",
+    summary: rawSnippet.slice(0, 150)
+  };
+}
+
+function initScraper() {
+  const urlInput = elements.scraperUrlInput;
+  const clearBtn = elements.scraperClearUrlBtn;
+  const toggleBtn = elements.btnToggleSnippet;
+  const snippetWrap = elements.scraperSnippetWrap;
+  const textInput = elements.scraperTextInput;
+  const scrapeBtn = elements.btnDoScrape;
+  const statusEl = elements.scraperStatusIndicator;
+  const previewCard = elements.scraperPreviewCard;
+  const applyBtn = elements.btnApplyScraper;
+
+  if (!urlInput || !scrapeBtn) return;
+
+  urlInput.addEventListener("input", () => {
+    if (clearBtn) clearBtn.hidden = !urlInput.value.trim();
+  });
+
+  clearBtn?.addEventListener("click", () => {
+    urlInput.value = "";
+    clearBtn.hidden = true;
+    if (previewCard) previewCard.hidden = true;
+    if (statusEl) statusEl.hidden = true;
+    urlInput.focus();
+  });
+
+  toggleBtn?.addEventListener("click", () => {
+    const isHidden = snippetWrap.hidden;
+    snippetWrap.hidden = !isHidden;
+    toggleBtn.textContent = isHidden ? "- 收起规格文本输入框" : "+ 展开粘贴规格/重量文本 (选填)";
+    if (isHidden) textInput?.focus();
+  });
+
+  scrapeBtn.addEventListener("click", async () => {
+    const url = urlInput.value.trim();
+    const snippet = textInput?.value.trim() || "";
+
+    if (!url && !snippet) {
+      showToast("⚠️ 请先粘贴商品网址链接，或直接输入商品规格文本。");
+      urlInput.focus();
+      return;
+    }
+
+    if (statusEl) {
+      statusEl.textContent = "⏳ 正在解析网页元数据与参数...";
+      statusEl.hidden = false;
+      statusEl.style.color = "#48634e";
+    }
+
+    scrapeBtn.disabled = true;
+
+    // Parse base structure immediately
+    const parsed = parseGearFromUrlOrText(url, snippet);
+
+    // Attempt fetch if URL is present (with 2.5s timeout)
+    if (url && /^https?:\/\//i.test(url)) {
+      try {
+        const controller = new AbortController();
+        const timer = setTimeout(() => controller.abort(), 2500);
+        const proxyUrl = "https://corsproxy.io/?" + encodeURIComponent(url);
+        const res = await fetch(proxyUrl, { signal: controller.signal });
+        clearTimeout(timer);
+        if (res.ok) {
+          const html = await res.text();
+          const doc = new DOMParser().parseFromString(html, "text/html");
+          const ogTitle = doc.querySelector('meta[property="og:title"]')?.getAttribute("content");
+          const ogImg = doc.querySelector('meta[property="og:image"]')?.getAttribute("content");
+          const ogDesc = doc.querySelector('meta[property="og:description"]')?.getAttribute("content");
+          const ogSite = doc.querySelector('meta[property="og:site_name"]')?.getAttribute("content");
+
+          if (ogTitle) {
+            parsed.name = ogTitle.replace(/\s*[-–|].*$/, "").trim();
+          }
+          if (ogSite && !parsed.brand) {
+            parsed.brand = ogSite;
+          }
+          if (ogImg) {
+            parsed.imagePath = ogImg;
+          }
+          if (ogDesc) {
+            parsed.summary = ogDesc.slice(0, 200);
+          }
+        }
+      } catch {
+        // Fallback to local parsing gracefully
+      }
+    }
+
+    lastScrapedData = parsed;
+    scrapeBtn.disabled = false;
+
+    if (statusEl) {
+      statusEl.textContent = "✓ 解析成功！已提取基本信息与规格。";
+      statusEl.style.color = "#235d39";
+    }
+
+    // Display preview card
+    if (previewCard) {
+      if (elements.scraperPreviewName) elements.scraperPreviewName.textContent = parsed.name;
+      if (elements.scraperPreviewBrand) elements.scraperPreviewBrand.textContent = parsed.brand;
+      if (elements.scraperPreviewCat) elements.scraperPreviewCat.textContent = parsed.category;
+      if (elements.scraperPreviewWeight) {
+        elements.scraperPreviewWeight.textContent = Number.isFinite(parsed.weightG) ? `⚖️ ${formatWeight(parsed.weightG)}` : "⚖️ 重量需手填";
+      }
+      if (elements.scraperPreviewPrice) {
+        elements.scraperPreviewPrice.textContent = Number.isFinite(parsed.price) ? `• $${parsed.price}` : "";
+      }
+      if (elements.scraperPreviewUrl) elements.scraperPreviewUrl.textContent = parsed.url;
+      if (elements.scraperPreviewImg && elements.scraperPreviewPh) {
+        if (parsed.imagePath) {
+          elements.scraperPreviewImg.src = parsed.imagePath;
+          elements.scraperPreviewImg.style.display = "block";
+          elements.scraperPreviewPh.style.display = "none";
+        } else {
+          elements.scraperPreviewImg.style.display = "none";
+          elements.scraperPreviewPh.style.display = "block";
+        }
+      }
+      previewCard.hidden = false;
+    }
+  });
+
+  applyBtn?.addEventListener("click", () => {
+    if (!lastScrapedData) return;
+    const d = lastScrapedData;
+
+    if (elements.formGearName) elements.formGearName.value = d.name || "";
+    if (elements.formGearBrand) elements.formGearBrand.value = d.brand || "";
+    if (elements.formGearCategory && d.category) elements.formGearCategory.value = d.category;
+    if (elements.formGearWeight) elements.formGearWeight.value = Number.isFinite(d.weightG) ? d.weightG : "";
+    if (elements.formGearPrice && Number.isFinite(d.price)) {
+      elements.formGearPrice.value = d.price;
+      elements.formGearCurrency.value = "AUD";
+    }
+    if (elements.formGearWebsite) elements.formGearWebsite.value = d.url || "";
+    if (elements.formGearImage) elements.formGearImage.value = d.imagePath || "";
+    if (elements.formGearSummary) elements.formGearSummary.value = d.summary || "";
+
+    showToast(`✨ 已成功将 <strong>${escapeHtml(d.name)}</strong> 填入下方表单！可在下方微调参数。`);
+    previewCard.hidden = true;
+    if (statusEl) statusEl.hidden = true;
+    elements.formGearName?.focus();
+  });
+}
+
 function initCatalogSearch() {
   const input = elements.catalogSearchInput;
   const dropdown = elements.catalogSuggestions;
@@ -2206,7 +2519,7 @@ function initCatalogSearch() {
     if (!matches.length) {
       dropdown.innerHTML = `<div style="padding:14px; text-align:center; font-size:12px; color:#78887b;">
         No matching popular gear found for "<strong>${escapeHtml(input.value)}</strong>".<br/>
-        <small style="color:#8f9d92;">You can enter the product details manually below.</small>
+        <small style="color:#8f9d92;">You can enter the product details manually below or use the Link Scraper.</small>
       </div>`;
       dropdown.hidden = false;
       return;
@@ -2244,8 +2557,25 @@ function initCatalogSearch() {
     input.value = "";
     dropdown.hidden = true;
     clearBtn.hidden = true;
+    if (elements.catalogBrandPills) {
+      elements.catalogBrandPills.querySelectorAll(".brand-pill").forEach(p => p.classList.remove("active"));
+    }
     input.focus();
   });
+
+  if (elements.catalogBrandPills) {
+    elements.catalogBrandPills.addEventListener("click", (e) => {
+      const pill = e.target.closest(".brand-pill");
+      if (!pill) return;
+      const brand = pill.dataset.brand;
+      if (brand) {
+        input.value = brand;
+        handleSearch();
+        elements.catalogBrandPills.querySelectorAll(".brand-pill").forEach(p => p.classList.remove("active"));
+        pill.classList.add("active");
+      }
+    });
+  }
 
   dropdown.addEventListener("click", (e) => {
     const itemEl = e.target.closest(".catalog-suggestion-item");
@@ -2293,6 +2623,7 @@ function openGearModal(item = null, defaultStatus = null) {
   if (!elements.gearModal || !elements.gearForm) return;
   elements.gearForm.reset();
   if (item) {
+    if (elements.gearEntryModes) elements.gearEntryModes.hidden = true;
     if (elements.catalogQuickfillBox) elements.catalogQuickfillBox.hidden = true;
     elements.modalGearTitle.textContent = "Edit Gear Item (编辑装备)";
     elements.formGearId.value = item.id;
@@ -2333,14 +2664,27 @@ function openGearModal(item = null, defaultStatus = null) {
     elements.formGearNotes.value = item.notes || "";
     elements.btnSubmitGear.textContent = "Save Changes (保存修改)";
   } else {
+    if (elements.gearEntryModes) {
+      elements.gearEntryModes.hidden = false;
+      switchEntryMode("catalog");
+    }
     if (elements.catalogQuickfillBox) {
       elements.catalogQuickfillBox.hidden = false;
       if (elements.catalogSearchInput) elements.catalogSearchInput.value = "";
       if (elements.catalogSuggestions) elements.catalogSuggestions.hidden = true;
       if (elements.catalogClearBtn) elements.catalogClearBtn.hidden = true;
       if (elements.catalogAutofilledBanner) elements.catalogAutofilledBanner.hidden = true;
+      if (elements.catalogBrandPills) {
+        elements.catalogBrandPills.querySelectorAll(".brand-pill").forEach(p => p.classList.remove("active"));
+      }
       loadPopularCatalog();
     }
+    if (elements.scraperUrlInput) elements.scraperUrlInput.value = "";
+    if (elements.scraperTextInput) elements.scraperTextInput.value = "";
+    if (elements.scraperPreviewCard) elements.scraperPreviewCard.hidden = true;
+    if (elements.scraperStatusIndicator) elements.scraperStatusIndicator.hidden = true;
+    if (elements.scraperClearUrlBtn) elements.scraperClearUrlBtn.hidden = true;
+
     const isWishlistAdd = defaultStatus === "想买" || currentViewMode === "wishlist";
     elements.modalGearTitle.textContent = isWishlistAdd ? "Add Wishlist Item (添加想买装备)" : "Add New Gear Item (新增装备到清单)";
     elements.formGearId.value = "";
@@ -2351,7 +2695,11 @@ function openGearModal(item = null, defaultStatus = null) {
     elements.btnSubmitGear.textContent = isWishlistAdd ? "Add to Wishlist (添加至想买清单)" : "Add to Inventory (添加至清单)";
   }
   elements.gearModal.classList.add("open");
-  elements.formGearName.focus();
+  if (currentEntryMode === "catalog" && elements.catalogSearchInput) {
+    elements.catalogSearchInput.focus();
+  } else {
+    elements.formGearName.focus();
+  }
 }
 
 function closeGearModal() {
@@ -2411,6 +2759,8 @@ async function init() {
     defaultInventory = data.map((item) => ({ ...item, statusKey: normalizeStatus(item.status) }));
     loadInventory(defaultInventory);
     loadTrails();
+    initGearEntryModes();
+    initScraper();
     initCatalogSearch();
 
     if (window.location.hash === "#wishlist") {
