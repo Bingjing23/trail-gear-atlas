@@ -78,7 +78,12 @@ const defaultTypeOrders = {
   ],
 };
 
-const STORAGE_KEY = "trail_gear_atlas_trails_v4";
+const STORAGE_KEY = "trail_gear_atlas_trails_v5";
+const UNIT_STORAGE_KEY = "trail_gear_atlas_unit";
+const CHART_TYPE_STORAGE_KEY = "trail_gear_atlas_chart_type";
+
+let currentUnit = localStorage.getItem(UNIT_STORAGE_KEY) || "metric"; // "metric" | "imperial"
+let currentChartType = localStorage.getItem(CHART_TYPE_STORAGE_KEY) || "donut"; // "donut" | "bar"
 
 const defaultTrails = [
   {
@@ -107,6 +112,14 @@ const defaultTrails = [
       "clothing-footwear-35": 1,
       "wishlist-03": 1,
     },
+    worn: {
+      "clothing-footwear-20": true, // Hoka Speedgoat 5 worn on feet
+      "clothing-footwear-35": true, // Patagonia sun shirt worn on body
+      "packs-essentials-08": true,  // Trekking poles in hands
+    },
+    shared: {
+      "sleep-shelter-01": 2, // Nemo Hornet OSMO 2P tent split 1/2 with partner
+    },
   },
   {
     id: "overland-track",
@@ -128,6 +141,15 @@ const defaultTrails = [
       "clothing-footwear-20": 1,
       "clothing-footwear-19": 1,
     },
+    worn: {
+      "clothing-footwear-20": true,
+      "clothing-footwear-19": true,
+      "packs-essentials-08": true,
+    },
+    shared: {
+      "sleep-shelter-01": 2,
+      "cooking-hydration-43": 2,
+    },
   },
   {
     id: "mount-barney",
@@ -145,6 +167,11 @@ const defaultTrails = [
       "clothing-footwear-75": 1,
       "personal-items-74": 1,
     },
+    worn: {
+      "clothing-footwear-75": true,
+      "packs-essentials-08": true,
+    },
+    shared: {},
   },
 ];
 
@@ -158,6 +185,10 @@ const elements = {
   sections: document.querySelector("#gear-sections"),
   empty: document.querySelector("#empty-state"),
   reset: document.querySelector("#reset-filters"),
+
+  // Unit switchers
+  btnUnitMetric: document.querySelector("#btn-unit-metric"),
+  btnUnitImperial: document.querySelector("#btn-unit-imperial"),
 
   // Planner elements
   activeTrailSelect: document.querySelector("#active-trail-select"),
@@ -173,23 +204,48 @@ const elements = {
   btnToggleCompleteTrail: document.querySelector("#btn-toggle-complete-trail"),
   btnClearPack: document.querySelector("#btn-clear-pack"),
 
+  // Dashboard 5 metrics
   metricTotalG: document.querySelector("#metric-total-g"),
+  metricTotalUnit: document.querySelector("#metric-total-unit"),
   metricTotalKg: document.querySelector("#metric-total-kg"),
   metricBaseG: document.querySelector("#metric-base-g"),
+  metricBaseUnit: document.querySelector("#metric-base-unit"),
   metricBaseKg: document.querySelector("#metric-base-kg"),
+  metricWornG: document.querySelector("#metric-worn-g"),
+  metricWornUnit: document.querySelector("#metric-worn-unit"),
+  metricWornSub: document.querySelector("#metric-worn-sub"),
+  metricSkinoutG: document.querySelector("#metric-skinout-g"),
+  metricSkinoutUnit: document.querySelector("#metric-skinout-unit"),
+  metricSkinoutSub: document.querySelector("#metric-skinout-sub"),
   metricItemCount: document.querySelector("#metric-item-count"),
   metricConsumableSummary: document.querySelector("#metric-consumable-summary"),
 
+  // Category Analytics: Donut Chart & Linear Bar
+  btnChartDonut: document.querySelector("#btn-chart-donut"),
+  btnChartBar: document.querySelector("#btn-chart-bar"),
+  donutChartView: document.querySelector("#donut-chart-view"),
+  linearBarView: document.querySelector("#linear-bar-view"),
+  categoryDonutSvg: document.querySelector("#category-donut-svg"),
+  donutCenterInfo: document.querySelector("#donut-center-info"),
+  donutCenterWeight: document.querySelector("#donut-center-weight"),
+  donutCenterCategory: document.querySelector("#donut-center-category"),
+  donutWornVal: document.querySelector("#donut-worn-val"),
+  donutWornCount: document.querySelector("#donut-worn-count"),
   categoryProgressBar: document.querySelector("#category-progress-bar"),
   categoryBarTotalLabel: document.querySelector("#category-bar-total-label"),
   categoryLegend: document.querySelector("#category-legend"),
+  categoryBarLegend: document.querySelector("#category-bar-legend"),
   missingWeightsAlert: document.querySelector("#missing-weights-alert"),
   missingWeightsText: document.querySelector("#missing-weights-text"),
 
+  // Packed items drawer
   packedItemsTitle: document.querySelector("#packed-items-title"),
   packedItemsCount: document.querySelector("#packed-items-count"),
   packedItemsList: document.querySelector("#packed-items-list"),
   btnExportPack: document.querySelector("#btn-export-pack"),
+  btnExportCsv: document.querySelector("#btn-export-csv"),
+  btnExportCsvModal: document.querySelector("#btn-export-csv-modal"),
+  csvFileInput: document.querySelector("#csv-file-input"),
 
   // Header & Sticky
   headerTrailName: document.querySelector("#header-trail-name"),
@@ -289,12 +345,45 @@ const elements = {
   btnViewOwnedKit: document.querySelector("#btn-view-owned-kit"),
   navWishlist: document.querySelector("#nav-wishlist"),
   metricWishlistG: document.querySelector("#metric-wishlist-g"),
+  metricWishlistUnit: document.querySelector("#metric-wishlist-unit"),
   metricWishlistSummary: document.querySelector("#metric-wishlist-summary"),
   metricCardWishlist: document.querySelector("#metric-card-wishlist"),
 };
 
 const escapeHtml = (value) => String(value ?? "").replace(/[&<>"']/g, (character) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[character]);
-const formatWeight = (value) => Number.isFinite(value) ? `${new Intl.NumberFormat("en-AU", { maximumFractionDigits: 1 }).format(value)} g` : "Not recorded";
+
+function formatWeight(value, opts = {}) {
+  if (!Number.isFinite(value)) return "Not recorded";
+
+  if (currentUnit === "imperial") {
+    // 1 g = 0.03527396195 oz; 1 lb = 453.59237 g
+    const oz = value * 0.03527396195;
+    const lb = value / 453.59237;
+
+    if (opts.showBoth || opts.full) {
+      return `${lb.toFixed(2)} lb (${oz.toFixed(1)} oz)`;
+    }
+    if (opts.onlyLb) {
+      return `${lb.toFixed(2)} lb`;
+    }
+    if (opts.onlyOz) {
+      return `${oz.toFixed(1)} oz`;
+    }
+    if (value >= 453.59237) {
+      return `${lb.toFixed(2)} lb`;
+    }
+    return `${oz.toFixed(1)} oz`;
+  }
+
+  // Metric
+  if (opts.showBoth || opts.full) {
+    return `${new Intl.NumberFormat("en-AU", { maximumFractionDigits: 1 }).format(value)} g (${(value / 1000).toFixed(2)} kg)`;
+  }
+  if (opts.onlyKg) {
+    return `${(value / 1000).toFixed(2)} kg`;
+  }
+  return `${new Intl.NumberFormat("en-AU", { maximumFractionDigits: 1 }).format(value)} g`;
+}
 const formatPrice = (item) => {
   if (Number.isFinite(item.unitPriceCny)) return new Intl.NumberFormat("en-AU", { style: "currency", currency: "CNY", currencyDisplay: "code" }).format(item.unitPriceCny);
   if (Number.isFinite(item.unitPriceAud)) return item.unitPriceAud === 0 && item.statusKey === "gift" ? "Gift" : new Intl.NumberFormat("en-AU", { style: "currency", currency: "AUD" }).format(item.unitPriceAud);
@@ -331,6 +420,8 @@ function showToast(message, duration = 3800) {
 
 const consumableTypes = new Set(["trail meal", "breakfast meal", "freeze dried meal", "trail dessert", "stove fuel", "hydration tablets", "energy gel", "wet wipes"]);
 function isConsumable(item) {
+  if (!item) return false;
+  if (item.category === "Food & Nutrition") return true;
   const type = String(item.itemType || "").toLowerCase();
   return consumableTypes.has(type);
 }
@@ -404,16 +495,24 @@ function updateInventoryStats() {
 
 function loadTrails() {
   try {
-    const raw = localStorage.getItem(STORAGE_KEY) || localStorage.getItem("trail_gear_atlas_trails_v3");
+    const raw = localStorage.getItem(STORAGE_KEY) || localStorage.getItem("trail_gear_atlas_trails_v4") || localStorage.getItem("trail_gear_atlas_trails_v3");
     if (raw) {
       const parsed = JSON.parse(raw);
       if (Array.isArray(parsed) && parsed.length > 0) {
-        trails = parsed;
+        trails = parsed.map((t) => {
+          const matchedDefault = defaultTrails.find((def) => def.id === t.id);
+          return {
+            ...t,
+            pack: t.pack || (matchedDefault?.pack ? { ...matchedDefault.pack } : {}),
+            worn: t.worn || (matchedDefault?.worn ? { ...matchedDefault.worn } : {}),
+            shared: t.shared || (matchedDefault?.shared ? { ...matchedDefault.shared } : {}),
+          };
+        });
         const milford = trails.find((t) => t.id === "milford-track");
         if (milford && milford.pack && !("wishlist-03" in milford.pack)) {
           milford.pack["wishlist-03"] = 1;
         }
-        activeTrailId = trails[0].id;
+        activeTrailId = trails[0]?.id || "milford-track";
         saveTrails();
         return;
       }
@@ -439,11 +538,14 @@ function getActiveTrail() {
 }
 
 function calculatePackMetrics(trail) {
-  let totalWeightG = 0;
-  let baseWeightG = 0;
-  let consumableWeightG = 0;
+  let totalPackWeightG = 0;   // Carried on back (Base + Consumables)
+  let baseWeightG = 0;        // Carried on back (non-consumables)
+  let consumableWeightG = 0;  // Carried on back (consumables)
+  let wornWeightG = 0;        // Worn on body (shoes, clothes, poles in hand)
   let missingCount = 0;
   let totalItems = 0;
+  let packItemsCount = 0;
+  let wornItemsCount = 0;
 
   let ownedWeightG = 0;
   let ownedBaseWeightG = 0;
@@ -455,51 +557,79 @@ function calculatePackMetrics(trail) {
   const wishlistItems = [];
 
   const categoryWeights = {};
+  const categoryWornWeights = {};
   for (const cat of categories) {
     categoryWeights[cat.name] = 0;
+    categoryWornWeights[cat.name] = 0;
   }
 
-  for (const [itemId, qty] of Object.entries(trail.pack || {})) {
+  for (const [itemId, rawQty] of Object.entries(trail.pack || {})) {
+    const qty = Number(rawQty) || 0;
     if (qty <= 0) continue;
     const item = gear.find((g) => g.id === itemId);
     if (!item) continue;
+
     totalItems += qty;
+    const isWorn = Boolean(trail.worn?.[itemId]);
+    const splitRatio = Number(trail.shared?.[itemId]) || 1;
     const isWishlist = (item.statusKey || normalizeStatus(item.status)) === "wishlist";
     const unitW = Number.isFinite(item.unitWeightG) ? item.unitWeightG : null;
+
     if (unitW === null) {
       missingCount += qty;
     } else {
-      const lineWeight = unitW * qty;
-      totalWeightG += lineWeight;
-      if (isConsumable(item)) {
-        consumableWeightG += lineWeight;
-      } else {
-        baseWeightG += lineWeight;
-      }
-      categoryWeights[item.category] = (categoryWeights[item.category] || 0) + lineWeight;
+      const fullLineWeight = unitW * qty;
+      const lineWeight = fullLineWeight / splitRatio;
 
-      if (isWishlist) {
-        wishlistWeightG += lineWeight;
-        wishlistItemsCount += qty;
-        wishlistItems.push({ item, qty, lineWeight });
-        if (!isConsumable(item)) wishlistBaseWeightG += lineWeight;
+      if (isWorn) {
+        wornWeightG += lineWeight;
+        wornItemsCount += qty;
+        categoryWornWeights[item.category] = (categoryWornWeights[item.category] || 0) + lineWeight;
       } else {
-        ownedWeightG += lineWeight;
-        ownedItemsCount += qty;
-        if (!isConsumable(item)) ownedBaseWeightG += lineWeight;
+        totalPackWeightG += lineWeight;
+        packItemsCount += qty;
+        if (isConsumable(item)) {
+          consumableWeightG += lineWeight;
+        } else {
+          baseWeightG += lineWeight;
+        }
+        categoryWeights[item.category] = (categoryWeights[item.category] || 0) + lineWeight;
+
+        if (isWishlist) {
+          wishlistWeightG += lineWeight;
+          wishlistItemsCount += qty;
+          wishlistItems.push({ item, qty, lineWeight, isWorn, splitRatio });
+          if (!isConsumable(item)) wishlistBaseWeightG += lineWeight;
+        } else {
+          ownedWeightG += lineWeight;
+          ownedItemsCount += qty;
+          if (!isConsumable(item)) ownedBaseWeightG += lineWeight;
+        }
       }
     }
   }
 
+  const skinOutWeightG = totalPackWeightG + wornWeightG;
+
   return {
-    totalWeightG,
-    totalWeightKg: totalWeightG / 1000,
+    totalPackWeightG,
+    totalPackWeightKg: totalPackWeightG / 1000,
+    totalWeightG: totalPackWeightG, // backward compatibility
+    totalWeightKg: totalPackWeightG / 1000,
     baseWeightG,
     baseWeightKg: baseWeightG / 1000,
     consumableWeightG,
+    consumableWeightKg: consumableWeightG / 1000,
+    wornWeightG,
+    wornWeightKg: wornWeightG / 1000,
+    wornItemsCount,
+    packItemsCount,
+    skinOutWeightG,
+    skinOutWeightKg: skinOutWeightG / 1000,
     missingCount,
     totalItems,
     categoryWeights,
+    categoryWornWeights,
     ownedWeightG,
     ownedWeightKg: ownedWeightG / 1000,
     ownedBaseWeightG,
@@ -1164,6 +1294,148 @@ function filteredItems() {
   });
 }
 
+function renderDonutChart(metrics) {
+  if (!elements.categoryDonutSvg) return;
+  const svg = elements.categoryDonutSvg;
+  const centerWeight = elements.donutCenterWeight;
+  const centerCat = elements.donutCenterCategory;
+  const centerSub = document.querySelector(".donut-center-sub");
+  const totalW = metrics.totalPackWeightG;
+
+  const C = 2 * Math.PI * 90; // ~565.487
+
+  function resetDonutCenter() {
+    if (centerSub) centerSub.textContent = "BASE WEIGHT";
+    if (centerWeight) centerWeight.textContent = formatWeight(metrics.baseWeightG);
+    if (centerCat) centerCat.innerHTML = `<span style="opacity:0.75;">●</span> ${formatWeight(metrics.totalPackWeightG)} Carried`;
+  }
+
+  if (totalW <= 0) {
+    svg.innerHTML = `<circle cx="130" cy="130" r="90" fill="transparent" stroke="#e0e7df" stroke-width="32" stroke-dasharray="${C.toFixed(2)} 0"></circle>`;
+    if (centerSub) centerSub.textContent = "EMPTY PACK";
+    if (centerWeight) centerWeight.textContent = formatWeight(0);
+    if (centerCat) centerCat.textContent = "0 items packed";
+  } else {
+    let accumulatedOffset = 0;
+    let circlesHtml = `<g transform="rotate(-90 130 130)">`;
+
+    for (const cat of categories) {
+      const w = metrics.categoryWeights[cat.name] || 0;
+      if (w <= 0) continue;
+      const frac = w / totalW;
+      const dashLength = frac * C;
+      const pct = (frac * 100).toFixed(1);
+
+      circlesHtml += `<circle
+        class="donut-segment"
+        cx="130"
+        cy="130"
+        r="90"
+        fill="transparent"
+        stroke="${cat.color}"
+        stroke-width="32"
+        stroke-dasharray="${dashLength.toFixed(2)} ${(C - dashLength).toFixed(2)}"
+        stroke-dashoffset="${(-accumulatedOffset).toFixed(2)}"
+        data-category="${escapeHtml(cat.name)}"
+        data-weight="${w}"
+        data-pct="${pct}"
+        data-color="${cat.color}"
+      ></circle>`;
+
+      accumulatedOffset += dashLength;
+    }
+    circlesHtml += `</g>`;
+    svg.innerHTML = circlesHtml;
+    resetDonutCenter();
+
+    // Attach hover/focus events to donut segments
+    const segments = svg.querySelectorAll(".donut-segment");
+    segments.forEach((seg) => {
+      seg.addEventListener("mouseenter", () => {
+        segments.forEach((s) => {
+          if (s !== seg) s.style.opacity = "0.35";
+        });
+        seg.style.strokeWidth = "40px";
+        seg.style.opacity = "1";
+        if (centerSub) centerSub.textContent = `${seg.dataset.pct}% OF PACK`;
+        if (centerWeight) centerWeight.textContent = formatWeight(parseFloat(seg.dataset.weight));
+        if (centerCat) centerCat.innerHTML = `<span style="color:${seg.dataset.color}">●</span> ${seg.dataset.category}`;
+      });
+
+      seg.addEventListener("mouseleave", () => {
+        segments.forEach((s) => {
+          s.style.opacity = "1";
+          s.style.strokeWidth = "32px";
+        });
+        resetDonutCenter();
+      });
+    });
+  }
+
+  // Update Donut Legend
+  if (elements.categoryLegend) {
+    elements.categoryLegend.innerHTML = categories.map((cat) => {
+      const catWeight = metrics.categoryWeights[cat.name] || 0;
+      const pct = totalW > 0 ? ((catWeight / totalW) * 100).toFixed(1) : "0.0";
+      return `<div class="legend-item" data-category="${escapeHtml(cat.name)}" style="cursor:pointer;">
+        <span class="legend-dot" style="background:${cat.color}"></span>
+        <span>${escapeHtml(cat.name)}</span>
+        <strong>${formatWeight(catWeight)}</strong>
+        <small style="color:#78887b">(${pct}%)</small>
+      </div>`;
+    }).join("");
+
+    // Allow hovering legend items to highlight corresponding slice
+    const legendItems = elements.categoryLegend.querySelectorAll(".legend-item");
+    legendItems.forEach((item) => {
+      item.addEventListener("mouseenter", () => {
+        const catName = item.dataset.category;
+        const seg = svg.querySelector(`.donut-segment[data-category="${catName}"]`);
+        if (seg) seg.dispatchEvent(new Event("mouseenter"));
+      });
+      item.addEventListener("mouseleave", () => {
+        const catName = item.dataset.category;
+        const seg = svg.querySelector(`.donut-segment[data-category="${catName}"]`);
+        if (seg) seg.dispatchEvent(new Event("mouseleave"));
+      });
+    });
+  }
+
+  // Update Worn Callout
+  if (elements.donutWornVal) {
+    elements.donutWornVal.textContent = formatWeight(metrics.wornWeightG);
+  }
+  if (elements.donutWornCount) {
+    elements.donutWornCount.textContent = metrics.wornItemsCount;
+  }
+}
+
+function renderCategoryProgressBar(metrics) {
+  if (elements.categoryBarTotalLabel) {
+    elements.categoryBarTotalLabel.textContent = `${formatWeight(metrics.totalPackWeightG, { full: true })}`;
+  }
+  if (elements.categoryProgressBar) {
+    if (metrics.totalPackWeightG > 0) {
+      elements.categoryProgressBar.innerHTML = categories.map((cat) => {
+        const catWeight = metrics.categoryWeights[cat.name] || 0;
+        const pct = ((catWeight / metrics.totalPackWeightG) * 100).toFixed(1);
+        if (catWeight <= 0) return "";
+        return `<div class="category-segment" style="width:${pct}%; background:${cat.color};" title="${cat.name}: ${formatWeight(catWeight)} (${pct}%)"></div>`;
+      }).join("");
+    } else {
+      elements.categoryProgressBar.innerHTML = `<div class="category-segment" style="width:100%; background:#d5dcd2;" title="Empty pack"></div>`;
+    }
+  }
+
+  if (elements.categoryBarLegend) {
+    elements.categoryBarLegend.innerHTML = categories.map((cat) => {
+      const catWeight = metrics.categoryWeights[cat.name] || 0;
+      const pct = metrics.totalPackWeightG > 0 ? ((catWeight / metrics.totalPackWeightG) * 100).toFixed(0) : 0;
+      return `<div class="legend-item"><span class="legend-dot" style="background:${cat.color}"></span><span>${cat.name}</span><strong>${formatWeight(catWeight)}</strong> <small style="color:#809083">(${pct}%)</small></div>`;
+    }).join("");
+  }
+}
+
 function renderPlanner() {
   const trail = getActiveTrail();
   if (!trail) return;
@@ -1201,23 +1473,82 @@ function renderPlanner() {
     elements.btnToggleCompleteTrail.textContent = trail.status === "completed" ? "↩ Revert to Planned" : "✓ Mark as Completed";
   }
 
-  // 3. Weight Dashboard
+  // 3. Weight Dashboard (5 Ultralight Metrics)
   const metrics = calculatePackMetrics(trail);
+  const isImp = currentUnit === "imperial";
 
   if (elements.metricTotalG) {
-    elements.metricTotalG.textContent = new Intl.NumberFormat("en-AU").format(metrics.totalWeightG);
-    if (metrics.wishlistItemsCount > 0) {
-      elements.metricTotalKg.innerHTML = `<strong>${(metrics.ownedWeightG / 1000).toFixed(2)} kg</strong> owned + <strong>${(metrics.wishlistWeightG / 1000).toFixed(2)} kg</strong> wishlist (${metrics.wishlistItemsCount} items)`;
-    } else {
-      elements.metricTotalKg.textContent = `${metrics.totalWeightKg.toFixed(2)} kg total carried load`;
-    }
-    elements.metricBaseG.textContent = new Intl.NumberFormat("en-AU").format(metrics.baseWeightG);
-    elements.metricBaseKg.textContent = `${metrics.baseWeightKg.toFixed(2)} kg pack base weight`;
-    elements.metricItemCount.textContent = metrics.totalItems;
-    elements.metricConsumableSummary.textContent = `${new Intl.NumberFormat("en-AU").format(metrics.consumableWeightG)} g consumables (food, fuel, tabs)`;
+    const totalLb = metrics.totalPackWeightG / 453.59237;
+    const totalOz = metrics.totalPackWeightG * 0.03527396195;
+    const baseLb = metrics.baseWeightG / 453.59237;
+    const baseOz = metrics.baseWeightG * 0.03527396195;
+    const wornLb = metrics.wornWeightG / 453.59237;
+    const wornOz = metrics.wornWeightG * 0.03527396195;
+    const skinLb = metrics.skinOutWeightG / 453.59237;
+    const skinOz = metrics.skinOutWeightG * 0.03527396195;
+    const wishLb = metrics.wishlistWeightG / 453.59237;
 
+    // 1. Pack Carried Load
+    if (isImp) {
+      elements.metricTotalG.textContent = totalLb.toFixed(2);
+      if (elements.metricTotalUnit) elements.metricTotalUnit.textContent = "lb";
+      elements.metricTotalKg.textContent = `${totalOz.toFixed(1)} oz carried load on back`;
+    } else {
+      elements.metricTotalG.textContent = new Intl.NumberFormat("en-AU").format(metrics.totalPackWeightG);
+      if (elements.metricTotalUnit) elements.metricTotalUnit.textContent = "g";
+      if (metrics.wishlistItemsCount > 0) {
+        elements.metricTotalKg.innerHTML = `<strong>${(metrics.ownedWeightG / 1000).toFixed(2)} kg</strong> owned + <strong>${(metrics.wishlistWeightG / 1000).toFixed(2)} kg</strong> wishlist (${metrics.wishlistItemsCount} items)`;
+      } else {
+        elements.metricTotalKg.textContent = `${metrics.totalPackWeightKg.toFixed(2)} kg carried load on back`;
+      }
+    }
+
+    // 2. Base Weight
+    if (isImp) {
+      elements.metricBaseG.textContent = baseLb.toFixed(2);
+      if (elements.metricBaseUnit) elements.metricBaseUnit.textContent = "lb";
+      elements.metricBaseKg.textContent = `${baseOz.toFixed(1)} oz pack base weight`;
+    } else {
+      elements.metricBaseG.textContent = new Intl.NumberFormat("en-AU").format(metrics.baseWeightG);
+      if (elements.metricBaseUnit) elements.metricBaseUnit.textContent = "g";
+      elements.metricBaseKg.textContent = `${metrics.baseWeightKg.toFixed(2)} kg pack base weight`;
+    }
+
+    // 3. Worn Weight
+    if (elements.metricWornG) {
+      if (isImp) {
+        elements.metricWornG.textContent = wornLb.toFixed(2);
+        if (elements.metricWornUnit) elements.metricWornUnit.textContent = "lb";
+        elements.metricWornSub.textContent = `${wornOz.toFixed(1)} oz shoes, clothes & poles (${metrics.wornItemsCount} items)`;
+      } else {
+        elements.metricWornG.textContent = new Intl.NumberFormat("en-AU").format(metrics.wornWeightG);
+        if (elements.metricWornUnit) elements.metricWornUnit.textContent = "g";
+        elements.metricWornSub.textContent = `${(metrics.wornWeightG / 1000).toFixed(2)} kg shoes, clothes & poles (${metrics.wornItemsCount} items)`;
+      }
+    }
+
+    // 4. Skin-Out Total
+    if (elements.metricSkinoutG) {
+      if (isImp) {
+        elements.metricSkinoutG.textContent = skinLb.toFixed(2);
+        if (elements.metricSkinoutUnit) elements.metricSkinoutUnit.textContent = "lb";
+        elements.metricSkinoutSub.textContent = `${skinOz.toFixed(1)} oz total carried + worn load`;
+      } else {
+        elements.metricSkinoutG.textContent = new Intl.NumberFormat("en-AU").format(metrics.skinOutWeightG);
+        if (elements.metricSkinoutUnit) elements.metricSkinoutUnit.textContent = "g";
+        elements.metricSkinoutSub.textContent = `${(metrics.skinOutWeightG / 1000).toFixed(2)} kg pack load + worn on body`;
+      }
+    }
+
+    // 5. Wishlist Simulator
     if (elements.metricWishlistG) {
-      elements.metricWishlistG.textContent = metrics.wishlistWeightG > 0 ? `+${new Intl.NumberFormat("en-AU").format(metrics.wishlistWeightG)}` : "+0";
+      if (isImp) {
+        elements.metricWishlistG.textContent = metrics.wishlistWeightG > 0 ? `+${wishLb.toFixed(2)}` : "+0";
+        if (elements.metricWishlistUnit) elements.metricWishlistUnit.textContent = "lb";
+      } else {
+        elements.metricWishlistG.textContent = metrics.wishlistWeightG > 0 ? `+${new Intl.NumberFormat("en-AU").format(metrics.wishlistWeightG)}` : "+0";
+        if (elements.metricWishlistUnit) elements.metricWishlistUnit.textContent = "g";
+      }
       elements.metricWishlistSummary.textContent = metrics.wishlistItemsCount > 0
         ? `✨ ${metrics.wishlistItemsCount} prospective item(s) on trial in pack`
         : "0 prospective items on trial";
@@ -1227,32 +1558,31 @@ function renderPlanner() {
   // Header & Sticky Pack pill
   if (elements.headerTrailName) {
     elements.headerTrailName.textContent = trail.name;
-    elements.headerPackWeight.textContent = `${metrics.totalWeightKg.toFixed(2)} kg`;
-    elements.stickyTrailName.textContent = trail.name;
-    elements.stickyItemCount.textContent = metrics.totalItems;
-    elements.stickyWeight.textContent = `${new Intl.NumberFormat("en-AU").format(metrics.totalWeightG)} g (${metrics.totalWeightKg.toFixed(2)} kg)`;
+    elements.headerPackWeight.textContent = formatWeight(metrics.totalPackWeightG, { onlyKg: currentUnit === "metric", onlyLb: currentUnit === "imperial" });
+    if (elements.stickyTrailName) elements.stickyTrailName.textContent = trail.name;
+    if (elements.stickyItemCount) elements.stickyItemCount.textContent = metrics.totalItems;
+    if (elements.stickyWeight) elements.stickyWeight.textContent = formatWeight(metrics.totalPackWeightG, { full: true });
   }
 
-  // 4. Progress bar & breakdown
-  if (elements.categoryProgressBar) {
-    elements.categoryBarTotalLabel.textContent = `${new Intl.NumberFormat("en-AU").format(metrics.totalWeightG)} g (${metrics.totalWeightKg.toFixed(2)} kg)`;
-    if (metrics.totalWeightG > 0) {
-      elements.categoryProgressBar.innerHTML = categories.map((cat) => {
-        const catWeight = metrics.categoryWeights[cat.name] || 0;
-        const pct = ((catWeight / metrics.totalWeightG) * 100).toFixed(1);
-        if (catWeight <= 0) return "";
-        return `<div class="category-segment" style="width:${pct}%; background:${cat.color};" title="${cat.name}: ${catWeight} g (${pct}%)"></div>`;
-      }).join("");
-    } else {
-      elements.categoryProgressBar.innerHTML = `<div class="category-segment" style="width:100%; background:#d5dcd2;" title="Empty pack"></div>`;
-    }
-
-    elements.categoryLegend.innerHTML = categories.map((cat) => {
-      const catWeight = metrics.categoryWeights[cat.name] || 0;
-      const pct = metrics.totalWeightG > 0 ? ((catWeight / metrics.totalWeightG) * 100).toFixed(0) : 0;
-      return `<div class="legend-item"><span class="legend-dot" style="background:${cat.color}"></span><span>${cat.name}</span><strong>${new Intl.NumberFormat("en-AU").format(catWeight)} g</strong> <small style="color:#809083">(${pct}%)</small></div>`;
-    }).join("");
+  // Unit switcher button active state
+  if (elements.btnUnitMetric && elements.btnUnitImperial) {
+    elements.btnUnitMetric.classList.toggle("active", currentUnit === "metric");
+    elements.btnUnitImperial.classList.toggle("active", currentUnit === "imperial");
   }
+
+  // View toggle between Donut Chart and Linear Bar
+  if (elements.btnChartDonut && elements.btnChartBar) {
+    elements.btnChartDonut.classList.toggle("active", currentChartType === "donut");
+    elements.btnChartBar.classList.toggle("active", currentChartType === "bar");
+  }
+  if (elements.donutChartView && elements.linearBarView) {
+    elements.donutChartView.hidden = currentChartType !== "donut";
+    elements.linearBarView.hidden = currentChartType !== "bar";
+  }
+
+  // 4. Render Donut Chart & Linear Bar
+  renderDonutChart(metrics);
+  renderCategoryProgressBar(metrics);
 
   // 5. Missing alert
   if (elements.missingWeightsAlert) {
@@ -1286,42 +1616,74 @@ function renderPlanner() {
           .filter(({ item }) => item && item.category === cat.name);
 
         if (!catItems.length) continue;
-        const catSubtotal = catItems.reduce((acc, { item, qty }) => acc + (Number.isFinite(item.unitWeightG) ? item.unitWeightG * qty : 0), 0);
+        const catSubtotal = catItems.reduce((acc, { item, qty }) => {
+          if (!Number.isFinite(item.unitWeightG)) return acc;
+          const split = Number(trail.shared?.[item.id]) || 1;
+          return acc + (item.unitWeightG * qty) / split;
+        }, 0);
 
         html += `<div class="packed-category-group" style="--group-color:${cat.color}">
           <div class="packed-category-title">
             <span>${cat.name} (${catItems.length} items)</span>
-            <span>Subtotal: ${new Intl.NumberFormat("en-AU").format(catSubtotal)} g</span>
+            <span>Subtotal: ${formatWeight(catSubtotal)}</span>
           </div>`;
 
         for (const { item, qty } of catItems) {
           const isWishlist = (item.statusKey || normalizeStatus(item.status)) === "wishlist";
+          const isWorn = Boolean(trail.worn?.[item.id]);
+          const splitRatio = Number(trail.shared?.[item.id]) || 1;
+          const isShared = splitRatio > 1;
+
           const thumb = item.imagePath
             ? `<img class="packed-item-thumb" src="${escapeHtml(item.imagePath)}" alt="${escapeHtml(item.name || "")}" />`
             : `<div class="packed-item-thumb placeholder">${escapeHtml(item.itemType ? item.itemType.slice(0, 4).toUpperCase() : "GEAR")}</div>`;
-          const lineWeight = Number.isFinite(item.unitWeightG) ? item.unitWeightG * qty : null;
+
+          const unitW = Number.isFinite(item.unitWeightG) ? item.unitWeightG : null;
+          const fullLineWeight = unitW !== null ? unitW * qty : null;
+          const effectiveLineWeight = unitW !== null ? fullLineWeight / splitRatio : null;
 
           const wishlistChip = isWishlist ? `<span class="packed-wishlist-chip" title="Prospective gear tested in pack">✨ 想买待购</span>` : "";
+          const wornChip = isWorn ? `<span class="packed-worn-chip" title="Worn on body (excluded from backpack weight)">👕 Worn</span>` : "";
+          const sharedChip = isShared ? `<span class="packed-shared-chip" title="Shared with ${splitRatio} teammates">👥 1/${splitRatio} Share</span>` : "";
+
           const convertBtn = isWishlist
-            ? `<button class="btn-pack-mark-bought" data-convert-id="${escapeHtml(item.id)}" type="button" title="I purchased this! Move to Owned collection">✓ Mark Bought</button>`
+            ? `<button class="btn-pack-mark-bought" data-convert-id="${escapeHtml(item.id)}" type="button" title="I purchased this! Move to Owned collection">✓ Bought</button>`
             : "";
 
-          html += `<div class="packed-item-row ${isWishlist ? "is-wishlist-packed-row" : ""}" data-item-id="${escapeHtml(item.id)}">
+          html += `<div class="packed-item-row ${isWishlist ? "is-wishlist-packed-row" : ""} ${isWorn ? "is-worn-row" : ""}" data-item-id="${escapeHtml(item.id)}">
             ${thumb}
             <div class="packed-item-details">
-              <div class="packed-item-brand">${escapeHtml(item.brand || "Brand not recorded")} ${wishlistChip}</div>
+              <div class="packed-item-brand">
+                <span>${escapeHtml(item.brand || "Brand not recorded")}</span>
+                ${wishlistChip}
+                ${wornChip}
+                ${sharedChip}
+              </div>
               <div class="packed-item-name" title="${escapeHtml(item.name || item.itemType)}">${escapeHtml(item.name || item.itemType)}</div>
             </div>
-            ${convertBtn}
+
+            <div class="packed-item-modifiers">
+              <button class="btn-toggle-worn ${isWorn ? "active" : ""}" data-worn-id="${escapeHtml(item.id)}" type="button" title="${isWorn ? "Move to backpack carried load" : "Mark as worn on body (excludes from backpack weight)"}">
+                ${isWorn ? "👕 Worn" : "🎒 In Pack"}
+              </button>
+              <button class="btn-toggle-shared ${isShared ? "active" : ""}" data-shared-id="${escapeHtml(item.id)}" type="button" title="Split gear weight with partner (current: 1/${splitRatio})">
+                👥 1/${splitRatio}
+              </button>
+              ${convertBtn}
+            </div>
+
             <div class="qty-stepper">
               <button class="btn-qty-minus" data-id="${escapeHtml(item.id)}" type="button" aria-label="Decrease quantity">−</button>
               <input type="number" class="planner-qty-input" data-id="${escapeHtml(item.id)}" value="${qty}" min="1" max="99" aria-label="Quantity for ${escapeHtml(item.name || item.itemType)}" />
               <button class="btn-qty-plus" data-id="${escapeHtml(item.id)}" type="button" aria-label="Increase quantity">+</button>
             </div>
+
             <div class="packed-item-weight">
-              ${formatWeight(lineWeight)}
-              ${qty > 1 && item.unitWeightG ? `<small>${formatWeight(item.unitWeightG)} each</small>` : ""}
+              ${formatWeight(effectiveLineWeight)}
+              ${isShared ? `<small class="shared-weight-detail">Full: ${formatWeight(fullLineWeight)}</small>` : (qty > 1 && unitW ? `<small>${formatWeight(unitW)} each</small>` : "")}
+              ${isWorn ? `<small class="worn-weight-note">(worn)</small>` : ""}
             </div>
+
             <button class="packed-item-remove" data-id="${escapeHtml(item.id)}" type="button" aria-label="Remove ${escapeHtml(item.name)} from pack">✕</button>
           </div>`;
         }
@@ -1513,6 +1875,227 @@ function closeTrailModal() {
   elements.trailModal?.classList.remove("open");
 }
 
+function exportLighterPackCsv() {
+  const trail = getActiveTrail();
+  if (!trail) return;
+
+  const rows = [
+    ["Category", "Item Name", "Description", "Weight", "Unit", "Quantity", "Worn", "Consumable", "Price"]
+  ];
+
+  const unitStr = currentUnit === "imperial" ? "oz" : "g";
+
+  for (const [itemId, rawQty] of Object.entries(trail.pack || {})) {
+    const qty = Number(rawQty) || 0;
+    if (qty <= 0) continue;
+    const item = gear.find((g) => g.id === itemId);
+    if (!item) continue;
+
+    const isWorn = trail.worn?.[itemId] ? 1 : 0;
+    const isConsum = isConsumable(item) ? 1 : 0;
+    const price = Number.isFinite(item.unitPriceAud) ? item.unitPriceAud : Number.isFinite(item.unitPriceCny) ? item.unitPriceCny : "";
+
+    let weightVal = "";
+    if (Number.isFinite(item.unitWeightG)) {
+      if (unitStr === "oz") {
+        weightVal = (item.unitWeightG * 0.03527396195).toFixed(2);
+      } else {
+        weightVal = item.unitWeightG;
+      }
+    }
+
+    const descParts = [];
+    if (item.brand) descParts.push(item.brand);
+    if (item.size) descParts.push(`Size: ${item.size}`);
+    if (item.summary) descParts.push(item.summary);
+    const desc = descParts.join(" · ");
+
+    rows.push([
+      item.category || "Packs & Essentials",
+      item.name || item.itemType || "Gear Item",
+      desc,
+      weightVal,
+      unitStr,
+      qty,
+      isWorn,
+      isConsum,
+      price
+    ]);
+  }
+
+  const csvContent = rows.map((r) => r.map((c) => {
+    const str = c === null || c === undefined ? "" : String(c);
+    if (str.includes(",") || str.includes('"') || str.includes("\n")) {
+      return `"${str.replace(/"/g, '""')}"`;
+    }
+    return `"${str}"`;
+  }).join(",")).join("\r\n");
+
+  const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  const slug = (trail.name || "pack").toLowerCase().replace(/[^a-z0-9]+/g, "-");
+  a.href = url;
+  a.download = `${slug}-lighterpack.csv`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+
+  showToast(`📥 Exported <strong>${escapeHtml(trail.name)}</strong> to <strong>${slug}-lighterpack.csv</strong>!`);
+}
+
+function parseCsvLine(line) {
+  const result = [];
+  let cur = "";
+  let inQuotes = false;
+  for (let i = 0; i < line.length; i++) {
+    const c = line[i];
+    if (c === '"') {
+      if (inQuotes && line[i + 1] === '"') {
+        cur += '"';
+        i++;
+      } else {
+        inQuotes = !inQuotes;
+      }
+    } else if (c === "," && !inQuotes) {
+      result.push(cur.trim());
+      cur = "";
+    } else {
+      cur += c;
+    }
+  }
+  result.push(cur.trim());
+  return result;
+}
+
+function importLighterPackCsv(file) {
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    try {
+      const text = e.target.result;
+      const lines = text.split(/\r?\n/).filter((l) => l.trim().length > 0);
+      if (lines.length < 2) {
+        showToast("⚠️ The selected CSV file is empty or does not contain data rows.");
+        return;
+      }
+
+      const headers = parseCsvLine(lines[0]).map((h) => h.toLowerCase().replace(/[^a-z0-9]/g, ""));
+      const colCategory = headers.findIndex((h) => h.includes("cat"));
+      const colName = headers.findIndex((h) => h.includes("name") || h.includes("item"));
+      const colDesc = headers.findIndex((h) => h.includes("desc"));
+      const colWeight = headers.findIndex((h) => h.includes("weight") || h.includes("wt"));
+      const colUnit = headers.findIndex((h) => h.includes("unit"));
+      const colQty = headers.findIndex((h) => h.includes("qty") || h.includes("quant"));
+      const colWorn = headers.findIndex((h) => h.includes("worn"));
+      const colConsum = headers.findIndex((h) => h.includes("consum"));
+      const colPrice = headers.findIndex((h) => h.includes("price") || h.includes("cost"));
+
+      const trail = getActiveTrail();
+      if (!trail) return;
+      trail.pack = trail.pack || {};
+      trail.worn = trail.worn || {};
+      trail.shared = trail.shared || {};
+
+      let importedCount = 0;
+      let newItemsCreated = 0;
+
+      for (let i = 1; i < lines.length; i++) {
+        const row = parseCsvLine(lines[i]);
+        if (!row || row.length === 0 || !row.some((cell) => cell.length > 0)) continue;
+
+        const rawName = colName >= 0 && row[colName] ? row[colName].trim() : "";
+        if (!rawName) continue;
+
+        const rawCat = colCategory >= 0 && row[colCategory] ? row[colCategory].trim() : "";
+        const rawDesc = colDesc >= 0 && row[colDesc] ? row[colDesc].trim() : "";
+        const rawWeight = colWeight >= 0 && row[colWeight] ? parseFloat(row[colWeight].replace(/[^0-9.]/g, "")) : NaN;
+        const rawUnit = colUnit >= 0 && row[colUnit] ? row[colUnit].trim().toLowerCase() : (currentUnit === "imperial" ? "oz" : "g");
+        const rawQty = colQty >= 0 && row[colQty] ? parseInt(row[colQty], 10) : 1;
+        const qty = Number.isFinite(rawQty) && rawQty > 0 ? rawQty : 1;
+        const rawWorn = colWorn >= 0 && row[colWorn] ? row[colWorn].trim().toLowerCase() : "";
+        const isWorn = rawWorn === "1" || rawWorn === "true" || rawWorn === "yes" || rawWorn === "worn";
+        const rawConsum = colConsum >= 0 && row[colConsum] ? row[colConsum].trim().toLowerCase() : "";
+        const isConsum = rawConsum === "1" || rawConsum === "true" || rawConsum === "yes" || rawConsum === "consumable";
+        const rawPrice = colPrice >= 0 && row[colPrice] ? parseFloat(row[colPrice].replace(/[^0-9.]/g, "")) : null;
+
+        // Convert weight to grams
+        let weightG = null;
+        if (Number.isFinite(rawWeight)) {
+          if (rawUnit === "oz" || rawUnit === "ounce" || rawUnit === "ounces") {
+            weightG = Math.round(rawWeight * 28.349523);
+          } else if (rawUnit === "lb" || rawUnit === "lbs" || rawUnit === "pound" || rawUnit === "pounds") {
+            weightG = Math.round(rawWeight * 453.59237);
+          } else if (rawUnit === "kg") {
+            weightG = Math.round(rawWeight * 1000);
+          } else {
+            weightG = Math.round(rawWeight);
+          }
+        }
+
+        // Map Category to one of our standard 6 categories
+        let matchedCat = categories.find((c) => c.name.toLowerCase() === rawCat.toLowerCase());
+        if (!matchedCat) {
+          const lower = rawCat.toLowerCase();
+          if (lower.includes("sleep") || lower.includes("shelter") || lower.includes("tent") || lower.includes("bag")) {
+            matchedCat = categories[0];
+          } else if (lower.includes("pack") || lower.includes("pole") || lower.includes("light") || lower.includes("essential")) {
+            matchedCat = categories[1];
+          } else if (lower.includes("cook") || lower.includes("stove") || lower.includes("water") || lower.includes("hydration")) {
+            matchedCat = categories[2];
+          } else if (lower.includes("food") || lower.includes("meal") || lower.includes("snack") || isConsum) {
+            matchedCat = categories[3];
+          } else if (lower.includes("cloth") || lower.includes("wear") || lower.includes("shoe") || lower.includes("boot") || lower.includes("layer")) {
+            matchedCat = categories[4];
+          } else {
+            matchedCat = categories[5];
+          }
+        }
+
+        // Check if item already exists in inventory
+        let existingItem = gear.find((g) => (g.name || "").toLowerCase() === rawName.toLowerCase());
+        if (!existingItem) {
+          const newId = `imported-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
+          existingItem = {
+            id: newId,
+            name: rawName,
+            brand: rawDesc.split("·")[0]?.trim() || "Imported Gear",
+            category: matchedCat.name,
+            itemType: isConsum ? "trail meal" : "gear item",
+            unitWeightG: weightG,
+            unitPriceAud: Number.isFinite(rawPrice) ? rawPrice : null,
+            status: "使用中",
+            statusKey: "in_use",
+            summary: rawDesc || `Imported from LighterPack CSV into ${trail.name}`,
+            notes: "Imported from LighterPack CSV file.",
+            custom: true,
+          };
+          gear.push(existingItem);
+          newItemsCreated++;
+        }
+
+        // Add to active trail pack
+        trail.pack[existingItem.id] = (trail.pack[existingItem.id] || 0) + qty;
+        if (isWorn) {
+          trail.worn[existingItem.id] = true;
+        }
+
+        importedCount++;
+      }
+
+      saveInventory();
+      saveTrails();
+      render();
+      showToast(`📥 Successfully imported <strong>${importedCount} item(s)</strong> (${newItemsCreated} new to inventory) from LighterPack CSV into <strong>${escapeHtml(trail.name)}</strong>!`);
+    } catch (err) {
+      console.error("Failed to parse LighterPack CSV", err);
+      showToast("⚠️ Could not parse CSV file. Please make sure it is a valid LighterPack CSV format.");
+    }
+  };
+  reader.readAsText(file);
+}
+
 function openExportModal() {
   const trail = getActiveTrail();
   if (!trail) return;
@@ -1523,10 +2106,12 @@ function openExportModal() {
   text += `Status: ${trail.status.toUpperCase()} | Distance: ${trail.distanceKm || "—"} km | Duration: ${trail.durationDays || "—"} days\n`;
   text += `Target Date: ${trail.date || "N/A"}\n\n`;
   text += `--------------------------------------------------\n`;
-  text += `TOTAL PACK WEIGHT: ${new Intl.NumberFormat("en-AU").format(metrics.totalWeightG)} g (${metrics.totalWeightKg.toFixed(2)} kg)\n`;
-  text += `BASE WEIGHT (excl. consumables): ${new Intl.NumberFormat("en-AU").format(metrics.baseWeightG)} g (${metrics.baseWeightKg.toFixed(2)} kg)\n`;
-  text += `CONSUMABLES: ${new Intl.NumberFormat("en-AU").format(metrics.consumableWeightG)} g\n`;
-  text += `ITEMS PACKED: ${metrics.totalItems}\n`;
+  text += `PACK CARRIED LOAD: ${formatWeight(metrics.totalPackWeightG, { full: true })}\n`;
+  text += `BASE WEIGHT (excl. consumables & worn): ${formatWeight(metrics.baseWeightG, { full: true })}\n`;
+  text += `CONSUMABLES (food, fuel, tabs): ${formatWeight(metrics.consumableWeightG, { full: true })}\n`;
+  text += `WORN ON BODY (shoes, clothes, poles): ${formatWeight(metrics.wornWeightG, { full: true })} (${metrics.wornItemsCount} items)\n`;
+  text += `SKIN-OUT TOTAL LOAD: ${formatWeight(metrics.skinOutWeightG, { full: true })}\n`;
+  text += `TOTAL ITEMS: ${metrics.totalItems}\n`;
   text += `--------------------------------------------------\n\n`;
 
   for (const cat of categories) {
@@ -1536,12 +2121,25 @@ function openExportModal() {
       .filter(({ item }) => item && item.category === cat.name);
 
     if (!catItems.length) continue;
-    const catSubtotal = catItems.reduce((acc, { item, qty }) => acc + (Number.isFinite(item.unitWeightG) ? item.unitWeightG * qty : 0), 0);
-    text += `### ${cat.name} (${catItems.length} items — ${new Intl.NumberFormat("en-AU").format(catSubtotal)} g)\n`;
+    const catSubtotal = catItems.reduce((acc, { item, qty }) => {
+      if (!Number.isFinite(item.unitWeightG)) return acc;
+      const split = Number(trail.shared?.[item.id]) || 1;
+      return acc + (item.unitWeightG * qty) / split;
+    }, 0);
+    text += `### ${cat.name} (${catItems.length} items — ${formatWeight(catSubtotal)})\n`;
 
     for (const { item, qty } of catItems) {
-      const lineWeight = Number.isFinite(item.unitWeightG) ? `${item.unitWeightG * qty} g` : "weight not recorded";
-      text += `- [x] ${qty > 1 ? `${qty}x ` : ""}${item.brand ? `${item.brand} ` : ""}${item.name || item.itemType} — ${lineWeight}\n`;
+      const isWorn = trail.worn?.[item.id];
+      const split = Number(trail.shared?.[item.id]) || 1;
+      const unitW = item.unitWeightG;
+      let weightStr = "weight not recorded";
+      if (Number.isFinite(unitW)) {
+        const lineW = (unitW * qty) / split;
+        weightStr = formatWeight(lineW);
+        if (split > 1) weightStr += ` (1/${split} split of ${formatWeight(unitW * qty)})`;
+      }
+      const wornTag = isWorn ? " [WORN ON BODY]" : "";
+      text += `- [x] ${qty > 1 ? `${qty}x ` : ""}${item.brand ? `${item.brand} ` : ""}${item.name || item.itemType} — ${weightStr}${wornTag}\n`;
     }
     text += `\n`;
   }
@@ -1788,6 +2386,54 @@ document.addEventListener("click", (e) => {
     const itemId = detailTrigger.dataset.detailId;
     const item = gear.find((g) => g.id === itemId);
     if (item) openProductModal(item);
+    return;
+  }
+
+  // 0f. Toggle worn on body in pack
+  const wornBtn = e.target.closest("[data-worn-id]");
+  if (wornBtn) {
+    e.stopPropagation();
+    const itemId = wornBtn.dataset.wornId;
+    const trail = getActiveTrail();
+    if (trail) {
+      trail.worn = trail.worn || {};
+      trail.worn[itemId] = !trail.worn[itemId];
+      saveTrails();
+      render();
+      const item = gear.find((g) => g.id === itemId);
+      if (trail.worn[itemId]) {
+        showToast(`👕 Marked <strong>${escapeHtml(item?.name || "Item")}</strong> as <strong>Worn on Body</strong> (excluded from pack base weight).`);
+      } else {
+        showToast(`🎒 Moved <strong>${escapeHtml(item?.name || "Item")}</strong> into <strong>Pack Carried Load</strong>.`);
+      }
+    }
+    return;
+  }
+
+  // 0g. Toggle shared gear split in pack
+  const sharedBtn = e.target.closest("[data-shared-id]");
+  if (sharedBtn) {
+    e.stopPropagation();
+    const itemId = sharedBtn.dataset.sharedId;
+    const trail = getActiveTrail();
+    if (trail) {
+      trail.shared = trail.shared || {};
+      const currentSplit = Number(trail.shared[itemId]) || 1;
+      const nextSplit = currentSplit >= 4 ? 1 : currentSplit + 1;
+      if (nextSplit === 1) {
+        delete trail.shared[itemId];
+      } else {
+        trail.shared[itemId] = nextSplit;
+      }
+      saveTrails();
+      render();
+      const item = gear.find((g) => g.id === itemId);
+      if (nextSplit === 1) {
+        showToast(`👤 <strong>${escapeHtml(item?.name || "Item")}</strong> set to <strong>Solo Carry (1/1)</strong>.`);
+      } else {
+        showToast(`👥 Shared <strong>${escapeHtml(item?.name || "Item")}</strong> with partner/team (carrying <strong>1/${nextSplit}</strong> of weight).`);
+      }
+    }
     return;
   }
 
@@ -2082,6 +2728,50 @@ elements.btnClearPack?.addEventListener("click", () => {
 
 elements.btnExportPack?.addEventListener("click", openExportModal);
 
+// Unit toggle buttons
+elements.btnUnitMetric?.addEventListener("click", () => {
+  if (currentUnit !== "metric") {
+    currentUnit = "metric";
+    localStorage.setItem(UNIT_STORAGE_KEY, currentUnit);
+    render();
+    showToast("Switched display units to <strong>Metric (g / kg)</strong>.");
+  }
+});
+
+elements.btnUnitImperial?.addEventListener("click", () => {
+  if (currentUnit !== "imperial") {
+    currentUnit = "imperial";
+    localStorage.setItem(UNIT_STORAGE_KEY, currentUnit);
+    render();
+    showToast("Switched display units to <strong>Imperial (oz / lb)</strong>.");
+  }
+});
+
+// Chart view toggle (Donut vs Bar)
+elements.btnChartDonut?.addEventListener("click", () => {
+  currentChartType = "donut";
+  localStorage.setItem(CHART_TYPE_STORAGE_KEY, currentChartType);
+  render();
+});
+
+elements.btnChartBar?.addEventListener("click", () => {
+  currentChartType = "bar";
+  localStorage.setItem(CHART_TYPE_STORAGE_KEY, currentChartType);
+  render();
+});
+
+// CSV Export and Import
+elements.btnExportCsv?.addEventListener("click", exportLighterPackCsv);
+elements.btnExportCsvModal?.addEventListener("click", exportLighterPackCsv);
+
+elements.csvFileInput?.addEventListener("change", (e) => {
+  const file = e.target.files?.[0];
+  if (file) {
+    importLighterPackCsv(file);
+    e.target.value = "";
+  }
+});
+
 // Modal bindings
 elements.modalTrailClose?.addEventListener("click", closeTrailModal);
 elements.modalTrailCancel?.addEventListener("click", closeTrailModal);
@@ -2344,5 +3034,11 @@ window.addEventListener("hashchange", () => {
 });
 
 window.addEventListener("scroll", updateStickyBar, { passive: true });
+
+window.exportLighterPackCsv = exportLighterPackCsv;
+window.importLighterPackCsv = importLighterPackCsv;
+window.getActiveTrail = getActiveTrail;
+window.formatWeight = formatWeight;
+window.calculatePackMetrics = calculatePackMetrics;
 
 init();
