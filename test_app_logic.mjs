@@ -134,12 +134,13 @@ async function waitForReady(maxWaitMs = 8000) {
           return {
             hasGetActiveTrail: typeof window.getActiveTrail === 'function',
             activeTrail: typeof window.getActiveTrail === 'function' ? window.getActiveTrail() : null,
-            gearLen: window.gear ? window.gear.length : 0,
-            hasCard: Boolean(document.querySelector(".gear-card"))
+            gearLen: Array.isArray(window.gear) ? window.gear.length : null,
+            hasCard: Boolean(document.querySelector(".gear-card")),
+            hasEmpty: Boolean(document.querySelector("#empty-state:not([hidden])"))
           };
         })()
       `);
-      if (lastVal?.hasGetActiveTrail && lastVal?.activeTrail && lastVal?.gearLen > 0 && lastVal?.hasCard) {
+      if (lastVal?.hasGetActiveTrail && lastVal?.activeTrail && lastVal?.gearLen !== null && (lastVal?.gearLen > 0 ? lastVal?.hasCard : lastVal?.hasEmpty)) {
         await new Promise((r) => setTimeout(r, 200));
         return true;
       }
@@ -174,6 +175,26 @@ try {
   recordTest("Page initialized and core exports ready", initialized);
 
   // -------------------------------------------------------------
+  // TEST 0.1: Clean Slate Empty Initial State Verification
+  // -------------------------------------------------------------
+  console.log("\n--- TEST 0.1: Clean Slate Empty Initial State Verification ---");
+  const cleanGearCount = await evalInPage("window.gear.length");
+  const cleanBaseWeight = await evalInPage("window.calculatePackMetrics(window.getActiveTrail()).baseWeightG");
+  const cleanTotalWeight = await evalInPage("window.calculatePackMetrics(window.getActiveTrail()).totalPackWeightG");
+  const emptyCardVisible = await evalInPage("Boolean(document.querySelector('#empty-state:not([hidden]) .empty-state-card'))");
+  const initialStatusCount = await evalInPage("document.querySelector('#hero-stat-items')?.textContent.trim()");
+
+  recordTest(
+    "New visitor opens to clean empty initial state (0 items, 0g base weight, clean slate card visible)",
+    Boolean(cleanGearCount === 0 && cleanBaseWeight === 0 && cleanTotalWeight === 0 && emptyCardVisible && initialStatusCount === "0"),
+    `Items: ${cleanGearCount}, BaseWeight: ${cleanBaseWeight}g, EmptyCard: ${emptyCardVisible}, HeroItems: ${initialStatusCount}`
+  );
+
+  const emptyStateScreenshot = await send("Page.captureScreenshot", { format: "png" });
+  fs.writeFileSync(path.join(ARTIFACT_DIR, "empty-state-clean-slate-preview.png"), Buffer.from(emptyStateScreenshot.data, "base64"));
+  console.log(`[Screenshot] Saved Clean Slate Empty State preview to ${path.join(ARTIFACT_DIR, "empty-state-clean-slate-preview.png")}`);
+
+  // -------------------------------------------------------------
   // TEST 0: Non-blocking First Visit & User Onboarding
   // -------------------------------------------------------------
   console.log("\n--- TEST 0: Non-blocking First Visit & User Onboarding ---");
@@ -200,11 +221,13 @@ try {
   fs.writeFileSync(onboardingPath, Buffer.from(onboardingScreenshot.data, "base64"));
   console.log(`[Screenshot] Saved Onboarding modal preview to ${onboardingPath}`);
 
-  // Fill in name "Alex" and submit with curated kit
+  // Fill in name "Alex" and choose curated kit
   await evalInPage(`
     (function() {
       const nameInput = document.querySelector("#onboarding-input-name");
       nameInput.value = "Alex";
+      const curatedRadio = document.querySelector('input[name="onboarding-starter"][value="curated"]');
+      if (curatedRadio) curatedRadio.checked = true;
       const form = document.querySelector("#onboarding-form");
       form.dispatchEvent(new Event("submit", { bubbles: true, cancelable: true }));
     })()
@@ -935,6 +958,11 @@ try {
   const exportModalZh = await evalInPage(`
     (() => {
       window.applyLanguage("zh");
+      const trail = window.getActiveTrail();
+      if (trail && (!trail.pack || Object.keys(trail.pack).length === 0)) {
+        const item = window.gear.find(g => g.category === "Sleep & Shelter") || window.gear[0];
+        if (item) trail.pack = { [item.id]: 1 };
+      }
       window.openExportModal();
       const textArea = document.querySelector("#export-text-area");
       const val = textArea.value;
