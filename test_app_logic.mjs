@@ -25,6 +25,7 @@ const MIME_TYPES = {
 };
 
 const server = http.createServer((req, res) => {
+  console.log("[HTTP]", req.method, req.url);
   let reqPath = req.url.split("?")[0].split("#")[0];
   if (reqPath === "/") reqPath = "/index.html";
   const filePath = path.join(DIST_DIR, reqPath);
@@ -87,6 +88,9 @@ const pendingCallbacks = new Map();
 
 ws.on("message", (event) => {
   const data = JSON.parse(event.data);
+  if (data.method === "Runtime.consoleAPICalled") {
+    console.log("[Browser Console]", data.params.type, data.params.args?.map(a => a.value ?? a.description ?? "").join(" "));
+  }
   if (data.method === "Page.javascriptDialogOpening") {
     send("Page.handleJavaScriptDialog", { accept: true, promptText: "Alex" }).catch(() => {});
   }
@@ -113,9 +117,39 @@ async function evalInPage(expression) {
     awaitPromise: true,
   });
   if (res.exceptionDetails) {
+    console.error("Eval Exception Details:", JSON.stringify(res.exceptionDetails, null, 2));
     throw new Error(`Eval error: ${res.exceptionDetails.text} (${expression})`);
   }
   return res.result?.value;
+}
+
+async function waitForReady(maxWaitMs = 8000) {
+  const start = Date.now();
+  let lastErr = null;
+  let lastVal = null;
+  while (Date.now() - start < maxWaitMs) {
+    try {
+      lastVal = await evalInPage(`
+        (() => {
+          return {
+            hasGetActiveTrail: typeof window.getActiveTrail === 'function',
+            activeTrail: typeof window.getActiveTrail === 'function' ? window.getActiveTrail() : null,
+            gearLen: window.gear ? window.gear.length : 0,
+            hasCard: Boolean(document.querySelector(".gear-card"))
+          };
+        })()
+      `);
+      if (lastVal?.hasGetActiveTrail && lastVal?.activeTrail && lastVal?.gearLen > 0 && lastVal?.hasCard) {
+        await new Promise((r) => setTimeout(r, 200));
+        return true;
+      }
+    } catch (e) {
+      lastErr = e.message;
+    }
+    await new Promise((r) => setTimeout(r, 200));
+  }
+  console.error("waitForReady timeout. lastVal:", lastVal, "lastErr:", lastErr);
+  throw new Error("Page did not become ready within timeout");
 }
 
 const testResults = [];
@@ -133,7 +167,7 @@ try {
   // Navigate to app
   console.log(`[Test] Navigating to http://127.0.0.1:${HTTP_PORT}/index.html ...`);
   await send("Page.navigate", { url: `http://127.0.0.1:${HTTP_PORT}/index.html` });
-  await new Promise((r) => setTimeout(r, 1200));
+  await waitForReady();
 
   // Verify page initialized
   const initialized = await evalInPage("typeof window.calculatePackMetrics === 'function'");
@@ -226,7 +260,7 @@ try {
   // Now RELOAD the page
   console.log("[Test 1] Reloading page to verify persistence...");
   await send("Page.reload");
-  await new Promise((r) => setTimeout(r, 1200));
+  await waitForReady();
 
   const afterReloadFirstTitle = await evalInPage(`
     document.querySelector("#sleep-shelter .gear-card h4")?.textContent
@@ -259,7 +293,7 @@ try {
 
   console.log("[Test 2] Reloading page to verify trail persistence...");
   await send("Page.reload");
-  await new Promise((r) => setTimeout(r, 1200));
+  await waitForReady();
 
   const reloadedTrailId = await evalInPage("window.getActiveTrail().id");
   const reloadedSelectValue = await evalInPage("document.querySelector('#active-trail-select').value");
@@ -298,7 +332,7 @@ try {
 
   console.log("[Test 3] Reloading page to verify Wishlist mode & item retention...");
   await send("Page.reload");
-  await new Promise((r) => setTimeout(r, 1200));
+  await waitForReady();
 
   const modeAfterReload = await evalInPage(`
     document.querySelector("#tab-view-wishlist").classList.contains("active") ? "wishlist" : "other"
@@ -337,7 +371,7 @@ try {
 
   console.log("[Test 4] Reloading page to verify pack state retention...");
   await send("Page.reload");
-  await new Promise((r) => setTimeout(r, 1200));
+  await waitForReady();
 
   const metricsAfterReload = await evalInPage("window.calculatePackMetrics(window.getActiveTrail())");
   recordTest("Pack weight calculation persists across reloads", metricsAfterReload.baseWeightG === actualBaseWeight, `Base weight after reload: ${metricsAfterReload.baseWeightG}g`);
@@ -354,7 +388,7 @@ try {
 
   console.log("[Test 5] Reloading page to verify unit switcher persistence...");
   await send("Page.reload");
-  await new Promise((r) => setTimeout(r, 1200));
+  await waitForReady();
 
   const isImperialAfterReload = await evalInPage(`document.querySelector("#btn-unit-imperial").classList.contains("active")`);
   recordTest("Imperial unit preference persists after reload", isImperialAfterReload);
@@ -571,7 +605,7 @@ try {
 
   // 3. Reload page and verify persistence
   await send("Page.reload");
-  await new Promise((r) => setTimeout(r, 1000));
+  await waitForReady();
 
   const reloadedLang = await evalInPage(`document.documentElement.lang`);
   const reloadedFirstCat = await evalInPage(`document.querySelector(".gear-section h3")?.textContent.trim()`);
@@ -816,6 +850,188 @@ try {
   `);
 
   recordTest("Blank slate clears inventory & re-import restores 100% of gear, photos and profile", Boolean(backupRoundtrip?.blankCount === 0 && backupRoundtrip?.restoredCount > 80 && backupRoundtrip?.photoItemRestored && backupRoundtrip?.profileRestored), `Initial: ${backupRoundtrip?.initialCount}, Blank: ${backupRoundtrip?.blankCount}, Restored: ${backupRoundtrip?.restoredCount}, PhotoRestored: ${backupRoundtrip?.photoItemRestored}, ProfileRestored: ${backupRoundtrip?.profileRestored}`);
+
+  // ===========================================================================
+  // TEST 12: Zero Mixed Language Audit Across All Popups & Modals
+  // ===========================================================================
+  console.log("\n--- TEST 12: Zero Mixed Language Audit Across All Popups & Modals ---");
+
+  // 1. Audit Product Modal in Chinese Mode
+  const productModalZh = await evalInPage(`
+    (() => {
+      window.applyLanguage("zh");
+      // Find an item with specs and temp rating or r-value
+      const item = window.gear.find(g => g.specs && (g.specs["Floor Dimensions"] || g.specs["Temperature Rating"] || g.specs["Capacity & Season"])) || window.gear[0];
+      window.openProductModal(item);
+      const modal = document.querySelector("#product-modal");
+      const content = document.querySelector("#product-modal-content");
+      
+      const specLabels = Array.from(content.querySelectorAll(".spec-label")).map(el => el.textContent.trim());
+      const hasChineseSpecLabels = specLabels.some(l => /[\u4e00-\u9fa5]/.test(l));
+      const hasUntranslatedCommonSpecs = specLabels.some(l => ["Floor Dimensions", "Capacity & Season", "Poles", "Fly Fabric"].includes(l));
+      
+      const tempCard = content.querySelector(".temp-rating-card");
+      const tempText = tempCard ? tempCard.textContent : "";
+      const tempIsChinese = tempCard ? /[\u4e00-\u9fa5]/.test(tempText) && !tempText.includes("Alpine Temperature Ratings") : true;
+
+      const rvalCard = content.querySelector(".rval-rating-card");
+      const rvalText = rvalCard ? rvalCard.textContent : "";
+      const rvalIsChinese = rvalCard ? /[\u4e00-\u9fa5]/.test(rvalText) && !rvalText.includes("Thermal Insulation") : true;
+
+      const metaType = content.querySelector(".modal-meta-grid .modal-meta-box:nth-child(4) strong")?.textContent.trim();
+      const metaTypeIsChinese = /[\u4e00-\u9fa5]/.test(metaType);
+
+      return {
+        itemTitle: item.name,
+        specLabelsCount: specLabels.length,
+        hasChineseSpecLabels,
+        hasUntranslatedCommonSpecs,
+        tempIsChinese,
+        rvalIsChinese,
+        metaType,
+        metaTypeIsChinese
+      };
+    })()
+  `);
+
+  recordTest(
+    "Product modal in Chinese mode translates technical specs, ratings & gear types cleanly",
+    Boolean(productModalZh.hasChineseSpecLabels && !productModalZh.hasUntranslatedCommonSpecs && productModalZh.tempIsChinese && productModalZh.rvalIsChinese && productModalZh.metaTypeIsChinese),
+    `Item: "${productModalZh.itemTitle}", Type: "${productModalZh.metaType}", HasChineseSpecs: ${productModalZh.hasChineseSpecLabels}, UntranslatedCommon: ${productModalZh.hasUntranslatedCommonSpecs}`
+  );
+
+  const productModalScreenshot = await send("Page.captureScreenshot", { format: "png" });
+  fs.writeFileSync(path.join(ARTIFACT_DIR, "modal-product-chinese-preview.png"), Buffer.from(productModalScreenshot.data, "base64"));
+  console.log(`[Screenshot] Saved Chinese Product Modal preview to ${path.join(ARTIFACT_DIR, "modal-product-chinese-preview.png")}`);
+
+  // 2. Audit Product Modal in English Mode (Zero Chinese Leaks)
+  const productModalEn = await evalInPage(`
+    (() => {
+      window.applyLanguage("en");
+      const content = document.querySelector("#product-modal-content");
+      const fullText = content.textContent;
+      // Match Chinese characters
+      const chineseMatches = fullText.match(/[\\u4e00-\\u9fa5]+/g) || [];
+      const specLabels = Array.from(content.querySelectorAll(".spec-label")).map(el => el.textContent.trim());
+      const allSpecLabelsEnglish = specLabels.every(l => !/[\\u4e00-\\u9fa5]/.test(l));
+
+      window.closeProductModal();
+
+      return {
+        chineseCount: chineseMatches.length,
+        chineseMatches: chineseMatches.slice(0, 5),
+        allSpecLabelsEnglish
+      };
+    })()
+  `);
+
+  recordTest(
+    "Product modal in English mode has 0 leftover Chinese characters & pure English specs",
+    Boolean(productModalEn.chineseCount === 0 && productModalEn.allSpecLabelsEnglish),
+    `Chinese words found: ${productModalEn.chineseCount} (${productModalEn.chineseMatches.join(", ")}), English specs: ${productModalEn.allSpecLabelsEnglish}`
+  );
+
+  // 3. Audit Export Modal in Chinese Mode
+  const exportModalZh = await evalInPage(`
+    (() => {
+      window.applyLanguage("zh");
+      window.openExportModal();
+      const textArea = document.querySelector("#export-text-area");
+      const val = textArea.value;
+      const hasChineseHeader = val.includes("徒步装备打包清单");
+      const hasChineseCarried = val.includes("背负总重 (PACK CARRIED LOAD)");
+      const hasChineseBase = val.includes("基准重量 (BASE WEIGHT");
+      const hasChineseCategory = val.includes("睡眠与庇护") || val.includes("背包与背负");
+
+      window.closeExportModal();
+
+      return {
+        hasChineseHeader,
+        hasChineseCarried,
+        hasChineseBase,
+        hasChineseCategory,
+        previewSnippet: val.slice(0, 150).replace(/\\n/g, " ")
+      };
+    })()
+  `);
+
+  recordTest(
+    "Export Pack List modal in Chinese mode renders full Chinese template & category headers",
+    Boolean(exportModalZh.hasChineseHeader && exportModalZh.hasChineseCarried && exportModalZh.hasChineseBase && exportModalZh.hasChineseCategory),
+    `Header: ${exportModalZh.hasChineseHeader}, Carried: ${exportModalZh.hasChineseCarried}, Base: ${exportModalZh.hasChineseBase}, Cat: ${exportModalZh.hasChineseCategory}`
+  );
+
+  // 4. Audit Export Modal in English Mode (Zero Chinese Leaks)
+  const exportModalEn = await evalInPage(`
+    (() => {
+      window.applyLanguage("en");
+      window.openExportModal();
+      const textArea = document.querySelector("#export-text-area");
+      const val = textArea.value;
+      const chineseMatches = val.match(/[\\u4e00-\\u9fa5]+/g) || [];
+      const hasEnglishHeader = val.includes("Expedition Gear Pack");
+      const hasEnglishCarried = val.includes("PACK CARRIED LOAD");
+
+      window.closeExportModal();
+
+      return {
+        chineseCount: chineseMatches.length,
+        hasEnglishHeader,
+        hasEnglishCarried
+      };
+    })()
+  `);
+
+  recordTest(
+    "Export Pack List modal in English mode renders pure English template with 0 Chinese characters",
+    Boolean(exportModalEn.chineseCount === 0 && exportModalEn.hasEnglishHeader && exportModalEn.hasEnglishCarried),
+    `Chinese words: ${exportModalEn.chineseCount}, English Header: ${exportModalEn.hasEnglishHeader}`
+  );
+
+  // 5. Audit Gear Modal in English Mode (Zero Chinese Leaks on autofill & placeholders)
+  const gearModalEn = await evalInPage(`
+    (() => {
+      window.applyLanguage("en");
+      window.openGearModal(null);
+
+      // Check placeholder attributes on gear modal
+      const weightPh = document.querySelector("#form-gear-weight")?.getAttribute("placeholder") || "";
+      const pricePh = document.querySelector("#form-gear-price")?.getAttribute("placeholder") || "";
+      const weightPhClean = !/[\\u4e00-\\u9fa5]/.test(weightPh);
+      const pricePhClean = !/[\\u4e00-\\u9fa5]/.test(pricePh);
+
+      // Trigger catalog autofill in English mode
+      const catItem = window.popularCatalog?.[0];
+      if (catItem) {
+        document.querySelector("#form-gear-name").value = catItem.name;
+        const banner = document.querySelector("#catalog-autofilled-banner");
+        const bannerTextEl = document.querySelector("#autofilled-banner-text");
+        if (bannerTextEl) {
+          bannerTextEl.innerHTML = window.t("modalGear.autofillBanner", { name: catItem.name });
+        }
+        if (banner) banner.hidden = false;
+      }
+
+      const bannerText = document.querySelector("#catalog-autofilled-banner")?.textContent || "";
+      const bannerClean = !/[\\u4e00-\\u9fa5]/.test(bannerText);
+
+      window.closeGearModal();
+      window.applyLanguage("zh");
+
+      return {
+        weightPhClean,
+        pricePhClean,
+        bannerClean,
+        bannerText: bannerText.slice(0, 80)
+      };
+    })()
+  `);
+
+  recordTest(
+    "Add Gear modal in English mode has clean English placeholders & zero Chinese in autofill banner",
+    Boolean(gearModalEn.weightPhClean && gearModalEn.pricePhClean && gearModalEn.bannerClean),
+    `WeightPh: ${gearModalEn.weightPhClean}, PricePh: ${gearModalEn.pricePhClean}, BannerClean: ${gearModalEn.bannerClean} -> "${gearModalEn.bannerText}"`
+  );
 
 } catch (err) {
   console.error("Test Suite Runtime Error:", err);
