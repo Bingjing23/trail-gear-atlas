@@ -82,6 +82,7 @@ const STORAGE_KEY = "trail_gear_atlas_trails_v5";
 const UNIT_STORAGE_KEY = "trail_gear_atlas_unit";
 const CHART_TYPE_STORAGE_KEY = "trail_gear_atlas_chart_type";
 const LANG_STORAGE_KEY = "trail_gear_atlas_lang";
+const USER_PROFILE_KEY = "trail_gear_atlas_user_profile_v1";
 
 let currentUnit = localStorage.getItem(UNIT_STORAGE_KEY) || "metric"; // "metric" | "imperial"
 let currentChartType = localStorage.getItem(CHART_TYPE_STORAGE_KEY) || "donut"; // "donut" | "bar"
@@ -392,6 +393,37 @@ const elements = {
   metricWishlistSummary: document.querySelector("#metric-wishlist-summary"),
   metricCardWishlist: document.querySelector("#metric-card-wishlist"),
   btnHeroAddGear: document.querySelector("#btn-hero-add-gear"),
+
+  // User Profile & Dropdown
+  userProfileMenuWrap: document.querySelector("#user-profile-menu-wrap"),
+  btnUserProfile: document.querySelector("#btn-user-profile"),
+  headerUserName: document.querySelector("#header-user-name"),
+  userProfileDropdown: document.querySelector("#user-profile-dropdown"),
+  dropdownUserGreeting: document.querySelector("#dropdown-user-greeting"),
+  dropdownUserStats: document.querySelector("#dropdown-user-stats"),
+  btnMenuEditName: document.querySelector("#btn-menu-edit-name"),
+  btnMenuExportBackup: document.querySelector("#btn-menu-export-backup"),
+  btnMenuImportBackup: document.querySelector("#btn-menu-import-backup"),
+  btnMenuStartBlank: document.querySelector("#btn-menu-start-blank"),
+  btnMenuRestoreStarter: document.querySelector("#btn-menu-restore-starter"),
+  globalBackupFileInput: document.querySelector("#global-backup-file-input"),
+
+  // Onboarding Modal
+  onboardingModal: document.querySelector("#onboarding-modal"),
+  onboardingForm: document.querySelector("#onboarding-form"),
+  onboardingInputName: document.querySelector("#onboarding-input-name"),
+  onboardingImportWrap: document.querySelector("#onboarding-import-wrap"),
+  onboardingFileInput: document.querySelector("#onboarding-file-input"),
+  onboardingFileChosenName: document.querySelector("#onboarding-file-chosen-name"),
+  btnOnboardingSubmit: document.querySelector("#btn-onboarding-submit"),
+
+  // Gear Modal Image Upload & Live Preview
+  formGearImageFile: document.querySelector("#form-gear-image-file"),
+  btnTriggerUploadImage: document.querySelector("#btn-trigger-upload-image"),
+  gearImagePreviewWrap: document.querySelector("#gear-image-preview-wrap"),
+  gearImagePreviewImg: document.querySelector("#gear-image-preview-img"),
+  previewImageNote: document.querySelector("#preview-image-note"),
+  btnRemovePreviewImage: document.querySelector("#btn-remove-preview-image"),
 };
 
 const escapeHtml = (value) => String(value ?? "").replace(/[&<>"']/g, (character) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[character]);
@@ -709,6 +741,30 @@ const translations = {
     "weight.notRecorded": "未记录重量",
     "price.notRecorded": "未记录价格",
 
+    // User Profile & Onboarding
+    "profile.editName": "修改称呼",
+    "profile.exportBackup": "导出完整备份 (.json)",
+    "profile.importBackup": "导入装备库备份",
+    "profile.startBlank": "清空建全新空白库",
+    "profile.restoreStarter": "恢复推荐精选库 (82件)",
+    "profile.greeting": "Hi, {name} 👋",
+    "profile.stats": "个人装备档案 · {count} 件装备",
+    "onboarding.title": "欢迎来到 Trail Gear Atlas",
+    "onboarding.subtitle": "请设置您的徒步者称呼，并选择如何开启您的专属装备库",
+    "onboarding.nameLabel": "您的称呼 / 昵称 *",
+    "onboarding.namePh": "例如：Alex / 阿锋 / 晨曦",
+    "onboarding.chooseStarter": "选择如何开启您的装备库：",
+    "onboarding.optCuratedTitle": "经典精选库起步 (82件常用尖货)",
+    "onboarding.optCuratedDesc": "内置澳洲三大专业店与经典UL热门装备，适合快速挑选与增删",
+    "onboarding.optBlankTitle": "从零建立全新空白库 (0件开始)",
+    "onboarding.optBlankDesc": "干干净净，通过214+热门装备库或自定义录入，打造专属私享库",
+    "onboarding.optImportTitle": "导入已有备份 / 表格 (.json / .csv)",
+    "onboarding.optImportDesc": "导入之前导出的 Gear Atlas 完整备份或 LighterPack CSV 表格",
+    "onboarding.btnStart": "开启我的徒步装备库 🚀",
+    "modalGear.or": "或",
+    "modalGear.uploadPhoto": "上传本地实拍照片",
+    "modalGear.photoCompressed": "实拍照片已压缩 (~30-50KB)",
+
     // Toasts
     "toast.langSwitched": "已切换为<strong>简体中文</strong>。",
     "toast.unitMetric": "已切换计量单位为<strong>公制 (g / kg)</strong>。",
@@ -723,7 +779,12 @@ const translations = {
     "toast.mdCopied": "Markdown 清单已复制到剪贴板！",
     "toast.csvExported": "已导出 LighterPack CSV 文件。",
     "toast.csvImported": "成功导入 {count} 件装备！",
-    "toast.convertedOwned": "🎉 已将 <strong>{name}</strong> 转为正式已拥有装备！"
+    "toast.convertedOwned": "🎉 已将 <strong>{name}</strong> 转为正式已拥有装备！",
+    "toast.profileUpdated": "称呼已更新为：<strong>{name}</strong>！",
+    "toast.backupExported": "已成功导出完整备份文件！包含所有自定义装备与本地实拍照片。",
+    "toast.backupImported": "已成功导入备份！恢复了 {count} 件装备与照片。",
+    "toast.blankKitCreated": "已为您建立全新空白装备库，点击右上角或下方按钮开始添加装备吧！",
+    "toast.starterRestored": "已成功恢复默认推荐精选库 (82件常用尖货)！"
   },
   en: {
     // Nav
@@ -1034,6 +1095,30 @@ const translations = {
     "weight.notRecorded": "Not recorded",
     "price.notRecorded": "Not recorded",
 
+    // User Profile & Onboarding
+    "profile.editName": "Edit Nickname",
+    "profile.exportBackup": "Export Full Backup (.json)",
+    "profile.importBackup": "Import Gear Backup",
+    "profile.startBlank": "Start Blank Kit (0 items)",
+    "profile.restoreStarter": "Restore Starter Kit (82 items)",
+    "profile.greeting": "Hi, {name} 👋",
+    "profile.stats": "Personal Gear Profile · {count} items",
+    "onboarding.title": "Welcome to Trail Gear Atlas",
+    "onboarding.subtitle": "Set your hiker nickname and choose how you'd like to start your gear library",
+    "onboarding.nameLabel": "Your Hiker Nickname *",
+    "onboarding.namePh": "e.g. Alex, Sam, Hiker",
+    "onboarding.chooseStarter": "Choose how to start your gear library:",
+    "onboarding.optCuratedTitle": "Classic Curated Starter Kit (82 items)",
+    "onboarding.optCuratedDesc": "Loaded with top gear from Paddy Pallin, K2 & BPL. Ideal for quick customization",
+    "onboarding.optBlankTitle": "Start Fresh Blank Slate (0 items)",
+    "onboarding.optBlankDesc": "Clean slate. Build your dream kit from our 214+ catalog or custom items",
+    "onboarding.optImportTitle": "Import Existing Backup / Sheet (.json / .csv)",
+    "onboarding.optImportDesc": "Import a previously exported Gear Atlas backup or LighterPack CSV file",
+    "onboarding.btnStart": "Launch My Gear Atlas 🚀",
+    "modalGear.or": "or",
+    "modalGear.uploadPhoto": "Upload Local Photo",
+    "modalGear.photoCompressed": "Photo compressed (~30-50KB)",
+
     // Toasts
     "toast.langSwitched": "Switched language to <strong>English</strong>.",
     "toast.unitMetric": "Switched display units to <strong>Metric (g / kg)</strong>.",
@@ -1048,7 +1133,12 @@ const translations = {
     "toast.mdCopied": "Pack summary copied to clipboard!",
     "toast.csvExported": "LighterPack CSV exported.",
     "toast.csvImported": "Successfully imported {count} items!",
-    "toast.convertedOwned": "🎉 Converted <strong>{name}</strong> to Owned item!"
+    "toast.convertedOwned": "🎉 Converted <strong>{name}</strong> to Owned item!",
+    "toast.profileUpdated": "Nickname updated to: <strong>{name}</strong>!",
+    "toast.backupExported": "Successfully exported full backup with all custom items and photos!",
+    "toast.backupImported": "Successfully restored {count} items and photos from backup!",
+    "toast.blankKitCreated": "Started fresh blank kit. Click '+ Add Gear' to begin building!",
+    "toast.starterRestored": "Restored 82-item starter kit!"
   }
 };
 
@@ -1215,9 +1305,13 @@ let currentViewMode = (typeof window !== "undefined" && window.location.hash ===
 function loadInventory(defaultData) {
   try {
     const raw = localStorage.getItem(INVENTORY_STORAGE_KEY) || localStorage.getItem("trail_gear_atlas_inventory_v5") || localStorage.getItem("trail_gear_atlas_inventory_v4");
-    if (raw) {
+    if (raw !== null) {
       const parsed = JSON.parse(raw);
-      if (Array.isArray(parsed) && parsed.length > 0) {
+      if (Array.isArray(parsed)) {
+        if (parsed.length === 0) {
+          gear = [];
+          return;
+        }
         const parsedMap = new Map(parsed.map((item) => [item.id, item]));
         const customItems = [];
         const defaultItemsMerged = [];
@@ -1242,8 +1336,8 @@ function loadInventory(defaultData) {
             defaultItemsMerged.push({
               ...def,
               ...userItem,
-              imagePath: def.imagePath,
-              imageSourceUrl: def.imageSourceUrl,
+              imagePath: userItem.imagePath || def.imagePath,
+              imageSourceUrl: userItem.imageSourceUrl || def.imageSourceUrl,
               websiteUrl: def.websiteUrl || userItem.websiteUrl,
               statusKey: normalizeStatus(userItem.status || def.status),
             });
@@ -2561,38 +2655,38 @@ function renderTrailLog() {
     return true;
   });
 
-  elements.trailLogGrid.innerHTML = filtered.map((t) => {
-    const metrics = calculatePackMetrics(t);
-    const isActive = t.id === activeTrailId;
+  elements.trailLogGrid.innerHTML = filtered.map((tr) => {
+    const metrics = calculatePackMetrics(tr);
+    const isActive = tr.id === activeTrailId;
     const statusMap = {
       planned: t("banner.status.planned"),
       "in-progress": t("banner.status.in-progress"),
       completed: t("banner.status.completed"),
     };
 
-    const packedNames = Object.entries(t.pack || {})
+    const packedNames = Object.entries(tr.pack || {})
       .filter(([_, qty]) => qty > 0)
       .map(([id]) => gear.find((g) => g.id === id)?.name)
       .filter(Boolean)
       .slice(0, 3)
       .join(", ");
 
-    return `<article class="trail-card ${isActive ? "is-active-trail" : ""}" data-trail-id="${escapeHtml(t.id)}">
+    return `<article class="trail-card ${isActive ? "is-active-trail" : ""}" data-trail-id="${escapeHtml(tr.id)}">
       <div class="trail-card-top">
-        <span class="trail-status-pill ${t.status || "planned"}">${statusMap[t.status] || t("banner.status.planned")}</span>
-        <span style="font-size:11px; font-weight:700; color:#78867a;">${escapeHtml(t.date || "")}</span>
+        <span class="trail-status-pill ${tr.status || "planned"}">${statusMap[tr.status] || t("banner.status.planned")}</span>
+        <span style="font-size:11px; font-weight:700; color:#78867a;">${escapeHtml(tr.date || "")}</span>
       </div>
-      <h3>${escapeHtml(t.name)}</h3>
-      <div class="trail-card-region">📍 ${escapeHtml(t.destination || (currentLang === "zh" ? "探险路线" : "Expedition route"))}</div>
+      <h3>${escapeHtml(tr.name)}</h3>
+      <div class="trail-card-region">📍 ${escapeHtml(tr.destination || (currentLang === "zh" ? "探险路线" : "Expedition route"))}</div>
       
       <div class="trail-card-metrics">
         <div class="trail-card-metric">
           <span>${t("log.distance")}</span>
-          <strong>${t.distanceKm ? `${t.distanceKm} km` : "—"}</strong>
+          <strong>${tr.distanceKm ? `${tr.distanceKm} km` : "—"}</strong>
         </div>
         <div class="trail-card-metric">
           <span>${t("log.duration")}</span>
-          <strong>${t.durationDays ? t("banner.days", { n: t.durationDays }) : "—"}</strong>
+          <strong>${tr.durationDays ? t("banner.days", { n: tr.durationDays }) : "—"}</strong>
         </div>
         <div class="trail-card-metric">
           <span>${t("log.packLoad")}</span>
@@ -2600,16 +2694,16 @@ function renderTrailLog() {
         </div>
       </div>
 
-      <p class="trail-card-notes">${escapeHtml(t.notes || (currentLang === "zh" ? "暂无详细记录。" : "No notes recorded."))}</p>
+      <p class="trail-card-notes">${escapeHtml(tr.notes || (currentLang === "zh" ? "暂无详细记录。" : "No notes recorded."))}</p>
 
       ${packedNames ? `<div class="trail-card-gear-summary"><span>🎒</span><span>${metrics.totalItems} ${currentLang === "zh" ? "件装备" : "items"} (${escapeHtml(packedNames)}...)</span></div>` : ""}
 
       <div class="trail-card-actions">
         ${isActive
-          ? `<button class="btn-primary btn-pack-now" data-id="${escapeHtml(t.id)}" type="button">${t("log.btnActive")}</button>`
-          : `<button class="btn-primary btn-switch-trail" data-id="${escapeHtml(t.id)}" type="button">${t("log.btnPack")}</button>`}
-        <button class="btn-secondary btn-view-weights" data-id="${escapeHtml(t.id)}" type="button">${t("log.btnWeights")}</button>
-        <button class="btn-secondary btn-edit-trail-card" data-id="${escapeHtml(t.id)}" type="button">${t("log.btnEdit")}</button>
+          ? `<button class="btn-primary btn-pack-now" data-id="${escapeHtml(tr.id)}" type="button">${t("log.btnActive")}</button>`
+          : `<button class="btn-primary btn-switch-trail" data-id="${escapeHtml(tr.id)}" type="button">${t("log.btnPack")}</button>`}
+        <button class="btn-secondary btn-view-weights" data-id="${escapeHtml(tr.id)}" type="button">${t("log.btnWeights")}</button>
+        <button class="btn-secondary btn-edit-trail-card" data-id="${escapeHtml(tr.id)}" type="button">${t("log.btnEdit")}</button>
       </div>
     </article>`;
   }).join("");
@@ -3002,6 +3096,202 @@ function importLighterPackCsv(file) {
   reader.readAsText(file);
 }
 
+// =============================================================================
+// Image Compression Engine (Client-side Canvas)
+// =============================================================================
+function compressImageFile(file, maxDimension = 600, quality = 0.82) {
+  return new Promise((resolve, reject) => {
+    if (!file || !file.type.startsWith("image/")) {
+      reject(new Error("File is not an image"));
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const img = new Image();
+      img.onload = () => {
+        let width = img.width;
+        let height = img.height;
+        if (width > maxDimension || height > maxDimension) {
+          if (width > height) {
+            height = Math.round((height * maxDimension) / width);
+            width = maxDimension;
+          } else {
+            width = Math.round((width * maxDimension) / height);
+            height = maxDimension;
+          }
+        }
+        const canvas = document.createElement("canvas");
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0, width, height);
+
+        let dataUrl = "";
+        try {
+          dataUrl = canvas.toDataURL("image/webp", quality);
+          if (!dataUrl.startsWith("data:image/webp")) {
+            dataUrl = canvas.toDataURL("image/jpeg", quality);
+          }
+        } catch (err) {
+          dataUrl = canvas.toDataURL("image/jpeg", quality);
+        }
+        resolve(dataUrl);
+      };
+      img.onerror = () => reject(new Error("Image decode failed"));
+      img.src = e.target.result;
+    };
+    reader.onerror = () => reject(new Error("File read error"));
+    reader.readAsDataURL(file);
+  });
+}
+
+// =============================================================================
+// User Profile & Onboarding Engine
+// =============================================================================
+function getUserProfile() {
+  try {
+    const raw = localStorage.getItem(USER_PROFILE_KEY);
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (parsed && typeof parsed === "object" && parsed.name) {
+        return parsed;
+      }
+    }
+  } catch (e) {
+    console.warn("Failed to parse user profile", e);
+  }
+  return null;
+}
+
+function saveUserProfile(profile) {
+  try {
+    localStorage.setItem(USER_PROFILE_KEY, JSON.stringify(profile));
+  } catch (e) {
+    console.error("Failed to save user profile", e);
+  }
+}
+
+function updateUserProfileUI() {
+  const profile = getUserProfile();
+  const userName = profile?.name ? profile.name : "Hiker";
+  if (elements.headerUserName) {
+    elements.headerUserName.textContent = `Hi, ${userName}!`;
+  }
+  if (elements.dropdownUserGreeting) {
+    elements.dropdownUserGreeting.textContent = `Hi, ${userName} 👋`;
+  }
+  if (elements.dropdownUserStats) {
+    elements.dropdownUserStats.textContent = (currentLang === "zh")
+      ? `个人装备档案 · ${gear.length} 件装备`
+      : `Personal Profile · ${gear.length} items`;
+  }
+}
+
+function openOnboardingModal() {
+  if (!elements.onboardingModal) return;
+  elements.onboardingModal.classList.add("open");
+  setTimeout(() => {
+    elements.onboardingInputName?.focus();
+  }, 100);
+}
+
+function closeOnboardingModal() {
+  if (!elements.onboardingModal) return;
+  elements.onboardingModal.classList.remove("open");
+}
+
+// =============================================================================
+// Full Backup JSON Export & Universal Import
+// =============================================================================
+function exportFullBackupJson() {
+  const profile = getUserProfile() || { name: "Hiker", onboarded: true };
+  const backupData = {
+    version: "trail-gear-atlas-v1",
+    exportedAt: new Date().toISOString(),
+    profile: profile,
+    unit: currentUnit,
+    lang: currentLang,
+    trails: trails,
+    activeTrailId: activeTrailId,
+    inventory: gear,
+  };
+  const jsonStr = JSON.stringify(backupData, null, 2);
+  const blob = new Blob([jsonStr], { type: "application/json;charset=utf-8;" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  const sanitizedName = (profile.name || "hiker").toLowerCase().replace(/[^a-z0-9_-]+/g, "-");
+  const dateStr = new Date().toISOString().slice(0, 10);
+  a.href = url;
+  a.download = `${sanitizedName}-gear-atlas-backup-${dateStr}.json`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  showToast(t("toast.backupExported"));
+}
+
+function importBackupOrCsvFile(file) {
+  return new Promise((resolve, reject) => {
+    if (!file) {
+      resolve(null);
+      return;
+    }
+    const fileName = file.name.toLowerCase();
+    if (fileName.endsWith(".json")) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        try {
+          const text = e.target.result;
+          const parsed = JSON.parse(text);
+          if (parsed && typeof parsed === "object") {
+            if (parsed.profile) {
+              saveUserProfile(parsed.profile);
+            }
+            if (Array.isArray(parsed.inventory)) {
+              gear = parsed.inventory.map(item => ({ ...item, statusKey: normalizeStatus(item.status) }));
+              saveInventory();
+            } else if (Array.isArray(parsed)) {
+              gear = parsed.map(item => ({ ...item, statusKey: normalizeStatus(item.status) }));
+              saveInventory();
+            }
+            if (Array.isArray(parsed.trails)) {
+              trails = parsed.trails;
+              saveTrails();
+            }
+            if (parsed.activeTrailId) {
+              activeTrailId = parsed.activeTrailId;
+              localStorage.setItem(ACTIVE_TRAIL_KEY, activeTrailId);
+            }
+            if (parsed.unit && ["metric", "imperial"].includes(parsed.unit)) {
+              currentUnit = parsed.unit;
+              localStorage.setItem(UNIT_STORAGE_KEY, currentUnit);
+            }
+            updateUserProfileUI();
+            updateInventoryStats();
+            render();
+            showToast(t("toast.backupImported", { count: gear.length }));
+            resolve(gear);
+          } else {
+            resolve(null);
+          }
+        } catch (err) {
+          console.error("Failed to parse JSON backup", err);
+          showToast(currentLang === "zh" ? "JSON 备份文件解析失败，请检查格式。" : "Failed to parse JSON backup file.");
+          reject(err);
+        }
+      };
+      reader.onerror = (err) => reject(err);
+      reader.readAsText(file);
+    } else if (fileName.endsWith(".csv")) {
+      importLighterPackCsv(file);
+      resolve(gear);
+    } else {
+      showToast(currentLang === "zh" ? "请选择 .json 备份文件或 .csv 表格文件。" : "Please select a .json backup or .csv spreadsheet.");
+      resolve(null);
+    }
+  });
+}
+
 function openExportModal() {
   const trail = getActiveTrail();
   if (!trail) return;
@@ -3334,6 +3624,7 @@ function initScraper() {
     }
     if (elements.formGearWebsite) elements.formGearWebsite.value = d.url || "";
     if (elements.formGearImage) elements.formGearImage.value = d.imagePath || "";
+    setImagePreview(d.imagePath);
     if (elements.formGearSummary) elements.formGearSummary.value = d.summary || "";
 
     showToast(`✨ 已成功将 <strong>${escapeHtml(d.name)}</strong> 填入下方表单！可在下方微调参数。`);
@@ -3455,6 +3746,7 @@ function initCatalogSearch() {
     }
     elements.formGearWebsite.value = item.websiteUrl || "";
     elements.formGearImage.value = item.imagePath || "";
+    setImagePreview(item.imagePath);
     elements.formGearSummary.value = item.summary || "";
 
     const specsLines = Object.entries(item.specs || {}).map(([k, v]) => `${k}: ${v}`).join("\n");
@@ -3478,6 +3770,21 @@ function initCatalogSearch() {
       dropdown.hidden = true;
     }
   });
+}
+
+function setImagePreview(src, noteText) {
+  if (!elements.gearImagePreviewWrap || !elements.gearImagePreviewImg) return;
+  if (src && src.trim()) {
+    elements.gearImagePreviewImg.src = src.trim();
+    elements.gearImagePreviewWrap.hidden = false;
+    if (elements.previewImageNote) {
+      elements.previewImageNote.textContent = noteText || (src.startsWith("data:") ? (currentLang === "zh" ? "已保存本地实拍照片" : "Local photo saved") : (currentLang === "zh" ? "商品图片预览" : "Product photo preview"));
+    }
+  } else {
+    elements.gearImagePreviewImg.src = "";
+    elements.gearImagePreviewWrap.hidden = true;
+    if (elements.previewImageNote) elements.previewImageNote.textContent = "";
+  }
 }
 
 function openGearModal(item = null, defaultStatus = null) {
@@ -3516,6 +3823,7 @@ function openGearModal(item = null, defaultStatus = null) {
     }
     elements.formGearWebsite.value = item.websiteUrl || "";
     elements.formGearImage.value = item.imagePath || "";
+    setImagePreview(item.imagePath);
     elements.formGearSummary.value = item.summary || "";
     
     const specsLines = Object.entries(item.specs || {}).map(([k, v]) => `${k}: ${v}`).join("\n");
@@ -3545,6 +3853,8 @@ function openGearModal(item = null, defaultStatus = null) {
     if (elements.scraperPreviewCard) elements.scraperPreviewCard.hidden = true;
     if (elements.scraperStatusIndicator) elements.scraperStatusIndicator.hidden = true;
     if (elements.scraperClearUrlBtn) elements.scraperClearUrlBtn.hidden = true;
+    if (elements.formGearImageFile) elements.formGearImageFile.value = "";
+    setImagePreview(null);
 
     const isWishlistAdd = defaultStatus === "想买" || currentViewMode === "wishlist";
     elements.modalGearTitle.textContent = isWishlistAdd ? t("modalGear.addWishTitle") : t("modalGear.addTitle");
@@ -3565,6 +3875,8 @@ function openGearModal(item = null, defaultStatus = null) {
 
 function closeGearModal() {
   elements.gearModal?.classList.remove("open");
+  if (elements.formGearImageFile) elements.formGearImageFile.value = "";
+  setImagePreview(null);
 }
 
 function deleteGearItem(itemId) {
@@ -3637,6 +3949,14 @@ async function init() {
     applyLanguage(currentLang);
     updateInventoryStats();
     render();
+
+    // Check user profile & onboarding
+    const profile = getUserProfile();
+    if (!profile || !profile.onboarded) {
+      openOnboardingModal();
+    } else {
+      updateUserProfileUI();
+    }
   } catch (error) {
     elements.stats.innerHTML = "<div class='loading'><strong>Inventory unavailable</strong><p>The gear data could not be loaded.</p></div>";
     elements.count.textContent = "The collection could not be loaded.";
@@ -4274,7 +4594,8 @@ elements.gearForm?.addEventListener("submit", (e) => {
       targetItem.statusKey = normalizeStatus(status);
       targetItem.size = size || null;
       targetItem.websiteUrl = websiteUrl || null;
-      if (imagePath) targetItem.imagePath = imagePath;
+      targetItem.imagePath = imagePath;
+      targetItem.imageSourceUrl = imagePath;
       targetItem.summary = summary || null;
       targetItem.specs = Object.keys(specs).length ? specs : targetItem.specs || {};
       targetItem.features = features.length ? features : targetItem.features || [];
@@ -4476,10 +4797,214 @@ window.addEventListener("hashchange", () => {
 
 window.addEventListener("scroll", updateStickyBar, { passive: true });
 
+// =============================================================================
+// User Profile & Onboarding Event Listeners
+// =============================================================================
+
+// Toggle User Profile Dropdown
+elements.btnUserProfile?.addEventListener("click", (e) => {
+  e.stopPropagation();
+  const dropdown = elements.userProfileDropdown;
+  if (!dropdown) return;
+  const opening = dropdown.hidden;
+  dropdown.hidden = !opening;
+  elements.btnUserProfile.setAttribute("aria-expanded", String(opening));
+  if (opening) {
+    updateUserProfileUI();
+  }
+});
+
+// Close Dropdown on outside click
+document.addEventListener("click", (e) => {
+  if (elements.userProfileDropdown && !elements.userProfileDropdown.hidden) {
+    if (!e.target.closest("#user-profile-menu-wrap")) {
+      elements.userProfileDropdown.hidden = true;
+      elements.btnUserProfile?.setAttribute("aria-expanded", "false");
+    }
+  }
+});
+
+// Edit Nickname
+elements.btnMenuEditName?.addEventListener("click", () => {
+  if (elements.userProfileDropdown) elements.userProfileDropdown.hidden = true;
+  const profile = getUserProfile() || { name: "Hiker", onboarded: true };
+  const promptMsg = currentLang === "zh" ? "请输入您的新称呼 / 昵称：" : "Enter your new hiker nickname:";
+  const newName = window.prompt(promptMsg, profile.name || "Hiker");
+  if (newName && newName.trim()) {
+    profile.name = newName.trim();
+    profile.onboarded = true;
+    profile.updatedAt = new Date().toISOString();
+    saveUserProfile(profile);
+    updateUserProfileUI();
+    showToast(t("toast.profileUpdated", { name: profile.name }));
+  }
+});
+
+// Export Full Backup JSON
+elements.btnMenuExportBackup?.addEventListener("click", () => {
+  if (elements.userProfileDropdown) elements.userProfileDropdown.hidden = true;
+  exportFullBackupJson();
+});
+
+// Import Full Backup or CSV
+elements.btnMenuImportBackup?.addEventListener("click", () => {
+  if (elements.userProfileDropdown) elements.userProfileDropdown.hidden = true;
+  elements.globalBackupFileInput?.click();
+});
+
+elements.globalBackupFileInput?.addEventListener("change", (e) => {
+  const file = e.target.files?.[0];
+  if (file) {
+    importBackupOrCsvFile(file);
+    e.target.value = "";
+  }
+});
+
+// Start Blank Slate
+elements.btnMenuStartBlank?.addEventListener("click", () => {
+  if (elements.userProfileDropdown) elements.userProfileDropdown.hidden = true;
+  const confirmMsg = currentLang === "zh"
+    ? "确定要清空装备库，从零建立全新空白库吗？（建议先导出备份以防丢失）"
+    : "Are you sure you want to clear your gear library and start blank? (We recommend exporting a backup first)";
+  if (window.confirm(confirmMsg)) {
+    gear = [];
+    saveInventory();
+    render();
+    updateInventoryStats();
+    updateUserProfileUI();
+    showToast(t("toast.blankKitCreated"));
+  }
+});
+
+// Restore Starter Kit (82 items)
+elements.btnMenuRestoreStarter?.addEventListener("click", () => {
+  if (elements.userProfileDropdown) elements.userProfileDropdown.hidden = true;
+  const confirmMsg = currentLang === "zh"
+    ? "确定要恢复包含 82 件常用装备的经典精选库吗？"
+    : "Restore the classic 82-item curated starter kit?";
+  if (window.confirm(confirmMsg)) {
+    gear = JSON.parse(JSON.stringify(defaultInventory));
+    saveInventory();
+    render();
+    updateInventoryStats();
+    updateUserProfileUI();
+    showToast(t("toast.starterRestored"));
+  }
+});
+
+// Onboarding Starter Radio Option Toggle
+document.querySelectorAll('input[name="onboarding-starter"]').forEach((radio) => {
+  radio.addEventListener("change", (e) => {
+    if (elements.onboardingImportWrap) {
+      elements.onboardingImportWrap.hidden = e.target.value !== "import";
+    }
+  });
+});
+
+// Onboarding File Input chosen indicator
+elements.onboardingFileInput?.addEventListener("change", (e) => {
+  const file = e.target.files?.[0];
+  if (elements.onboardingFileChosenName) {
+    elements.onboardingFileChosenName.textContent = file ? `✓ 已就绪: ${file.name}` : "";
+  }
+});
+
+// Onboarding Form Submit
+elements.onboardingForm?.addEventListener("submit", (e) => {
+  e.preventDefault();
+  const name = elements.onboardingInputName?.value.trim();
+  if (!name) return;
+
+  const starterMode = document.querySelector('input[name="onboarding-starter"]:checked')?.value || "curated";
+  const newProfile = {
+    name: name,
+    onboarded: true,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString()
+  };
+  saveUserProfile(newProfile);
+
+  if (starterMode === "blank") {
+    gear = [];
+    saveInventory();
+    render();
+    updateInventoryStats();
+    showToast(t("toast.blankKitCreated"));
+  } else if (starterMode === "import") {
+    const importFile = elements.onboardingFileInput?.files?.[0];
+    if (importFile) {
+      importBackupOrCsvFile(importFile);
+    } else {
+      elements.globalBackupFileInput?.click();
+    }
+  } else {
+    // Curated starter kit
+    if (gear.length === 0 && defaultInventory.length > 0) {
+      gear = JSON.parse(JSON.stringify(defaultInventory));
+      saveInventory();
+      render();
+      updateInventoryStats();
+    }
+    showToast(currentLang === "zh" ? `Hi ${name}！已为您载入 82 件经典精选装备。` : `Hi ${name}! Curated starter kit loaded.`);
+  }
+
+  closeOnboardingModal();
+  updateUserProfileUI();
+});
+
+// =============================================================================
+// Local Photo Upload & Canvas Compression Event Listeners
+// =============================================================================
+elements.btnTriggerUploadImage?.addEventListener("click", () => {
+  elements.formGearImageFile?.click();
+});
+
+elements.formGearImageFile?.addEventListener("change", async (e) => {
+  const file = e.target.files?.[0];
+  if (!file) return;
+  try {
+    setImagePreview("", currentLang === "zh" ? "正在压缩照片..." : "Compressing photo...");
+    const compressedDataUrl = await compressImageFile(file, 600, 0.82);
+    elements.formGearImage.value = compressedDataUrl;
+    setImagePreview(compressedDataUrl, t("modalGear.photoCompressed"));
+  } catch (err) {
+    console.error("Failed to compress image", err);
+    showToast(currentLang === "zh" ? "图片读取或压缩失败，请重试。" : "Failed to read or compress image.");
+  }
+});
+
+elements.btnRemovePreviewImage?.addEventListener("click", () => {
+  elements.formGearImage.value = "";
+  if (elements.formGearImageFile) elements.formGearImageFile.value = "";
+  setImagePreview(null);
+});
+
+elements.formGearImage?.addEventListener("input", (e) => {
+  const val = e.target.value.trim();
+  if (val.length > 5 && (val.startsWith("http") || val.startsWith("./") || val.startsWith("data:"))) {
+    setImagePreview(val);
+  } else if (!val) {
+    setImagePreview(null);
+  }
+});
+
 window.exportLighterPackCsv = exportLighterPackCsv;
 window.importLighterPackCsv = importLighterPackCsv;
+window.exportFullBackupJson = exportFullBackupJson;
+window.importBackupOrCsvFile = importBackupOrCsvFile;
+window.getUserProfile = getUserProfile;
+window.saveUserProfile = saveUserProfile;
+window.updateUserProfileUI = updateUserProfileUI;
+window.compressImageFile = compressImageFile;
 window.getActiveTrail = getActiveTrail;
 window.formatWeight = formatWeight;
 window.calculatePackMetrics = calculatePackMetrics;
+window.render = render;
+window.defaultTrails = defaultTrails;
+
+Object.defineProperty(window, "gear", {
+  get: () => gear,
+  set: (v) => { gear = v; saveInventory(); }
+});
 
 init();

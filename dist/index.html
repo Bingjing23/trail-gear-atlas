@@ -38,6 +38,37 @@
               oz / lb
             </button>
           </div>
+          <div class="user-profile-menu-wrap" id="user-profile-menu-wrap">
+            <button class="user-profile-pill" id="btn-user-profile" type="button" aria-haspopup="true" aria-expanded="false" title="个人档案与数据备份">
+              <span class="user-avatar-icon">👤</span>
+              <span class="user-greeting-name" id="header-user-name">Hi, Hiker!</span>
+              <span class="profile-caret">▾</span>
+            </button>
+            <div class="user-profile-dropdown" id="user-profile-dropdown" hidden>
+              <div class="profile-dropdown-header">
+                <strong id="dropdown-user-greeting">Hi, Hiker 👋</strong>
+                <span id="dropdown-user-stats">个人装备档案</span>
+              </div>
+              <div class="profile-dropdown-divider"></div>
+              <button class="profile-dropdown-item" id="btn-menu-edit-name" type="button">
+                <span>✏️</span> <span data-i18n="profile.editName">修改称呼</span>
+              </button>
+              <button class="profile-dropdown-item" id="btn-menu-export-backup" type="button">
+                <span>💾</span> <span data-i18n="profile.exportBackup">导出完整备份 (.json)</span>
+              </button>
+              <button class="profile-dropdown-item" id="btn-menu-import-backup" type="button">
+                <span>📥</span> <span data-i18n="profile.importBackup">导入装备库备份</span>
+              </button>
+              <div class="profile-dropdown-divider"></div>
+              <button class="profile-dropdown-item" id="btn-menu-start-blank" type="button">
+                <span>📄</span> <span data-i18n="profile.startBlank">清空建全新空白库</span>
+              </button>
+              <button class="profile-dropdown-item" id="btn-menu-restore-starter" type="button">
+                <span>🎒</span> <span data-i18n="profile.restoreStarter">恢复推荐精选库 (82件)</span>
+              </button>
+            </div>
+          </div>
+          <input type="file" id="global-backup-file-input" accept=".json,.csv" style="display:none;" />
           <a class="header-action" href="#trail-planner" id="header-pack-pill" title="查看当前路线背包详情与重量拆解">
             <span class="header-pack-dot"></span>
             <span>🎒 <span id="header-trail-name">Milford Track</span></span>
@@ -652,8 +683,20 @@
             </div>
 
             <div class="form-field full">
-              <label for="form-gear-image" data-i18n="modalGear.image">商品图片链接 (选填)</label>
-              <input type="text" id="form-gear-image" data-i18n-placeholder="modalGear.imagePh" placeholder="例如：./photos/... 或 https://..." />
+              <label for="form-gear-image" data-i18n="modalGear.image">商品图片 (选填)</label>
+              <div class="image-input-dual-group">
+                <input type="text" id="form-gear-image" data-i18n-placeholder="modalGear.imagePh" placeholder="网络图片 URL (https://... 或本地路径)" />
+                <span class="image-upload-divider" data-i18n="modalGear.or">或</span>
+                <input type="file" id="form-gear-image-file" accept="image/*" style="display:none;" />
+                <button type="button" class="btn-upload-image" id="btn-trigger-upload-image">
+                  <span>📸</span> <span data-i18n="modalGear.uploadPhoto">上传本地实拍照片</span>
+                </button>
+              </div>
+              <div class="image-preview-thumbnail-wrap" id="gear-image-preview-wrap" hidden>
+                <img id="gear-image-preview-img" class="preview-thumbnail-img" src="" alt="Preview" />
+                <span class="preview-image-note" id="preview-image-note">已压缩为轻量本地照片</span>
+                <button type="button" class="btn-remove-preview-image" id="btn-remove-preview-image" title="移除图片">✕</button>
+              </div>
             </div>
 
             <div class="form-field full">
@@ -680,6 +723,70 @@
           <div class="modal-actions">
             <button class="btn-secondary" type="button" id="modal-gear-cancel" data-i18n="modalGear.cancel">取消</button>
             <button class="btn-primary" type="submit" id="btn-submit-gear" data-i18n="modalGear.addInventory">保存至装备库</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- New User Onboarding Modal -->
+    <div class="modal-overlay" id="onboarding-modal">
+      <div class="onboarding-modal-box">
+        <div class="onboarding-header">
+          <div class="onboarding-icon">🧭</div>
+          <h3 data-i18n="onboarding.title">欢迎来到 Trail Gear Atlas</h3>
+          <p data-i18n="onboarding.subtitle">请设置您的徒步者称呼，并选择如何开启您的专属装备库</p>
+        </div>
+        <form class="onboarding-form" id="onboarding-form">
+          <div class="form-field">
+            <label for="onboarding-input-name" data-i18n="onboarding.nameLabel">您的称呼 / 昵称 *</label>
+            <input type="text" id="onboarding-input-name" required data-i18n-placeholder="onboarding.namePh" placeholder="例如：Alex / 阿锋 / 晨曦" />
+          </div>
+
+          <div>
+            <span class="starter-section-label" data-i18n="onboarding.chooseStarter">选择如何开启您的装备库：</span>
+            <div class="onboarding-starter-options">
+              <label class="starter-option">
+                <input type="radio" name="onboarding-starter" value="curated" checked />
+                <div class="starter-option-card">
+                  <span class="starter-option-icon">🎒</span>
+                  <div class="starter-option-info">
+                    <strong data-i18n="onboarding.optCuratedTitle">经典精选库起步 (82件常用尖货)</strong>
+                    <p data-i18n="onboarding.optCuratedDesc">内置澳洲三大专业店与经典UL热门装备，适合快速挑选与增删</p>
+                  </div>
+                </div>
+              </label>
+
+              <label class="starter-option">
+                <input type="radio" name="onboarding-starter" value="blank" />
+                <div class="starter-option-card">
+                  <span class="starter-option-icon">📄</span>
+                  <div class="starter-option-info">
+                    <strong data-i18n="onboarding.optBlankTitle">从零建立全新空白库 (0件开始)</strong>
+                    <p data-i18n="onboarding.optBlankDesc">干干净净，通过214+热门装备库或自定义录入，打造专属私享库</p>
+                  </div>
+                </div>
+              </label>
+
+              <label class="starter-option">
+                <input type="radio" name="onboarding-starter" value="import" />
+                <div class="starter-option-card">
+                  <span class="starter-option-icon">📥</span>
+                  <div class="starter-option-info">
+                    <strong data-i18n="onboarding.optImportTitle">导入已有备份 / 表格 (.json / .csv)</strong>
+                    <p data-i18n="onboarding.optImportDesc">导入之前导出的 Gear Atlas 完整备份或 LighterPack CSV 表格</p>
+                  </div>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <div class="onboarding-import-wrap" id="onboarding-import-wrap" hidden>
+            <input type="file" id="onboarding-file-input" accept=".json,.csv" />
+            <p id="onboarding-file-chosen-name" style="font-size:11px;color:#235d39;margin:6px 0 0;font-weight:600;"></p>
+          </div>
+
+          <div class="onboarding-actions">
+            <button class="btn-primary btn-onboarding-submit" id="btn-onboarding-submit" type="submit" data-i18n="onboarding.btnStart">开启我的徒步装备库 🚀</button>
           </div>
         </form>
       </div>

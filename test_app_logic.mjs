@@ -137,6 +137,43 @@ try {
   recordTest("Page initialized and core exports ready", initialized);
 
   // -------------------------------------------------------------
+  // TEST 0: New User Onboarding Modal & Name Greeting
+  // -------------------------------------------------------------
+  console.log("\n--- TEST 0: New User Onboarding Modal & Name Greeting ---");
+  const isOnboardingOpen = await evalInPage(`
+    document.querySelector("#onboarding-modal")?.classList.contains("open")
+  `);
+  recordTest("New visitor receives onboarding welcome modal", isOnboardingOpen, `Modal visible: ${isOnboardingOpen}`);
+
+  // Capture screenshot of Onboarding Welcome Modal
+  const onboardingScreenshot = await send("Page.captureScreenshot", { format: "png" });
+  const onboardingPath = path.join(ARTIFACT_DIR, "onboarding-welcome-modal.png");
+  fs.writeFileSync(onboardingPath, Buffer.from(onboardingScreenshot.data, "base64"));
+  console.log(`[Screenshot] Saved Onboarding modal preview to ${onboardingPath}`);
+
+  // Fill in name "Alex" and submit with curated kit
+  await evalInPage(`
+    (function() {
+      const nameInput = document.querySelector("#onboarding-input-name");
+      nameInput.value = "Alex";
+      const form = document.querySelector("#onboarding-form");
+      form.dispatchEvent(new Event("submit", { bubbles: true, cancelable: true }));
+    })()
+  `);
+  await new Promise((r) => setTimeout(r, 400));
+
+  const isModalClosed = await evalInPage(`
+    !document.querySelector("#onboarding-modal")?.classList.contains("open")
+  `);
+  const headerGreetingText = await evalInPage(`
+    document.querySelector("#header-user-name")?.textContent.trim()
+  `);
+  const profileNameStored = await evalInPage(`
+    JSON.parse(localStorage.getItem("trail_gear_atlas_user_profile_v1") || "{}").name
+  `);
+  recordTest("Onboarding form submits, closes modal & sets Hi Alex greeting", isModalClosed && headerGreetingText === "Hi, Alex!" && profileNameStored === "Alex", `Closed: ${isModalClosed}, Header: "${headerGreetingText}", Stored: "${profileNameStored}"`);
+
+  // -------------------------------------------------------------
   // TEST 1: Custom Item Creation, Top-Ranking & Reload Persistence
   // -------------------------------------------------------------
   console.log("\n--- TEST 1: Custom Item Creation & Persistence ---");
@@ -606,8 +643,164 @@ try {
   recordTest("Popular catalog search matches Nemo Hornet Elite with Backpacking Light badge & $999.95 price", Boolean(catSuggestionTitle?.includes("Hornet 2P Elite") && catSuggestionPrice?.includes("999.95") && catSuggestionRetailer?.includes("Backpacking Light")), `Name: "${catSuggestionTitle}", Price: "${catSuggestionPrice}", Retailer: "${catSuggestionRetailer}"`);
 
   // Close gear modal
-  await evalInPage(`document.querySelector("#gear-modal-close")?.click()`);
+  await evalInPage(`document.querySelector("#modal-gear-close")?.click()`);
   await new Promise((r) => setTimeout(r, 200));
+
+  // -------------------------------------------------------------
+  // TEST 11: Profile Dropdown, Local Photo Upload & Full Backup
+  // -------------------------------------------------------------
+  console.log("\n--- TEST 11: Profile Dropdown, Image Upload & Full JSON Backup ---");
+
+  // 1. Test Profile Dropdown Menu & Greeting
+  await evalInPage(`document.querySelector("#btn-user-profile")?.click()`);
+  await new Promise((r) => setTimeout(r, 200));
+
+  const isDropdownOpen = await evalInPage(`
+    !document.querySelector("#user-profile-dropdown")?.hidden
+  `);
+  const dropdownGreeting = await evalInPage(`
+    document.querySelector("#dropdown-user-greeting")?.textContent.trim()
+  `);
+  recordTest("Clicking profile pill opens dropdown with greeting", Boolean(isDropdownOpen && dropdownGreeting?.includes("Alex")), `Dropdown open: ${isDropdownOpen}, Greeting: "${dropdownGreeting}"`);
+
+  // Capture screenshot of Header Profile Dropdown
+  const profileScreenshot = await send("Page.captureScreenshot", { format: "png" });
+  const profilePath = path.join(ARTIFACT_DIR, "header-profile-menu-preview.png");
+  fs.writeFileSync(profilePath, Buffer.from(profileScreenshot.data, "base64"));
+  console.log(`[Screenshot] Saved Header Profile dropdown preview to ${profilePath}`);
+
+  // Close dropdown by clicking outside
+  await evalInPage(`document.querySelector("#header-user-name")?.click()`);
+  await new Promise((r) => setTimeout(r, 150));
+
+  // 2. Test Local Photo Upload & Canvas Compression
+  // Reset main search so we can see all items
+  await evalInPage(`
+    (function() {
+      const search = document.querySelector("#gear-search");
+      if (search) {
+        search.value = "";
+        search.dispatchEvent(new Event("input", { bubbles: true }));
+      }
+    })()
+  `);
+  await new Promise((r) => setTimeout(r, 200));
+
+  // Synthesize a photo upload via Canvas compression and add item
+  const photoItemName = "Custom Silnylon Tarp with Field Photo";
+  const photoAddedResult = await evalInPage(`
+    (async function() {
+      // 1. Create a 200x200 canvas with a stylized mountain icon
+      const canvas = document.createElement("canvas");
+      canvas.width = 200;
+      canvas.height = 200;
+      const ctx = canvas.getContext("2d");
+      ctx.fillStyle = "#2d5a3f";
+      ctx.fillRect(0, 0, 200, 200);
+      ctx.fillStyle = "#ffffff";
+      ctx.beginPath();
+      ctx.moveTo(100, 40);
+      ctx.lineTo(160, 160);
+      ctx.lineTo(40, 160);
+      ctx.closePath();
+      ctx.fill();
+
+      // Convert to blob and file
+      const blob = await new Promise(r => canvas.toBlob(r, "image/png"));
+      const file = new File([blob], "field_photo.png", { type: "image/png" });
+
+      // Compress with our client-side compression function
+      const compressedDataUrl = await window.compressImageFile(file, 600, 0.82);
+
+      // Submit new item via form
+      const form = document.querySelector("#gear-form");
+      document.querySelector("#form-gear-id").value = "";
+      document.querySelector("#form-gear-name").value = "${photoItemName}";
+      document.querySelector("#form-gear-brand").value = "Hiker DIY";
+      document.querySelector("#form-gear-category").value = "Sleep & Shelter";
+      document.querySelector("#form-gear-type").value = "Tarp";
+      document.querySelector("#form-gear-weight").value = "310";
+      document.querySelector("#form-gear-price").value = "120";
+      document.querySelector("#form-gear-currency").value = "AUD";
+      document.querySelector("#form-gear-status").value = "使用中";
+      document.querySelector("#form-gear-image").value = compressedDataUrl;
+      form.dispatchEvent(new Event("submit", { bubbles: true, cancelable: true }));
+
+      return {
+        isCompressedDataUrl: compressedDataUrl.startsWith("data:image/"),
+        sizeBytes: compressedDataUrl.length
+      };
+    })()
+  `);
+
+  recordTest("Canvas image compression generates compact Data URL", Boolean(photoAddedResult?.isCompressedDataUrl && photoAddedResult?.sizeBytes > 100), `IsDataUrl: ${photoAddedResult?.isCompressedDataUrl}, Size: ${photoAddedResult?.sizeBytes} chars`);
+
+  await new Promise((r) => setTimeout(r, 400));
+
+  // Verify gear card in DOM renders the custom photo
+  const cardImgSrc = await evalInPage(`
+    (function() {
+      const cards = Array.from(document.querySelectorAll("#sleep-shelter .gear-card"));
+      const match = cards.find(c => c.querySelector("h4")?.textContent.includes("${photoItemName}"));
+      return match ? match.querySelector("img.product-image")?.getAttribute("src") : null;
+    })()
+  `);
+  const hasRenderedPhoto = Boolean(cardImgSrc?.startsWith("data:image/"));
+  recordTest("Gear card renders uploaded local photo faithfully in UI", hasRenderedPhoto, `Img src: ${cardImgSrc ? cardImgSrc.slice(0, 32) + "..." : "none"}`);
+
+  // Capture screenshot of Gear Card with local photo
+  const photoCardScreenshot = await send("Page.captureScreenshot", { format: "png" });
+  const photoCardPath = path.join(ARTIFACT_DIR, "custom-photo-gear-card.png");
+  fs.writeFileSync(photoCardPath, Buffer.from(photoCardScreenshot.data, "base64"));
+  console.log(`[Screenshot] Saved Custom Photo gear card preview to ${photoCardPath}`);
+
+  // 3. Test Full JSON Backup Export & Universal Import
+  const backupRoundtrip = await evalInPage(`
+    (async function() {
+      // 1. Generate full backup payload
+      const profile = window.getUserProfile();
+      const backupData = {
+        version: "trail-gear-atlas-v1",
+        exportedAt: new Date().toISOString(),
+        profile: profile,
+        unit: "metric",
+        lang: "zh",
+        trails: window.defaultTrails || [],
+        activeTrailId: "milford-track",
+        inventory: window.gear,
+      };
+
+      const initialCount = window.gear.length;
+
+      // 2. Clear to blank slate
+      window.gear = [];
+      localStorage.setItem("trail_gear_atlas_inventory_v6", JSON.stringify([]));
+      window.render();
+      const blankCount = window.gear.length;
+
+      // 3. Re-import from backup JSON File
+      const jsonBlob = new Blob([JSON.stringify(backupData)], { type: "application/json" });
+      const backupFile = new File([jsonBlob], "alex-gear-backup.json", { type: "application/json" });
+      await window.importBackupOrCsvFile(backupFile);
+
+      // Wait a moment for DOM render
+      await new Promise(r => setTimeout(r, 400));
+
+      const restoredCount = window.gear.length;
+      const photoItemRestored = window.gear.some(g => g.name === "${photoItemName}" && g.imagePath && g.imagePath.startsWith("data:image/"));
+      const profileRestored = window.getUserProfile()?.name === "Alex";
+
+      return {
+        initialCount,
+        blankCount,
+        restoredCount,
+        photoItemRestored,
+        profileRestored
+      };
+    })()
+  `);
+
+  recordTest("Blank slate clears inventory & re-import restores 100% of gear, photos and profile", Boolean(backupRoundtrip?.blankCount === 0 && backupRoundtrip?.restoredCount > 80 && backupRoundtrip?.photoItemRestored && backupRoundtrip?.profileRestored), `Initial: ${backupRoundtrip?.initialCount}, Blank: ${backupRoundtrip?.blankCount}, Restored: ${backupRoundtrip?.restoredCount}, PhotoRestored: ${backupRoundtrip?.photoItemRestored}, ProfileRestored: ${backupRoundtrip?.profileRestored}`);
 
 } catch (err) {
   console.error("Test Suite Runtime Error:", err);
