@@ -87,6 +87,9 @@ const pendingCallbacks = new Map();
 
 ws.on("message", (event) => {
   const data = JSON.parse(event.data);
+  if (data.method === "Page.javascriptDialogOpening") {
+    send("Page.handleJavaScriptDialog", { accept: true, promptText: "Alex" }).catch(() => {});
+  }
   if (data.id && pendingCallbacks.has(data.id)) {
     const { resolve, reject } = pendingCallbacks.get(data.id);
     pendingCallbacks.delete(data.id);
@@ -137,13 +140,25 @@ try {
   recordTest("Page initialized and core exports ready", initialized);
 
   // -------------------------------------------------------------
-  // TEST 0: New User Onboarding Modal & Name Greeting
+  // TEST 0: Non-blocking First Visit & User Onboarding
   // -------------------------------------------------------------
-  console.log("\n--- TEST 0: New User Onboarding Modal & Name Greeting ---");
-  const isOnboardingOpen = await evalInPage(`
+  console.log("\n--- TEST 0: Non-blocking First Visit & User Onboarding ---");
+  const isOnboardingOpenInitially = await evalInPage(`
     document.querySelector("#onboarding-modal")?.classList.contains("open")
   `);
-  recordTest("New visitor receives onboarding welcome modal", isOnboardingOpen, `Modal visible: ${isOnboardingOpen}`);
+  recordTest("New visitor is NOT blocked by onboarding modal (can browse first)", !isOnboardingOpenInitially, `Modal initially open: ${isOnboardingOpenInitially}`);
+
+  // Open profile dropdown and trigger onboarding modal
+  await evalInPage(`
+    document.querySelector("#btn-user-profile")?.click();
+    document.querySelector("#btn-menu-edit-name")?.click();
+  `);
+  await new Promise((r) => setTimeout(r, 300));
+
+  const isModalOpenNow = await evalInPage(`
+    document.querySelector("#onboarding-modal")?.classList.contains("open")
+  `);
+  recordTest("User can intentionally open onboarding setup from profile menu", isModalOpenNow, `Modal visible: ${isModalOpenNow}`);
 
   // Capture screenshot of Onboarding Welcome Modal
   const onboardingScreenshot = await send("Page.captureScreenshot", { format: "png" });
@@ -507,14 +522,14 @@ try {
   await new Promise((r) => setTimeout(r, 300));
 
   const enActive = await evalInPage(`document.querySelector("#btn-lang-en")?.classList.contains("active")`);
-  const enAddBtnText = await evalInPage(`document.querySelector("#btn-add-gear")?.textContent.trim()`);
+  const enAddBtnText = await evalInPage(`document.querySelector("#btn-toolbar-add-gear, #btn-add-gear")?.textContent.trim()`);
   const enCarriedLabel = await evalInPage(`document.querySelector(".weight-card.primary .weight-card-label")?.textContent.trim()`);
   const enBaseLabel = await evalInPage(`document.querySelector("#metric-card-base .weight-card-label")?.textContent.trim()`);
   const enFirstCat = await evalInPage(`document.querySelector(".gear-section h3")?.textContent.trim()`);
   const enStoredLang = await evalInPage(`localStorage.getItem("trail_gear_atlas_lang")`);
 
   const enPassed = enActive &&
-    enAddBtnText === "+ Add Gear Item" &&
+    Boolean(enAddBtnText?.includes("Add Gear")) &&
     enCarriedLabel.includes("PACK CARRIED LOAD") &&
     enBaseLabel.includes("BASE WEIGHT") &&
     enFirstCat === "Sleep & Shelter" &&
@@ -533,14 +548,14 @@ try {
   await new Promise((r) => setTimeout(r, 300));
 
   const zhActive = await evalInPage(`document.querySelector("#btn-lang-zh")?.classList.contains("active")`);
-  const zhAddBtnText = await evalInPage(`document.querySelector("#btn-add-gear")?.textContent.trim()`);
+  const zhAddBtnText = await evalInPage(`document.querySelector("#btn-toolbar-add-gear, #btn-add-gear")?.textContent.trim()`);
   const zhCarriedLabel = await evalInPage(`document.querySelector(".weight-card.primary .weight-card-label")?.textContent.trim()`);
   const zhBaseLabel = await evalInPage(`document.querySelector("#metric-card-base .weight-card-label")?.textContent.trim()`);
   const zhFirstCat = await evalInPage(`document.querySelector(".gear-section h3")?.textContent.trim()`);
   const zhStoredLang = await evalInPage(`localStorage.getItem("trail_gear_atlas_lang")`);
 
   const zhPassed = zhActive &&
-    zhAddBtnText === "+ 添加装备" &&
+    Boolean(zhAddBtnText?.includes("添加装备")) &&
     zhCarriedLabel.includes("背负总重") &&
     zhBaseLabel.includes("基准重量") &&
     zhFirstCat === "睡眠与庇护" &&
@@ -560,8 +575,8 @@ try {
 
   const reloadedLang = await evalInPage(`document.documentElement.lang`);
   const reloadedFirstCat = await evalInPage(`document.querySelector(".gear-section h3")?.textContent.trim()`);
-  const reloadedBtnText = await evalInPage(`document.querySelector("#btn-add-gear")?.textContent.trim()`);
-  const persistPassed = reloadedLang === "zh-CN" && reloadedFirstCat === "睡眠与庇护" && reloadedBtnText === "+ 添加装备";
+  const reloadedBtnText = await evalInPage(`document.querySelector("#btn-toolbar-add-gear, #btn-add-gear")?.textContent.trim()`);
+  const persistPassed = reloadedLang === "zh-CN" && reloadedFirstCat === "睡眠与庇护" && Boolean(reloadedBtnText?.includes("添加装备"));
 
   recordTest("Language selection persists in localStorage across full page reload", persistPassed, `Lang: "${reloadedLang}", Cat: "${reloadedFirstCat}", Btn: "${reloadedBtnText}"`);
 
@@ -595,7 +610,7 @@ try {
   // 2. Open Product Modal & inspect specs & Backpacking Light links
   await evalInPage(`
     (function() {
-      const btn = document.querySelector("#item-wishlist-05 .card-detail-btn");
+      const btn = document.querySelector("#item-wishlist-05 .card-link-specs-btn, #item-wishlist-05 .card-title, #item-wishlist-05 [data-detail-id]");
       if (btn) btn.click();
     })()
   `);

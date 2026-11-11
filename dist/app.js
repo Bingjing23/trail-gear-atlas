@@ -480,8 +480,8 @@ const translations = {
     "metric.worn.sub": "{wt} 鞋靴、衣物与手杖",
     "metric.skinout.label": "全身行头总重",
     "metric.skinout.sub": "{wt} 背负总重 + 随身穿戴",
-    "metric.wishlist.label": "想买试重",
-    "metric.wishlist.sub": "{count} 件心愿单装备在试装",
+    "metric.wishlist.label": "想买试算负重",
+    "metric.wishlist.sub": "{count} 件心愿单装备试算增重",
 
     // Tiers
     "tier.empty": "空背包",
@@ -491,7 +491,7 @@ const translations = {
     "tier.expedition": "🔴 重装远征 (> 14kg)",
 
     // Donut & Chart
-    "chart.kicker": "装备系统重量分布",
+    "chart.kicker": "分类背负重量 (仅计入背包负重，不含随身穿戴)",
     "chart.title": "系统重量拆解",
     "chart.donut": "🍩 环形图",
     "chart.bar": "📊 堆叠条形图",
@@ -800,7 +800,7 @@ const translations = {
     "hero.tag": "ULTRALIGHT PACK BUILDER · FIELD GEAR ATLAS",
     "hero.title": "Trail Gear Atlas",
     "hero.desc": "Precise record of gear weights, purchase records, and pack statuses. Supports worn-weight exclusions, prospective trial loads, and LighterPack CSV sync.",
-    "hero.addGear": "+ Add Gear",
+    "hero.addGear": "+ Add Gear Item",
     "hero.browse": "Explore Gear ↓",
     "hero.stats": "{items} gear items · {trails} planned trails",
 
@@ -835,7 +835,7 @@ const translations = {
     "metric.skinout.label": "SKIN-OUT TOTAL",
     "metric.skinout.sub": "{wt} carried load + worn on body",
     "metric.wishlist.label": "WISHLIST TRIAL LOAD",
-    "metric.wishlist.sub": "{count} prospective items on trial",
+    "metric.wishlist.sub": "{count} prospective items on trial load",
 
     // Tiers
     "tier.empty": "EMPTY PACK",
@@ -845,7 +845,7 @@ const translations = {
     "tier.expedition": "🔴 EXPEDITION (> 30 lb)",
 
     // Donut & Chart
-    "chart.kicker": "GEAR SYSTEM WEIGHT DISTRIBUTION",
+    "chart.kicker": "CATEGORY CARRIED LOAD (EXCL. WORN ON BODY)",
     "chart.title": "Category Breakdown",
     "chart.donut": "🍩 Donut Chart",
     "chart.bar": "📊 Linear Bar",
@@ -1377,10 +1377,12 @@ function updateInventoryStats() {
       <div class="stat"><strong>${weighted}</strong><span>${currentLang === "zh" ? "件记录克重" : "Weights recorded"}</span></div>
     `;
   }
-  const heroItems = document.querySelector("#hero-stat-items");
-  const heroTrails = document.querySelector("#hero-stat-trails");
-  if (heroItems) heroItems.textContent = gear.length;
-  if (heroTrails) heroTrails.textContent = trails.length;
+  const heroStatSummary = document.querySelector("#hero-stat-summary");
+  if (heroStatSummary) {
+    heroStatSummary.innerHTML = (currentLang === "zh")
+      ? `<strong><span id="hero-stat-items">${gear.length}</span></strong> 件装备 <span>·</span> <strong><span id="hero-stat-trails">${trails.length}</span></strong> 条规划路线`
+      : `<strong><span id="hero-stat-items">${gear.length}</span></strong> items <span>·</span> <strong><span id="hero-stat-trails">${trails.length}</span></strong> trails`;
+  }
 }
 
 function loadTrails() {
@@ -1979,8 +1981,8 @@ function openProductModal(item) {
               <strong class="modal-meta-v">${escapeHtml(item.itemType || (currentLang === "zh" ? "装备" : "Gear"))}</strong>
             </div>
             <div class="modal-meta-box">
-              <span class="modal-meta-k">${t("modalProduct.metaReceipt")}</span>
-              <strong class="modal-meta-v modal-meta-evidence">${escapeHtml((item.invoiceEvidence || []).join(", ") || item.provenance || "Workbook")}</strong>
+              <span class="modal-meta-k">${currentLang === "zh" ? "制造品牌" : "Brand"}</span>
+              <strong class="modal-meta-v">${escapeHtml(item.brand || (currentLang === "zh" ? "未记录品牌" : "Brand not recorded"))}</strong>
             </div>
           </div>
 
@@ -2026,30 +2028,19 @@ function closeProductModal() {
 
 function mediaMarkup(item) {
   if (!item.imagePath) {
-    return `<div class="card-media media-placeholder clickable-media" data-detail-id="${escapeHtml(item.id)}" aria-label="Product image not available" title="${currentLang === "zh" ? "点击查看参数与官网" : "Click to view specs &amp; official website"}">
+    return `<div class="card-media media-placeholder clickable-media" data-detail-id="${escapeHtml(item.id)}" aria-label="Product image not available" title="${currentLang === "zh" ? "点击查看参数、官网与编辑" : "Click to view specs, official link & edit"}">
       <svg viewBox="0 0 180 120" aria-hidden="true"><circle cx="131" cy="35" r="16"/><path d="M8 101 55 47l30 35 19-21 62 40H8Z"/><path d="M8 110h158"/></svg>
       <span>${currentLang === "zh" ? "暂无实物图" : "IMAGE TO ADD"}</span>
-      <span class="card-media-hover-hint">${currentLang === "zh" ? "查看详情 ↗" : "Inspect Specs ↗"}</span>
     </div>`;
   }
   const alt = `${item.brand || ""} ${item.name || item.itemType || "gear"} product photo`.trim();
-  const officialUrl = item.websiteUrl || item.imageSourceUrl;
-  const domain = extractDomain(officialUrl);
-  const isCustomPhoto = item.imagePath && item.imagePath.startsWith("data:");
-  const credit = isCustomPhoto
-    ? `<span class="photo-source photo-source-custom" title="${currentLang === "zh" ? "本地实拍压缩照片" : "Local compressed photo"}">${currentLang === "zh" ? "📸 实拍图" : "📸 PHOTO"}</span>`
-    : (officialUrl
-      ? `<a class="photo-source" href="${escapeHtml(officialUrl)}" target="_blank" rel="noopener noreferrer" aria-label="Official website for ${escapeHtml(item.name || item.itemType)}" title="Official Brand Website: ${escapeHtml(domain)}">${currentLang === "zh" ? "官方网站 ↗" : "OFFICIAL SITE ↗"}</a>`
-      : "");
-  return `<div class="card-media clickable-media" data-detail-id="${escapeHtml(item.id)}" title="${currentLang === "zh" ? "点击查看参数与官网" : "Click to view specs &amp; official website"}"><img class="product-image" src="${escapeHtml(item.imagePath)}" alt="${escapeHtml(alt)}" loading="lazy" decoding="async" />${credit}<span class="card-media-hover-hint">${currentLang === "zh" ? "查看详情 ↗" : "Inspect Specs ↗"}</span></div>`;
+  return `<div class="card-media clickable-media" data-detail-id="${escapeHtml(item.id)}" title="${currentLang === "zh" ? "点击查看参数、官网与编辑" : "Click to view specs, official link & edit"}">
+    <img class="product-image" src="${escapeHtml(item.imagePath)}" alt="${escapeHtml(alt)}" loading="lazy" decoding="async" />
+  </div>`;
 }
 
 function renderCard(item, category) {
   const note = item.notes?.trim() ? `<p class="card-note">${escapeHtml(item.notes)}</p>` : "";
-  const quantityLabel = item.status === "Purchased · ownership to confirm" ? (currentLang === "zh" ? "单据数量" : "Quantity on receipt") : (currentLang === "zh" ? "库存数量" : "Quantity in inventory");
-  const quantity = item.quantity && item.quantity !== 1 ? `<div class="item-qty">${quantityLabel}: ${escapeHtml(item.quantity)}</div>` : "";
-  const evidence = Array.isArray(item.invoiceEvidence) ? item.invoiceEvidence.filter((source) => source !== "unmatched") : [];
-  const source = evidence.length ? `<div class="card-source">${evidence.map(formatEvidence).map(escapeHtml).join(" · ")}</div>` : "";
   const weight = Number.isFinite(item.unitWeightG) ? item.unitWeightG : null;
   const hasPrice = Number.isFinite(item.unitPriceAud) || Number.isFinite(item.unitPriceCny);
 
@@ -2062,6 +2053,16 @@ function renderCard(item, category) {
   const isWishlist = item.statusKey === "wishlist";
   const isCustom = Boolean(item.isCustom || item.id?.startsWith("custom-gear-"));
   const customBadge = isCustom ? `<span class="item-custom-pill" title="${t("chip.custom")}">${t("chip.custom")}</span>` : "";
+
+  // Verification indicator: pending confirmation or approx weight
+  const noteLower = (item.notes || "").toLowerCase();
+  const isPending = item.statusKey === "older" || item.statusKey === "review" || /to confirm|unverified|match not verified/i.test(noteLower);
+  const isApprox = /approx|stated weight|estimated/i.test(noteLower);
+  const verifyBadge = isPending
+    ? `<span class="badge-verification pending" title="${currentLang === "zh" ? "型号或规格待实物核验" : "Model or specs pending verification"}">${currentLang === "zh" ? "待核实" : "Unverified"}</span>`
+    : (isApprox
+      ? `<span class="badge-verification approx" title="${currentLang === "zh" ? "标称或估算重量" : "Estimated or stated weight"}">${currentLang === "zh" ? "估算" : "Est."}</span>`
+      : "");
 
   let packControl = "";
   if (isPacked) {
@@ -2096,8 +2097,6 @@ function renderCard(item, category) {
     ? `<div class="card-wishlist-ribbon"><span>${t("card.wishlistRibbon")}</span><button class="btn-card-mark-bought" data-convert-id="${escapeHtml(item.id)}" type="button" title="${t("card.markBought")}">${t("card.markBought")}</button></div>`
     : "";
 
-  const specBadge = getCardSpecBadge(item);
-
   const statusOpts = [
     { val: "想买", key: "wishlist" },
     { val: "使用中", key: "in_use" },
@@ -2124,26 +2123,28 @@ function renderCard(item, category) {
         ${customBadge}
         <span class="item-type">${escapeHtml(item.itemType || "Gear")}</span>
         ${item.size ? `<span class="item-size-badge" title="Size / Capacity: ${escapeHtml(item.size)}">${escapeHtml(item.size)}</span>` : ""}
+        ${verifyBadge}
       </div>
       <div class="card-top-actions">
         <select class="status-quick-select ${statusClass(item)}" data-status-id="${escapeHtml(item.id)}" title="${currentLang === "zh" ? "点击切换状态" : "Click to change status"}">
           ${statusOptionsHtml}
         </select>
-        <button class="card-mini-action btn-card-edit" data-edit-id="${escapeHtml(item.id)}" type="button" title="${currentLang === "zh" ? "编辑此装备" : "Edit this gear item"}" aria-label="Edit item">✏️</button>
-        <button class="card-mini-action btn-card-delete" data-delete-id="${escapeHtml(item.id)}" type="button" title="${currentLang === "zh" ? "从装备库中删除" : "Delete this gear item from inventory"}" aria-label="Delete item">🗑️</button>
       </div>
     </div>
     <div class="card-brand">${escapeHtml(item.brand || "Brand not recorded")}</div>
-    <h4 class="card-title clickable-title" data-detail-id="${escapeHtml(item.id)}" title="${currentLang === "zh" ? "点击查看规格与官网链接" : "Click to view specs & official website"}">${escapeHtml(item.name || item.itemType || "Unnamed item")}</h4>
-    ${specBadge}
+    <h4 class="card-title clickable-title" data-detail-id="${escapeHtml(item.id)}" title="${currentLang === "zh" ? "点击查看规格、官网与编辑" : "Click to view specs, official link & edit"}">${escapeHtml(item.name || item.itemType || "Unnamed item")}</h4>
     ${note}
-    <div class="card-metrics"><div class="metric weight-metric"><span class="metric-lbl">${t("card.weight")}</span><strong class="metric-val ${weight === null ? "missing" : ""}">${formatWeight(weight)}</strong></div><div class="metric price-metric"><span class="metric-lbl">${t("card.price")}</span><strong class="metric-val ${hasPrice ? "" : "missing"}">${formatPrice(item)}</strong></div></div>
-    ${quantity}
-    <button class="card-detail-btn" data-detail-id="${escapeHtml(item.id)}" type="button" title="${currentLang === "zh" ? "查看技术规格与官方链接" : "View technical specs, features, and official brand link"}">
-      <span>${t("card.detailsBtn")}</span>
-      <span class="detail-link-arrow">↗</span>
-    </button>
-    ${packControl}
+    <div class="card-metrics">
+      <div class="metric weight-metric"><span class="metric-lbl">${t("card.weight")}</span><strong class="metric-val ${weight === null ? "missing" : ""}">${formatWeight(weight)}</strong></div>
+      <div class="metric price-metric"><span class="metric-lbl">${t("card.price")}</span><strong class="metric-val ${hasPrice ? "" : "missing"}">${formatPrice(item)}</strong></div>
+    </div>
+    <div class="card-bottom-actions">
+      ${packControl}
+      <button class="card-link-specs-btn" data-detail-id="${escapeHtml(item.id)}" type="button" title="${currentLang === "zh" ? "查看技术规格与编辑" : "View technical specs & edit"}">
+        <span>${t("card.detailsBtn")}</span>
+        <span class="detail-link-arrow">↗</span>
+      </button>
+    </div>
   </article>`;
 }
 
@@ -2464,14 +2465,27 @@ function renderPlanner() {
 
     // 3. Worn Weight
     if (elements.metricWornG) {
+      const wornItemNames = Object.entries(trail.pack || {})
+        .filter(([id, qty]) => qty > 0 && trail.worn?.[id])
+        .map(([id]) => gear.find((g) => g.id === id))
+        .filter(Boolean)
+        .map((g) => g.brand ? `${g.brand} ${g.itemType || g.name}` : (g.name || g.itemType));
+      const wornSummary = wornItemNames.length > 0
+        ? wornItemNames.slice(0, 3).join(", ") + (wornItemNames.length > 3 ? "..." : "")
+        : (currentLang === "zh" ? "无随身穿戴装备" : "No worn gear");
+
       if (isImp) {
         elements.metricWornG.textContent = wornLb.toFixed(2);
         if (elements.metricWornUnit) elements.metricWornUnit.textContent = "lb";
-        elements.metricWornSub.textContent = t("metric.worn.sub", { wt: `${wornOz.toFixed(1)} oz` }) + (currentLang === "zh" ? ` (${metrics.wornItemsCount} 件)` : ` (${metrics.wornItemsCount} items)`);
+        elements.metricWornSub.textContent = (currentLang === "zh")
+          ? `${wornOz.toFixed(1)} oz 随身穿戴 (${wornSummary})`
+          : `${wornOz.toFixed(1)} oz Worn on Body (${wornSummary})`;
       } else {
         elements.metricWornG.textContent = new Intl.NumberFormat("en-AU").format(metrics.wornWeightG);
         if (elements.metricWornUnit) elements.metricWornUnit.textContent = "g";
-        elements.metricWornSub.textContent = t("metric.worn.sub", { wt: `${(metrics.wornWeightG / 1000).toFixed(2)} kg` }) + (currentLang === "zh" ? ` (${metrics.wornItemsCount} 件)` : ` (${metrics.wornItemsCount} items)`);
+        elements.metricWornSub.textContent = (currentLang === "zh")
+          ? `${(metrics.wornWeightG / 1000).toFixed(2)} kg 随身穿戴 (${wornSummary})`
+          : `${(metrics.wornWeightG / 1000).toFixed(2)} kg Worn on Body (${wornSummary})`;
       }
     }
 
@@ -2507,9 +2521,12 @@ function renderPlanner() {
   if (elements.headerTrailName) {
     elements.headerTrailName.textContent = trail.name;
     elements.headerPackWeight.textContent = formatWeight(metrics.totalPackWeightG, { onlyKg: currentUnit === "metric", onlyLb: currentUnit === "imperial" });
-    if (elements.stickyTrailName) elements.stickyTrailName.textContent = trail.name;
-    if (elements.stickyItemCount) elements.stickyItemCount.textContent = metrics.totalItems;
-    if (elements.stickyWeight) elements.stickyWeight.textContent = formatWeight(metrics.totalPackWeightG, { full: true });
+    const stickyStats = document.querySelector(".sticky-pack-stats");
+    if (stickyStats) {
+      stickyStats.innerHTML = (currentLang === "zh")
+        ? `🎒 <strong id="sticky-item-count">${metrics.totalItems}</strong> 件打包装备 · <strong id="sticky-weight">${formatWeight(metrics.totalPackWeightG, { full: true })}</strong>`
+        : `🎒 <strong id="sticky-item-count">${metrics.totalItems}</strong> items · <strong id="sticky-weight">${formatWeight(metrics.totalPackWeightG, { full: true })}</strong>`;
+    }
   }
 
   // Unit switcher button active state
@@ -2546,7 +2563,12 @@ function renderPlanner() {
 
   // 6. Packed Items List
   if (elements.packedItemsList) {
-    elements.packedItemsCount.textContent = metrics.totalItems;
+    const packedTitle = document.querySelector("#packed-items-title");
+    if (packedTitle) {
+      packedTitle.innerHTML = (currentLang === "zh")
+        ? `打包清单 (<span id="packed-items-count">${metrics.totalItems}</span> 件)`
+        : `Pack Checklist (<span id="packed-items-count">${metrics.totalItems}</span> items)`;
+    }
 
     const packedEntries = Object.entries(trail.pack || {}).filter(([_, qty]) => qty > 0);
     if (!packedEntries.length) {
@@ -2564,17 +2586,34 @@ function renderPlanner() {
           .filter(({ item }) => item && item.category === cat.name);
 
         if (!catItems.length) continue;
-        const catSubtotal = catItems.reduce((acc, { item, qty }) => {
+        const catCarriedWeight = catItems.reduce((acc, { item, qty }) => {
           if (!Number.isFinite(item.unitWeightG)) return acc;
+          if (trail.worn?.[item.id]) return acc;
           const split = Number(trail.shared?.[item.id]) || 1;
           return acc + (item.unitWeightG * qty) / split;
         }, 0);
 
+        const catWornWeight = catItems.reduce((acc, { item, qty }) => {
+          if (!Number.isFinite(item.unitWeightG)) return acc;
+          if (!trail.worn?.[item.id]) return acc;
+          const split = Number(trail.shared?.[item.id]) || 1;
+          return acc + (item.unitWeightG * qty) / split;
+        }, 0);
+
+        const catSubtotal = catCarriedWeight + catWornWeight;
         const catCountText = currentLang === "zh" ? `${catItems.length} 件` : `${catItems.length} items`;
+        const subtotalText = catWornWeight > 0
+          ? (currentLang === "zh"
+              ? `背负: ${formatWeight(catCarriedWeight)} (含穿戴: ${formatWeight(catSubtotal)})`
+              : `Carried: ${formatWeight(catCarriedWeight)} (Total incl. Worn: ${formatWeight(catSubtotal)})`)
+          : (currentLang === "zh"
+              ? `背负小计: ${formatWeight(catCarriedWeight)}`
+              : `Subtotal: ${formatWeight(catCarriedWeight)}`);
+
         html += `<div class="packed-category-group" style="--group-color:${cat.color}">
           <div class="packed-category-title">
             <span>${getCategoryDisplayName(cat.name)} (${catCountText})</span>
-            <span>${t("packed.subtotal", { wt: formatWeight(catSubtotal) })}</span>
+            <span>${subtotalText}</span>
           </div>`;
 
         for (const { item, qty } of catItems) {
@@ -2653,9 +2692,12 @@ function renderTrailLog() {
   const completedTrails = trails.filter((t) => t.status === "completed").length;
   const plannedTrails = trails.filter((t) => t.status !== "completed").length;
 
-  if (elements.countAllTrails) elements.countAllTrails.textContent = totalTrails;
-  if (elements.countCompletedTrails) elements.countCompletedTrails.textContent = completedTrails;
-  if (elements.countPlannedTrails) elements.countPlannedTrails.textContent = plannedTrails;
+  const btnAll = document.querySelector("#btn-filter-all-trails");
+  const btnComp = document.querySelector("#btn-filter-completed-trails");
+  const btnPlan = document.querySelector("#btn-filter-planned-trails");
+  if (btnAll) btnAll.innerHTML = (currentLang === "zh") ? `全部路线 (<span id="count-all-trails">${totalTrails}</span>)` : `All Expeditions (<span id="count-all-trails">${totalTrails}</span>)`;
+  if (btnComp) btnComp.innerHTML = (currentLang === "zh") ? `已完成徒步 (<span id="count-completed-trails">${completedTrails}</span>)` : `Completed Hikes (<span id="count-completed-trails">${completedTrails}</span>)`;
+  if (btnPlan) btnPlan.innerHTML = (currentLang === "zh") ? `计划中 / 即将出发 (<span id="count-planned-trails">${plannedTrails}</span>)` : `Upcoming & Planned (<span id="count-planned-trails">${plannedTrails}</span>)`;
 
   const filtered = trails.filter((t) => {
     if (currentLogFilter === "completed") return t.status === "completed";
@@ -3182,7 +3224,9 @@ function saveUserProfile(profile) {
 
 function updateUserProfileUI() {
   const profile = getUserProfile();
-  const userName = profile?.name ? profile.name : "Hiker";
+  const userName = profile?.name || (currentLang === "zh" ? "徒步者" : "Hiker");
+  const isOnboarded = Boolean(profile?.onboarded);
+
   if (elements.headerUserName) {
     elements.headerUserName.textContent = `Hi, ${userName}!`;
   }
@@ -3193,6 +3237,12 @@ function updateUserProfileUI() {
     elements.dropdownUserStats.textContent = (currentLang === "zh")
       ? `个人装备档案 · ${gear.length} 件装备`
       : `Personal Profile · ${gear.length} items`;
+  }
+  const editNameText = document.querySelector("#btn-menu-edit-name span[data-i18n]");
+  if (editNameText) {
+    editNameText.textContent = isOnboarded
+      ? (currentLang === "zh" ? "修改称呼" : "Edit Name")
+      : (currentLang === "zh" ? "创建个人档案 / 导入" : "Set Up Profile / Import");
   }
 }
 
@@ -3208,6 +3258,12 @@ function closeOnboardingModal() {
   if (!elements.onboardingModal) return;
   elements.onboardingModal.classList.remove("open");
 }
+
+document.querySelector("#modal-onboarding-close")?.addEventListener("click", closeOnboardingModal);
+document.querySelector("#btn-onboarding-skip")?.addEventListener("click", closeOnboardingModal);
+elements.onboardingModal?.addEventListener("click", (e) => {
+  if (e.target === elements.onboardingModal) closeOnboardingModal();
+});
 
 // =============================================================================
 // Full Backup JSON Export & Universal Import
@@ -3927,12 +3983,15 @@ function deleteGearItem(itemId) {
 }
 
 function resetInventory() {
-  if (confirm("Reset gear inventory to the original 77 default items?\n\nAny custom added items will be discarded and default items restored.")) {
+  const confirmMsg = currentLang === "zh"
+    ? "是否将装备库重置为初始 83 件经典精选装备？\n\n自定义编辑和新增的物品将被重置，恢复官方精选入门库。"
+    : "Reset gear inventory to the curated 83 starter items?\n\nAny custom edits or added items will be discarded and default kit restored.";
+  if (confirm(confirmMsg)) {
     gear = JSON.parse(JSON.stringify(defaultInventory));
     saveInventory();
     render();
     updateInventoryStats();
-    showToast("Inventory restored to original 77 items.");
+    showToast(currentLang === "zh" ? "已恢复官方 83 件精选装备库。" : "Curated starter kit restored (83 items).");
   }
 }
 
@@ -3963,13 +4022,8 @@ async function init() {
     updateInventoryStats();
     render();
 
-    // Check user profile & onboarding
-    const profile = getUserProfile();
-    if (!profile || !profile.onboarded) {
-      openOnboardingModal();
-    } else {
-      updateUserProfileUI();
-    }
+    // User profile UI (non-blocking: allow browsing immediately)
+    updateUserProfileUI();
   } catch (error) {
     elements.stats.innerHTML = "<div class='loading'><strong>Inventory unavailable</strong><p>The gear data could not be loaded.</p></div>";
     elements.count.textContent = "The collection could not be loaded.";
@@ -4837,20 +4891,10 @@ document.addEventListener("click", (e) => {
   }
 });
 
-// Edit Nickname
+// Edit Profile / Nickname Modal
 elements.btnMenuEditName?.addEventListener("click", () => {
   if (elements.userProfileDropdown) elements.userProfileDropdown.hidden = true;
-  const profile = getUserProfile() || { name: "Hiker", onboarded: true };
-  const promptMsg = currentLang === "zh" ? "请输入您的新称呼 / 昵称：" : "Enter your new hiker nickname:";
-  const newName = window.prompt(promptMsg, profile.name || "Hiker");
-  if (newName && newName.trim()) {
-    profile.name = newName.trim();
-    profile.onboarded = true;
-    profile.updatedAt = new Date().toISOString();
-    saveUserProfile(profile);
-    updateUserProfileUI();
-    showToast(t("toast.profileUpdated", { name: profile.name }));
-  }
+  openOnboardingModal();
 });
 
 // Export Full Backup JSON
