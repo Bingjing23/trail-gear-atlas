@@ -4034,3 +4034,14 @@ button:active {
   background: #fee2e2;
   color: #991b1b;
 }
+
+.photo-source-custom {
+  background: #eef7f0 !important;
+  color: #1e5130 !important;
+  border: 1px solid #b9d9bf;
+  border-radius: 4px;
+  opacity: 0.9 !important;
+}
+.card-media:hover .photo-source-custom {
+  opacity: 1 !important;
+}

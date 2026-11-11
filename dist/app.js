@@ -1902,11 +1902,16 @@ function openProductModal(item) {
   if (item.imagePath) {
     const alt = `${item.brand || ""} ${item.name || item.itemType || "gear"} product photo`.trim();
     const officialUrl = item.websiteUrl || item.imageSourceUrl;
-    const photoSource = officialUrl ? `
+    const isCustomPhoto = item.imagePath.startsWith("data:");
+    const photoSource = isCustomPhoto ? `
+      <span class="modal-photo-source" style="background:#eef7f0; color:#1e5130; border-color:#b9d9bf; font-weight:700;">
+        📸 ${currentLang === "zh" ? "用户本地实拍压缩照片" : "User local compressed photo"}
+      </span>
+    ` : (officialUrl ? `
       <a class="modal-photo-source" href="${escapeHtml(officialUrl)}" target="_blank" rel="noopener noreferrer" title="Official Brand Website: ${escapeHtml(extractDomain(officialUrl))}">
         ${currentLang === "zh" ? "官方品牌源" : "Official Brand Source"}: ${escapeHtml(extractDomain(officialUrl))} ↗
       </a>
-    ` : "";
+    ` : "");
     mediaMarkup = `
       <div class="modal-media-wrap">
         <img class="modal-product-img" src="${escapeHtml(item.imagePath)}" alt="${escapeHtml(alt)}" />
@@ -2030,9 +2035,12 @@ function mediaMarkup(item) {
   const alt = `${item.brand || ""} ${item.name || item.itemType || "gear"} product photo`.trim();
   const officialUrl = item.websiteUrl || item.imageSourceUrl;
   const domain = extractDomain(officialUrl);
-  const credit = officialUrl
-    ? `<a class="photo-source" href="${escapeHtml(officialUrl)}" target="_blank" rel="noopener noreferrer" aria-label="Official website for ${escapeHtml(item.name || item.itemType)}" title="Official Brand Website: ${escapeHtml(domain)}">${currentLang === "zh" ? "官方网站 ↗" : "OFFICIAL SITE ↗"}</a>`
-    : "";
+  const isCustomPhoto = item.imagePath && item.imagePath.startsWith("data:");
+  const credit = isCustomPhoto
+    ? `<span class="photo-source photo-source-custom" title="${currentLang === "zh" ? "本地实拍压缩照片" : "Local compressed photo"}">${currentLang === "zh" ? "📸 实拍图" : "📸 PHOTO"}</span>`
+    : (officialUrl
+      ? `<a class="photo-source" href="${escapeHtml(officialUrl)}" target="_blank" rel="noopener noreferrer" aria-label="Official website for ${escapeHtml(item.name || item.itemType)}" title="Official Brand Website: ${escapeHtml(domain)}">${currentLang === "zh" ? "官方网站 ↗" : "OFFICIAL SITE ↗"}</a>`
+      : "");
   return `<div class="card-media clickable-media" data-detail-id="${escapeHtml(item.id)}" title="${currentLang === "zh" ? "点击查看参数与官网" : "Click to view specs &amp; official website"}"><img class="product-image" src="${escapeHtml(item.imagePath)}" alt="${escapeHtml(alt)}" loading="lazy" decoding="async" />${credit}<span class="card-media-hover-hint">${currentLang === "zh" ? "查看详情 ↗" : "Inspect Specs ↗"}</span></div>`;
 }
 
@@ -3101,7 +3109,8 @@ function importLighterPackCsv(file) {
 // =============================================================================
 function compressImageFile(file, maxDimension = 600, quality = 0.82) {
   return new Promise((resolve, reject) => {
-    if (!file || !file.type.startsWith("image/")) {
+    const isImg = (file && file.type && file.type.startsWith("image/")) || /\.(jpe?g|png|webp|gif|bmp|heic|avif)$/i.test(file?.name || "");
+    if (!file || !isImg) {
       reject(new Error("File is not an image"));
       return;
     }
@@ -3777,12 +3786,16 @@ function setImagePreview(src, noteText) {
   if (src && src.trim()) {
     elements.gearImagePreviewImg.src = src.trim();
     elements.gearImagePreviewWrap.hidden = false;
+    elements.gearImagePreviewWrap.removeAttribute("hidden");
+    elements.gearImagePreviewWrap.style.display = "inline-flex";
     if (elements.previewImageNote) {
       elements.previewImageNote.textContent = noteText || (src.startsWith("data:") ? (currentLang === "zh" ? "已保存本地实拍照片" : "Local photo saved") : (currentLang === "zh" ? "商品图片预览" : "Product photo preview"));
     }
   } else {
     elements.gearImagePreviewImg.src = "";
     elements.gearImagePreviewWrap.hidden = true;
+    elements.gearImagePreviewWrap.setAttribute("hidden", "");
+    elements.gearImagePreviewWrap.style.display = "none";
     if (elements.previewImageNote) elements.previewImageNote.textContent = "";
   }
 }
