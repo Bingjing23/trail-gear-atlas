@@ -20,8 +20,8 @@
         </a>
         <nav class="desktop-nav" aria-label="Main navigation">
           <a href="#collection" data-i18n="nav.explore">探索装备</a>
-          <a href="#wishlist" id="nav-wishlist" data-i18n="nav.wishlist">✨ 心愿单与测重</a>
           <a href="#trail-planner" data-i18n="nav.planner">背包规划与负重</a>
+          <a href="#wishlist" id="nav-wishlist" data-i18n="nav.wishlist">✨ 心愿单与测重</a>
           <a href="#trail-log" data-i18n="nav.log">路线日志</a>
           <a href="#about" data-i18n="nav.about">关于本清单</a>
         </nav>
@@ -93,19 +93,100 @@
             <p data-i18n="hero.desc">精确记录每件装备的实际重量、价格与打包状态。支持随身穿戴扣减、心愿单试重与 LighterPack 格式同步。</p>
           </div>
           <div class="hero-quick-actions">
-            <button class="btn-primary hero-btn-add" id="btn-hero-add-gear" type="button" data-i18n="hero.addGear">+ 添加装备</button>
-            <a class="btn-secondary" href="#collection" data-i18n="hero.browse">浏览装备库 ↓</a>
+            <a class="btn-primary hero-btn-browse" href="#collection" data-i18n="hero.browse">浏览装备库 ↓</a>
+            <a class="btn-secondary" href="#trail-planner" data-i18n="hero.planner">背包负重分析 ↓</a>
             <div class="hero-stat-pill" id="hero-stat-summary">
-              <strong><span id="hero-stat-items">81</span> 件装备</strong>
+              <span id="hero-stat-items-text"><strong><span id="hero-stat-items">83</span></strong> 件装备</span>
               <span>·</span>
-              <strong><span id="hero-stat-trails">3</span> 条规划路线</strong>
+              <span id="hero-stat-trails-text"><strong><span id="hero-stat-trails">3</span></strong> 条路线</span>
             </div>
           </div>
         </div>
         <div id="stats" hidden></div>
       </section>
 
-      <!-- Trail Pack Planner & Weight Calculator -->
+      <!-- Master Gear Collection (Primary View) -->
+<section class="collection" id="collection" aria-labelledby="collection-title">
+        <div class="shell">
+          <!-- Kit View Mode Switcher: Master Inventory vs Wishlist & Trials vs All -->
+          <div class="view-mode-tabs" role="tablist" aria-label="Kit views">
+            <button class="view-tab-btn active" id="tab-view-owned" role="tab" aria-selected="true" data-view="owned">
+              <span class="tab-icon">📦</span>
+              <span data-i18n="tab.owned">我的装备库</span>
+              <span class="tab-badge" id="badge-count-owned">77</span>
+            </button>
+            <button class="view-tab-btn" id="tab-view-wishlist" role="tab" aria-selected="false" data-view="wishlist">
+              <span class="tab-icon">✨</span>
+              <span data-i18n="tab.wishlist">想买清单与测重</span>
+              <span class="tab-badge badge-wishlist" id="badge-count-wishlist">4</span>
+            </button>
+            <button class="view-tab-btn" id="tab-view-all" role="tab" aria-selected="false" data-view="all">
+              <span class="tab-icon">🌐</span>
+              <span data-i18n="tab.all">全部装备</span>
+              <span class="tab-badge" id="badge-count-all">81</span>
+            </button>
+          </div>
+
+          <!-- Wishlist Laboratory Dedicated Banner -->
+          <div class="wishlist-hero-banner" id="wishlist-hero-banner" hidden>
+            <div class="wishlist-hero-main">
+              <div class="wishlist-hero-kicker">
+                <span class="sparkle-dot"></span>
+                <span data-i18n="wishlist.kicker">想买心愿单与换装测重</span>
+              </div>
+              <h3 data-i18n="wishlist.title">购买前先测算负重</h3>
+              <p id="wishlist-hero-desc">此处的装备为你正在考虑入手的心愿单。你可以直接将它们打包加入当前路线（<strong><span id="wishlist-active-trail-name">Milford Track</span></strong>）测算减重效果，与既有装备横向比对，购买后可一键转入已拥有装备库。</p>
+            </div>
+            <div class="wishlist-hero-stats">
+              <div class="wishlist-stat-box">
+                <span class="wishlist-stat-num" id="stat-wishlist-count">4</span>
+                <span class="wishlist-stat-lbl" data-i18n="wishlist.stat.count">心愿装备</span>
+              </div>
+              <div class="wishlist-stat-box">
+                <span class="wishlist-stat-num" id="stat-wishlist-weight">2,167 g</span>
+                <span class="wishlist-stat-lbl" data-i18n="wishlist.stat.weight">潜在增重</span>
+              </div>
+              <div class="wishlist-stat-box">
+                <span class="wishlist-stat-num" id="stat-wishlist-packed">1</span>
+                <span class="wishlist-stat-lbl" data-i18n="wishlist.stat.packed">当前路线上包测试</span>
+              </div>
+              <div class="wishlist-stat-box">
+                <span class="wishlist-stat-num" id="stat-wishlist-cost">$1,898 AUD</span>
+                <span class="wishlist-stat-lbl" data-i18n="wishlist.stat.cost">预计总投入</span>
+              </div>
+            </div>
+            <div class="wishlist-hero-actions">
+              <button class="btn-primary btn-add-wishlist" id="btn-add-wishlist-gear" type="button" data-i18n="wishlist.btnAdd">+ 添加想买装备</button>
+              <button class="btn-secondary" id="btn-view-owned-kit" type="button" data-i18n="wishlist.btnBack">← 返回我的装备库</button>
+            </div>
+          </div>
+
+          <div class="collection-heading" id="collection-heading-main-wrap">
+            <div class="collection-heading-main">
+              <span class="section-kicker" id="collection-kicker" data-i18n="collection.kicker">全套装备总览</span>
+              <h2 id="collection-title" data-i18n="collection.title">山野行囊细目</h2>
+              <p id="collection-desc" data-i18n="collection.desc">按系统浏览、搜索单品，或对比整套装备的克重与入手开销。</p>
+            </div>
+          </div>
+
+          <div class="toolbar" role="search">
+            <label class="search-field" for="gear-search">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 5 5"/></svg>
+              <input id="gear-search" type="search" data-i18n-placeholder="search.placeholder" placeholder="按装备名称、品牌或特点搜索..." autocomplete="off" />
+            </label>
+            <label class="select-field" for="status-filter"><span data-i18n="status.label">状态</span><select id="status-filter"><option value="all" data-i18n="filter.allStatus">全部状态</option><option value="active" data-i18n="filter.activeStatus">仅现役可用</option><option value="wishlist" data-i18n="filter.wishlistStatus">✨ 仅想买心愿</option><option value="in_use" data-i18n="status.in_use">使用中 (现役)</option><option value="owned" data-i18n="status.owned">已拥有</option><option value="purchased" data-i18n="status.purchased">已购入</option><option value="gift" data-i18n="status.gift">礼品</option><option value="lost" data-i18n="status.lost">已丢失</option><option value="selling" data-i18n="status.selling">准备出掉</option><option value="returned" data-i18n="status.returned">已退货</option><option value="older" data-i18n="status.older">旧款 / 待确认</option><option value="review" data-i18n="status.review">需补充信息</option></select></label>
+            <label class="select-field" for="sort-order"><span data-i18n="sort.label">排序</span><select id="sort-order"><option value="original" data-i18n="sort.default">默认排序</option><option value="weight-asc" data-i18n="sort.weightAsc">重量：由轻到重</option><option value="weight-desc" data-i18n="sort.weightDesc">重量：由重到轻</option><option value="price-asc" data-i18n="sort.priceAsc">价格：由低到高</option><option value="price-desc" data-i18n="sort.priceDesc">价格：由高到低</option></select></label>
+            <button class="toolbar-add-btn" id="btn-toolbar-add-gear" type="button" data-i18n="hero.addGear" title="添加新装备">+ 添加装备</button>
+          </div>
+
+          <nav class="category-nav" id="category-nav" aria-label="Gear categories"></nav>
+          <div class="result-count" id="result-count" aria-live="polite"></div>
+          <div id="gear-sections"></div>
+          <div class="empty-state" id="empty-state" hidden><span data-i18n="empty.noMatch">未找到匹配项</span><h3 data-i18n="empty.title">装备库中没有找到符合搜索条件的物品。</h3><p data-i18n="empty.desc">请尝试调整搜索关键词或重置筛选条件。</p><button id="reset-filters" type="button" data-i18n="filter.reset">重置筛选</button></div>
+        </div>
+      </section>
+
+<!-- Trail Pack Planner & Weight Calculator -->
       <section class="trail-planner-section" id="trail-planner" aria-labelledby="planner-title">
         <div class="shell">
           <div class="planner-header">
@@ -264,92 +345,6 @@
         </div>
       </section>
 
-      <section class="collection" id="collection" aria-labelledby="collection-title">
-        <div class="shell">
-          <!-- Kit View Mode Switcher: Master Inventory vs Wishlist & Trials vs All -->
-          <div class="view-mode-tabs" role="tablist" aria-label="Kit views">
-            <button class="view-tab-btn active" id="tab-view-owned" role="tab" aria-selected="true" data-view="owned">
-              <span class="tab-icon">📦</span>
-              <span data-i18n="tab.owned">我的装备库</span>
-              <span class="tab-badge" id="badge-count-owned">77</span>
-            </button>
-            <button class="view-tab-btn" id="tab-view-wishlist" role="tab" aria-selected="false" data-view="wishlist">
-              <span class="tab-icon">✨</span>
-              <span data-i18n="tab.wishlist">想买清单与测重</span>
-              <span class="tab-badge badge-wishlist" id="badge-count-wishlist">4</span>
-            </button>
-            <button class="view-tab-btn" id="tab-view-all" role="tab" aria-selected="false" data-view="all">
-              <span class="tab-icon">🌐</span>
-              <span data-i18n="tab.all">全部装备</span>
-              <span class="tab-badge" id="badge-count-all">81</span>
-            </button>
-          </div>
-
-          <!-- Wishlist Laboratory Dedicated Banner -->
-          <div class="wishlist-hero-banner" id="wishlist-hero-banner" hidden>
-            <div class="wishlist-hero-main">
-              <div class="wishlist-hero-kicker">
-                <span class="sparkle-dot"></span>
-                <span data-i18n="wishlist.kicker">想买心愿单与换装测重</span>
-              </div>
-              <h3 data-i18n="wishlist.title">购买前先测算负重</h3>
-              <p id="wishlist-hero-desc">此处的装备为你正在考虑入手的心愿单。你可以直接将它们打包加入当前路线（<strong><span id="wishlist-active-trail-name">Milford Track</span></strong>）测算减重效果，与既有装备横向比对，购买后可一键转入已拥有装备库。</p>
-            </div>
-            <div class="wishlist-hero-stats">
-              <div class="wishlist-stat-box">
-                <span class="wishlist-stat-num" id="stat-wishlist-count">4</span>
-                <span class="wishlist-stat-lbl" data-i18n="wishlist.stat.count">心愿装备</span>
-              </div>
-              <div class="wishlist-stat-box">
-                <span class="wishlist-stat-num" id="stat-wishlist-weight">2,167 g</span>
-                <span class="wishlist-stat-lbl" data-i18n="wishlist.stat.weight">潜在增重</span>
-              </div>
-              <div class="wishlist-stat-box">
-                <span class="wishlist-stat-num" id="stat-wishlist-packed">1</span>
-                <span class="wishlist-stat-lbl" data-i18n="wishlist.stat.packed">当前路线上包测试</span>
-              </div>
-              <div class="wishlist-stat-box">
-                <span class="wishlist-stat-num" id="stat-wishlist-cost">$1,898 AUD</span>
-                <span class="wishlist-stat-lbl" data-i18n="wishlist.stat.cost">预计总投入</span>
-              </div>
-            </div>
-            <div class="wishlist-hero-actions">
-              <button class="btn-primary btn-add-wishlist" id="btn-add-wishlist-gear" type="button" data-i18n="wishlist.btnAdd">+ 添加想买装备</button>
-              <button class="btn-secondary" id="btn-view-owned-kit" type="button" data-i18n="wishlist.btnBack">← 返回我的装备库</button>
-            </div>
-          </div>
-
-          <div class="collection-heading" id="collection-heading-main-wrap">
-            <div class="collection-heading-main">
-              <span class="section-kicker" id="collection-kicker" data-i18n="collection.kicker">全套装备总览</span>
-              <h2 id="collection-title" data-i18n="collection.title">山野行囊细目</h2>
-              <p id="collection-desc" data-i18n="collection.desc">按系统浏览、搜索单品，或对比整套装备的克重与入手开销。</p>
-            </div>
-            <div class="collection-heading-actions">
-              <button class="btn-primary btn-add-gear" id="btn-add-gear" type="button" data-i18n="collection.btnAdd" title="添加新装备到装备库">+ 添加装备</button>
-              <button class="btn-secondary" id="btn-reset-inventory" type="button" data-i18n="collection.btnReset" title="重置装备库为初始状态">↺ 重置装备库</button>
-            </div>
-          </div>
-
-          <div class="toolbar" role="search">
-            <label class="search-field" for="gear-search">
-              <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 5 5"/></svg>
-              <input id="gear-search" type="search" data-i18n-placeholder="search.placeholder" placeholder="按装备名称、品牌或特点搜索..." autocomplete="off" />
-            </label>
-            <label class="select-field" for="status-filter"><span data-i18n="status.label">状态</span><select id="status-filter"><option value="all" data-i18n="filter.allStatus">全部状态</option><option value="active" data-i18n="filter.activeStatus">仅现役可用</option><option value="wishlist" data-i18n="filter.wishlistStatus">✨ 仅想买心愿</option><option value="in_use" data-i18n="status.in_use">使用中 (现役)</option><option value="owned" data-i18n="status.owned">已拥有</option><option value="purchased" data-i18n="status.purchased">已购入</option><option value="gift" data-i18n="status.gift">礼品</option><option value="lost" data-i18n="status.lost">已丢失</option><option value="selling" data-i18n="status.selling">准备出掉</option><option value="returned" data-i18n="status.returned">已退货</option><option value="older" data-i18n="status.older">旧款 / 待确认</option><option value="review" data-i18n="status.review">需补充信息</option></select></label>
-            <label class="select-field" for="sort-order"><span data-i18n="sort.label">排序</span><select id="sort-order"><option value="original" data-i18n="sort.default">默认排序</option><option value="weight-asc" data-i18n="sort.weightAsc">重量：由轻到重</option><option value="weight-desc" data-i18n="sort.weightDesc">重量：由重到轻</option><option value="price-asc" data-i18n="sort.priceAsc">价格：由低到高</option><option value="price-desc" data-i18n="sort.priceDesc">价格：由高到低</option></select></label>
-            <button class="toolbar-add-btn" id="btn-toolbar-add-gear" type="button" data-i18n="hero.addGear" title="添加新装备">+ 添加装备</button>
-          </div>
-
-          <nav class="category-nav" id="category-nav" aria-label="Gear categories"></nav>
-          <div class="result-count" id="result-count" aria-live="polite"></div>
-          <div id="gear-sections"></div>
-          <div class="empty-state" id="empty-state" hidden><span data-i18n="empty.noMatch">未找到匹配项</span><h3 data-i18n="empty.title">装备库中没有找到符合搜索条件的物品。</h3><p data-i18n="empty.desc">请尝试调整搜索关键词或重置筛选条件。</p><button id="reset-filters" type="button" data-i18n="filter.reset">重置筛选</button></div>
-        </div>
-      </section>
-        </div>
-      </section>
-
       <!-- Trail Log Section -->
       <section class="trail-log-section" id="trail-log" aria-labelledby="log-title">
         <div class="shell">
@@ -388,11 +383,9 @@
     <!-- Sticky Quick-Pack Floating Bar -->
     <div class="sticky-pack-bar hidden" id="sticky-pack-bar">
       <div class="sticky-pack-info">
-        <span class="sticky-pack-trail">🎒 <span id="sticky-trail-name">Milford Track</span></span>
-        <span class="sticky-pack-stats"><strong id="sticky-item-count">0</strong> 件装备 · <strong id="sticky-weight">0 g</strong></span>
+        <span class="sticky-pack-stats">🎒 <strong id="sticky-item-count">0</strong> 件装备 · <strong id="sticky-weight">0 g</strong></span>
       </div>
       <div class="sticky-pack-actions">
-        <button class="btn-sticky-new" id="sticky-btn-new-trail" type="button" data-i18n="header.newTrail" title="规划新徒步路线">+ 新建路线</button>
         <a class="sticky-pack-link" href="#trail-planner" data-i18n="sticky.viewPack">查看背包与负重 ↑</a>
       </div>
     </div>
@@ -520,11 +513,11 @@
               </div>
               <!-- Brand quick pills -->
               <div class="catalog-brand-pills" id="catalog-brand-pills">
-                <span class="brand-pills-label" data-i18n="modalGear.brandPillsLabel">户外专卖推荐:</span>
-                <button type="button" class="brand-pill retailer-brand-pill" data-brand="Backpacking Light">🏪 Backpacking Light</button>
-                <button type="button" class="brand-pill retailer-brand-pill" data-brand="K2 Base Camp">🏪 K2 Base Camp</button>
-                <button type="button" class="brand-pill retailer-brand-pill" data-brand="Paddy Pallin">🏪 Paddy Pallin</button>
+                <span class="brand-pills-label" data-i18n="modalGear.brandPillsLabel">热门品牌推荐:</span>
+                <button type="button" class="brand-pill" data-brand="Nemo">Nemo</button>
                 <button type="button" class="brand-pill" data-brand="ULA Equipment">ULA</button>
+                <button type="button" class="brand-pill" data-brand="Durston">Durston</button>
+                <button type="button" class="brand-pill" data-brand="Zpacks">Zpacks</button>
                 <button type="button" class="brand-pill" data-brand="Gossamer Gear">Gossamer Gear</button>
                 <button type="button" class="brand-pill" data-brand="SlingFin">SlingFin</button>
                 <button type="button" class="brand-pill" data-brand="Six Moon Designs">Six Moon Designs</button>
@@ -731,6 +724,7 @@
     <!-- New User Onboarding Modal -->
     <div class="modal-overlay" id="onboarding-modal">
       <div class="onboarding-modal-box">
+        <button class="modal-close-btn" id="modal-onboarding-close" type="button" aria-label="关闭对话框">✕</button>
         <div class="onboarding-header">
           <div class="onboarding-icon">🧭</div>
           <h3 data-i18n="onboarding.title">欢迎来到 Trail Gear Atlas</h3>
@@ -787,6 +781,7 @@
 
           <div class="onboarding-actions">
             <button class="btn-primary btn-onboarding-submit" id="btn-onboarding-submit" type="submit" data-i18n="onboarding.btnStart">开启我的徒步装备库 🚀</button>
+            <button type="button" class="btn-text-secondary" id="btn-onboarding-skip" data-i18n="onboarding.btnSkip">先随意逛逛，稍后设置 →</button>
           </div>
         </form>
       </div>
