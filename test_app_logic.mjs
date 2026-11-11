@@ -460,6 +460,74 @@ try {
   await evalInPage(`document.querySelector("#gear-modal-close")?.click()`);
   await new Promise((r) => setTimeout(r, 200));
 
+  // -------------------------------------------------------------
+  // TEST 9: Multilingual Language Switcher (ZH / EN)
+  // -------------------------------------------------------------
+  console.log("\n--- TEST 9: Multilingual Language Switcher (ZH / EN) ---");
+
+  // 1. Switch to English
+  await evalInPage(`document.querySelector("#btn-lang-en")?.click()`);
+  await new Promise((r) => setTimeout(r, 300));
+
+  const enActive = await evalInPage(`document.querySelector("#btn-lang-en")?.classList.contains("active")`);
+  const enAddBtnText = await evalInPage(`document.querySelector("#btn-add-gear")?.textContent.trim()`);
+  const enCarriedLabel = await evalInPage(`document.querySelector(".weight-card.primary .weight-card-label")?.textContent.trim()`);
+  const enBaseLabel = await evalInPage(`document.querySelector("#metric-card-base .weight-card-label")?.textContent.trim()`);
+  const enFirstCat = await evalInPage(`document.querySelector(".gear-section h3")?.textContent.trim()`);
+  const enStoredLang = await evalInPage(`localStorage.getItem("trail_gear_atlas_lang")`);
+
+  const enPassed = enActive &&
+    enAddBtnText === "+ Add Gear Item" &&
+    enCarriedLabel.includes("PACK CARRIED LOAD") &&
+    enBaseLabel.includes("BASE WEIGHT") &&
+    enFirstCat === "Sleep & Shelter" &&
+    enStoredLang === "en";
+
+  recordTest("Switching to English (EN) updates headers, buttons, cards & categories to pure English", enPassed, `Btn: "${enAddBtnText}", Carried: "${enCarriedLabel}", Cat: "${enFirstCat}", Stored: "${enStoredLang}"`);
+
+  // Capture screenshot of English UI
+  const enScreenshot = await send("Page.captureScreenshot", { format: "png" });
+  const enPath = path.join(ARTIFACT_DIR, "app-bilingual-en-preview.png");
+  fs.writeFileSync(enPath, Buffer.from(enScreenshot.data, "base64"));
+  console.log(`[Screenshot] Saved English UI preview to ${enPath}`);
+
+  // 2. Switch to Chinese
+  await evalInPage(`document.querySelector("#btn-lang-zh")?.click()`);
+  await new Promise((r) => setTimeout(r, 300));
+
+  const zhActive = await evalInPage(`document.querySelector("#btn-lang-zh")?.classList.contains("active")`);
+  const zhAddBtnText = await evalInPage(`document.querySelector("#btn-add-gear")?.textContent.trim()`);
+  const zhCarriedLabel = await evalInPage(`document.querySelector(".weight-card.primary .weight-card-label")?.textContent.trim()`);
+  const zhBaseLabel = await evalInPage(`document.querySelector("#metric-card-base .weight-card-label")?.textContent.trim()`);
+  const zhFirstCat = await evalInPage(`document.querySelector(".gear-section h3")?.textContent.trim()`);
+  const zhStoredLang = await evalInPage(`localStorage.getItem("trail_gear_atlas_lang")`);
+
+  const zhPassed = zhActive &&
+    zhAddBtnText === "+ 添加装备" &&
+    zhCarriedLabel.includes("背负总重") &&
+    zhBaseLabel.includes("基准重量") &&
+    zhFirstCat === "睡眠与庇护" &&
+    zhStoredLang === "zh";
+
+  recordTest("Switching to Chinese (ZH) updates headers, buttons, cards & categories to pure Chinese", zhPassed, `Btn: "${zhAddBtnText}", Carried: "${zhCarriedLabel}", Cat: "${zhFirstCat}", Stored: "${zhStoredLang}"`);
+
+  // Capture screenshot of Chinese UI
+  const zhScreenshot = await send("Page.captureScreenshot", { format: "png" });
+  const zhPath = path.join(ARTIFACT_DIR, "app-bilingual-zh-preview.png");
+  fs.writeFileSync(zhPath, Buffer.from(zhScreenshot.data, "base64"));
+  console.log(`[Screenshot] Saved Chinese UI preview to ${zhPath}`);
+
+  // 3. Reload page and verify persistence
+  await send("Page.reload");
+  await new Promise((r) => setTimeout(r, 1000));
+
+  const reloadedLang = await evalInPage(`document.documentElement.lang`);
+  const reloadedFirstCat = await evalInPage(`document.querySelector(".gear-section h3")?.textContent.trim()`);
+  const reloadedBtnText = await evalInPage(`document.querySelector("#btn-add-gear")?.textContent.trim()`);
+  const persistPassed = reloadedLang === "zh-CN" && reloadedFirstCat === "睡眠与庇护" && reloadedBtnText === "+ 添加装备";
+
+  recordTest("Language selection persists in localStorage across full page reload", persistPassed, `Lang: "${reloadedLang}", Cat: "${reloadedFirstCat}", Btn: "${reloadedBtnText}"`);
+
 } catch (err) {
   console.error("Test Suite Runtime Error:", err);
   process.exitCode = 1;

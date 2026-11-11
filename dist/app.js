@@ -81,9 +81,11 @@ const defaultTypeOrders = {
 const STORAGE_KEY = "trail_gear_atlas_trails_v5";
 const UNIT_STORAGE_KEY = "trail_gear_atlas_unit";
 const CHART_TYPE_STORAGE_KEY = "trail_gear_atlas_chart_type";
+const LANG_STORAGE_KEY = "trail_gear_atlas_lang";
 
 let currentUnit = localStorage.getItem(UNIT_STORAGE_KEY) || "metric"; // "metric" | "imperial"
 let currentChartType = localStorage.getItem(CHART_TYPE_STORAGE_KEY) || "donut"; // "donut" | "bar"
+let currentLang = localStorage.getItem(LANG_STORAGE_KEY) || (navigator.language?.toLowerCase().startsWith("zh") ? "zh" : "en"); // "zh" | "en"
 
 const defaultTrails = [
   {
@@ -189,6 +191,10 @@ const elements = {
   // Unit switchers
   btnUnitMetric: document.querySelector("#btn-unit-metric"),
   btnUnitImperial: document.querySelector("#btn-unit-imperial"),
+
+  // Language switchers
+  btnLangZh: document.querySelector("#btn-lang-zh"),
+  btnLangEn: document.querySelector("#btn-lang-en"),
 
   // Planner elements
   activeTrailSelect: document.querySelector("#active-trail-select"),
@@ -390,8 +396,736 @@ const elements = {
 
 const escapeHtml = (value) => String(value ?? "").replace(/[&<>"']/g, (character) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[character]);
 
+// =============================================================================
+// Multilingual / Internationalization (i18n) Engine
+// =============================================================================
+const translations = {
+  zh: {
+    // Nav
+    "nav.explore": "探索装备",
+    "nav.wishlist": "✨ 心愿单与测重",
+    "nav.planner": "背包规划与负重",
+    "nav.log": "路线日志",
+    "nav.about": "关于本清单",
+    "header.newTrail": "+ 新建路线",
+    "header.packDetails": "查看当前路线背包详情与重量拆解",
+
+    // Hero
+    "hero.tag": "极简轻量化装备库 · 背包负重分析",
+    "hero.title": "Trail Gear Atlas",
+    "hero.desc": "精确记录每件装备的实际重量、价格与打包状态。支持随身穿戴扣减、心愿单试重与 LighterPack 格式同步。",
+    "hero.addGear": "+ 添加装备",
+    "hero.browse": "浏览装备库 ↓",
+    "hero.stats": "{items} 件装备 · {trails} 条规划路线",
+
+    // Planner Header
+    "planner.kicker": "路线打包与负重分析",
+    "planner.title": "路线打包与负重分析",
+    "planner.routeLabel": "当前路线",
+    "planner.newTrail": "+ 新建路线",
+
+    // Banner Actions
+    "banner.edit": "✏️ 编辑路线",
+    "banner.markComplete": "✓ 标为已完成",
+    "banner.revertPlanned": "↩ 恢复为计划中",
+    "banner.emptyPack": "清空背包",
+
+    // Banner Meta
+    "banner.status.planned": "计划中 · 下一站",
+    "banner.status.in-progress": "进行中 · 途中",
+    "banner.status.completed": "已完成 · 纪事",
+    "banner.days": "{n} 天",
+    "banner.daysTbd": "天数待定",
+    "banner.targetDate": "出行时间：{date}",
+
+    // 5 Weight Cards
+    "metric.carried.label": "背负总重",
+    "metric.carried.sub": "{wt} 背负行囊实际总重",
+    "metric.carried.wishSub": "<strong>{owned} kg</strong> 已拥有 + <strong>{wish} kg</strong> 心愿单 ({count} 件)",
+    "metric.base.label": "基准重量 (不含消耗品与穿戴)",
+    "metric.base.sub": "{wt} 背包基础净重",
+    "metric.worn.label": "随身穿戴 (非背负)",
+    "metric.worn.sub": "{wt} 鞋靴、衣物与手杖",
+    "metric.skinout.label": "全身行头总重",
+    "metric.skinout.sub": "{wt} 背负总重 + 随身穿戴",
+    "metric.wishlist.label": "想买试重",
+    "metric.wishlist.sub": "{count} 件心愿单装备在试装",
+
+    // Tiers
+    "tier.empty": "空背包",
+    "tier.ultralight": "🟢 超轻量 (< 4.5kg)",
+    "tier.lightweight": "🟡 轻量级 (4.5 - 9kg)",
+    "tier.standard": "🟠 传统标准 (9 - 14kg)",
+    "tier.expedition": "🔴 重装远征 (> 14kg)",
+
+    // Donut & Chart
+    "chart.kicker": "装备系统重量分布",
+    "chart.title": "系统重量拆解",
+    "chart.donut": "🍩 环形图",
+    "chart.bar": "📊 堆叠条形图",
+    "chart.total": "{wt} 总重",
+    "chart.baseWeight": "基准重量",
+    "chart.hoverCat": "悬停查看各系统",
+    "chart.wornTitle": "穿戴重量：",
+    "chart.wornDesc": "不计入背负重量",
+
+    // Missing alert
+    "missing.text": "{count} 件已打包装备未记录重量，未计入总重。",
+
+    // Packed Drawer
+    "packed.title": "打包清单 ({count} 件)",
+    "packed.tip": "点击 <strong>👕 穿戴</strong> 可从基重中扣除，点击 <strong>👥 分摊</strong> 可均分队友重量。",
+    "packed.browse": "在下方挑选添加 ↓",
+    "packed.exportCsv": "📥 导出 LighterPack CSV",
+    "packed.importCsv": "📤 导入 LighterPack CSV",
+    "packed.viewMd": "📋 查看 Markdown 清单",
+    "packed.emptyTitle": "背包当前为空",
+    "packed.emptyDesc": "你还没有为 {name} 选择任何装备。请在下方装备库中挑选，点击「+ 放入当前背包」即可打包！",
+    "packed.subtotal": "小计：{wt}",
+
+    // Chips
+    "chip.worn": "👕 随身穿戴",
+    "chip.shared": "👥 1/{split} 分摊",
+    "chip.wishlist": "✨ 想买待购",
+    "chip.bought": "✓ 标记已购入",
+    "chip.custom": "👤 自建装备",
+
+    // Collection Tabs
+    "tab.owned": "我的装备库",
+    "tab.wishlist": "想买清单与测重",
+    "tab.all": "全部装备",
+
+    // Wishlist Banner
+    "wishlist.kicker": "想买心愿单与换装测重",
+    "wishlist.title": "购买前先测算负重",
+    "wishlist.desc": "此处的装备为你正在考虑入手的心愿单。你可以直接将它们打包加入当前路线（<strong>{trail}</strong>）测算减重效果，与既有装备横向比对，购买后可一键转入已拥有装备库。",
+    "wishlist.stat.count": "心愿装备",
+    "wishlist.stat.weight": "潜在增重",
+    "wishlist.stat.packed": "当前路线上包测试",
+    "wishlist.stat.cost": "预计总投入",
+    "wishlist.btnAdd": "+ 添加想买装备",
+    "wishlist.btnBack": "← 返回我的装备库",
+
+    // Collection Header
+    "collection.kicker": "全套装备总览",
+    "collection.title": "山野行囊细目",
+    "collection.desc": "按系统浏览、搜索单品，或对比整套装备的克重与入手开销。",
+    "collection.btnAdd": "+ 添加装备",
+    "collection.btnReset": "↺ 重置装备库",
+
+    // Toolbar & Filters
+    "search.placeholder": "按装备名称、品牌或特点搜索...",
+    "search.showing": "显示 {shown} / {total} 件装备",
+    "status.label": "状态",
+    "sort.label": "排序",
+    "sort.default": "默认排序",
+    "sort.weightAsc": "重量：由轻到重",
+    "sort.weightDesc": "重量：由重到轻",
+    "sort.priceAsc": "价格：由低到高",
+    "sort.priceDesc": "价格：由高到低",
+    "sort.brandAsc": "品牌：A 到 Z",
+    "filter.allStatus": "全部状态",
+    "filter.activeStatus": "仅现役可用",
+    "filter.wishlistStatus": "✨ 仅想买心愿",
+    "filter.allSystems": "全部系统",
+    "filter.reset": "重置筛选",
+    "empty.noMatch": "未找到匹配项",
+    "empty.title": "装备库中没有找到符合搜索条件的物品。",
+    "empty.desc": "请尝试调整搜索关键词或重置筛选条件。",
+
+    // Gear Card
+    "card.packAdd": "+ 放入 {trail}",
+    "card.packTest": "+ 试装入包 {trail}",
+    "card.inPack": "已入包",
+    "card.inTrial": "试装中",
+    "card.packedBadgeSingle": "已打包",
+    "card.packedBadgeMulti": "{qty} 件已打包",
+    "card.wishlistRibbon": "✨ 心愿单 · 待购入",
+    "card.markBought": "✓ 标记已购入",
+    "card.detailsBtn": "参数与详情",
+    "card.weight": "⚖️ 重量",
+    "card.price": "价格",
+
+    // Status Map (for dropdown & badges)
+    "status.in_use": "使用中 (现役)",
+    "status.wishlist": "✨ 想买 (心愿单)",
+    "status.owned": "已拥有",
+    "status.purchased": "已购入",
+    "status.gift": "礼品",
+    "status.lost": "已丢失",
+    "status.selling": "准备出掉",
+    "status.returned": "已退货",
+    "status.older": "旧款 / 待确认",
+    "status.review": "需补充信息",
+
+    // Trail Log
+    "log.kicker": "徒步纪事",
+    "log.title": "路线日志与规划",
+    "log.desc": "查看历史完成徒步路线与未来探险计划，对比每次出行的实际打包装备与背负重量。",
+    "log.all": "全部路线 ({count})",
+    "log.completed": "已完成徒步 ({count})",
+    "log.planned": "计划中 / 即将出发 ({count})",
+    "log.distance": "总里程",
+    "log.duration": "行程天数",
+    "log.daysUnit": "天",
+    "log.packLoad": "背负总重",
+    "log.btnActive": "🎒 当前选中路线 (在下方打包 ↓)",
+    "log.btnPack": "🎒 设为当前路线并打包 ↓",
+    "log.btnWeights": "📊 负重分析",
+    "log.btnEdit": "编辑",
+
+    // About
+    "about.kicker": "关于本清单",
+    "about.title": "一份不断演进的装备档案",
+    "about.p1": "本清单汇总了真实的户外徒步装备、采购凭证与购买截图。发票价格以包含消费税的澳币金额记录；国内电商截图按人民币记录，币种之间不做折算。装备重量为标称或实测重量，在家使用电子秤复测后会持续校准更新。",
+    "about.p2": "产品展示图尽可能呈现对应型号，实际颜色或年份版本可能与实物稍有差异。缺失细节的装备仍保留展示，以便后续补齐档案。早期淘汰或遗失的装备单独标注区分。凭证仅记录购买事实，并不代表消耗品仍在背包中。",
+
+    // Footer
+    "footer.brand": "TRAIL GEAR <em>ATLAS</em>",
+    "footer.updated": "个人徒步装备档案 · 更新于 2026 年 11 月",
+    "footer.top": "返回顶部 ↑",
+
+    // Sticky Bar
+    "sticky.items": "<strong>{count}</strong> 件装备 · <strong>{weight}</strong>",
+    "sticky.newTrail": "+ 新建路线",
+    "sticky.viewPack": "查看背包与负重 ↑",
+
+    // Trail Modal
+    "modalTrail.title": "规划徒步路线",
+    "modalTrail.desc": "设定路线名称、目标里程与行程天数，随后从装备库中挑选行囊。",
+    "modalTrail.name": "路线 / 活动名称 *",
+    "modalTrail.namePh": "例如：Milford Track, Overland Track, Mount Bogong",
+    "modalTrail.dest": "目的地 / 地区",
+    "modalTrail.destPh": "例如：Fiordland, New Zealand",
+    "modalTrail.status": "状态",
+    "modalTrail.statusPlanned": "计划中 (下一站)",
+    "modalTrail.statusProgress": "进行中",
+    "modalTrail.statusCompleted": "已完成",
+    "modalTrail.dist": "总里程 (km)",
+    "modalTrail.duration": "行程天数 (天)",
+    "modalTrail.date": "出行时间",
+    "modalTrail.datePh": "例如：2026 年 11 月",
+    "modalTrail.template": "装备初始搭配",
+    "modalTrail.tplEmpty": "从零自选装备",
+    "modalTrail.tplCopy": "复制当前路线装备搭配",
+    "modalTrail.notes": "路线说明与注意事项",
+    "modalTrail.notesPh": "地形路况、天气预警、垭口海拔、行前备忘等...",
+    "modalTrail.cancel": "取消",
+    "modalTrail.submit": "保存并开始打包 ↓",
+
+    // Export Modal
+    "modalExport.title": "导出打包清单",
+    "modalExport.desc": "复制格式化的装备负重清单，分享给队友或保存至出行笔记。",
+    "modalExport.close": "关闭",
+    "modalExport.downloadCsv": "📥 下载 LighterPack CSV",
+    "modalExport.copyMd": "复制 Markdown 文本",
+
+    // Product Modal
+    "modalProduct.officialResource": "官方品牌资源",
+    "modalProduct.officialSite": "前往官方网站 / 页面",
+    "modalProduct.specsTitle": "技术参数与规格",
+    "modalProduct.featuresTitle": "设计亮点与核心特色",
+    "modalProduct.notesTitle": "实测心得与备忘",
+    "modalProduct.prospectiveChip": "✨ 心愿单 · 待购入",
+    "modalProduct.markPurchased": "✓ 标记已购入 (转为已拥有)",
+    "modalProduct.metaSize": "尺码 / 容量",
+    "modalProduct.metaWeight": "单件重量",
+    "modalProduct.metaPrice": "记录价格",
+    "modalProduct.metaType": "装备类型",
+    "modalProduct.metaReceipt": "购买凭证 / 发票",
+    "modalProduct.packTag": "路线打包",
+    "modalProduct.btnEdit": "✏️ 编辑装备",
+    "modalProduct.btnDelete": "🗑️ 删除装备",
+
+    // Gear Modal
+    "modalGear.addTitle": "添加装备",
+    "modalGear.editTitle": "编辑装备",
+    "modalGear.addWishTitle": "添加想买装备",
+    "modalGear.desc": "记录装备的重量、价格、技术规格与官方链接。",
+    "modalGear.modeCatalog": "<strong>方案 A</strong> 热门大牌速选",
+    "modalGear.modeScraper": "<strong>方案 B</strong> 网址/规格智能抓取",
+    "modalGear.modeManual": "<strong>手动新建</strong> 空白建档",
+    "modalGear.catalogKicker": "热门品牌装备库秒级速填",
+    "modalGear.catalogBadge": "210+ 专业徒步装备库 (K2 · Paddy Pallin · Backpacking Light)",
+    "modalGear.catalogSearchPh": "输入品牌或型号（如 ULA Circuit, Portal 2, Mariposa, Lunar Solo, Evernew, Torrid...）",
+    "modalGear.brandPillsLabel": "户外专卖推荐:",
+    "modalGear.autofillBanner": "已从 <strong>{name}</strong> 自动回填！可在下方继续调整尺码、价格或实测备注。",
+    "modalGear.scraperKicker": "小众网站与规格抓取",
+    "modalGear.scraperBadge": "智能自动识别",
+    "modalGear.scraperDesc": "粘贴小众品牌/独立电商（如 Zpacks, Durston, Garage Grown Gear, REI, 品牌官网等）的商品链接或参数文本：",
+    "modalGear.scraperUrlPh": "粘贴商品详情页网址 (https://...)",
+    "modalGear.scraperSnippetToggle": "+ 展开粘贴规格/重量文本 (选填)",
+    "modalGear.scraperSnippetPh": "可选：在此粘贴商品规格文本 (例如: Weight: 28.5 oz / 808 g, Price: $240 USD, Double wall)...",
+    "modalGear.scraperBtn": "⚡ 智能解析并提取数据",
+    "modalGear.scraperUseData": "✓ 填入表单",
+    "modalGear.manualTitle": "自由手动录入模式",
+    "modalGear.manualDesc": "适合 DIY 自制装备、实体店自购、旧款绝版或无需网购链接的个人户外物品。请直接在下方表单中填写各项参数。",
+    "modalGear.name": "装备名称 *",
+    "modalGear.namePh": "例如：Hornet Elite OSMO 2P Tent",
+    "modalGear.brand": "品牌 / 制造方 *",
+    "modalGear.brandPh": "例如：Nemo, Mont, Arc'teryx, Sea to Summit",
+    "modalGear.category": "所属系统 *",
+    "modalGear.itemType": "物品类型",
+    "modalGear.itemTypePh": "例如：tent, sleeping_pad, pack, stove",
+    "modalGear.size": "尺码 / 容量 (选填)",
+    "modalGear.sizePh": "例如：Women's S, Regular Wide, 1100ml, 20L",
+    "modalGear.weight": "单件重量 (克 / g)",
+    "modalGear.price": "记录价格",
+    "modalGear.currency": "币种",
+    "modalGear.status": "装备状态 *",
+    "modalGear.website": "官网 / 购买链接 (选填)",
+    "modalGear.image": "商品图片链接 (选填)",
+    "modalGear.imagePh": "例如：./photos/... 或 https://...",
+    "modalGear.summary": "一句话特点介绍",
+    "modalGear.summaryPh": "材料与用途的一句话技术概括",
+    "modalGear.specs": "技术规格与参数 (每行一条: 键: 值)",
+    "modalGear.specsPh": "温标：舒适 -5°C | 极限 -10°C\n填充：850+ 蓬松度羽绒\n展开尺寸：183 x 51 cm\n面料：20D 防撕裂尼龙",
+    "modalGear.features": "设计亮点与特性 (每行一条)",
+    "modalGear.featuresPh": "超轻紧凑收纳体积\n多功能气阀快速排气\n兼容防滑枕头锁",
+    "modalGear.notes": "实测备忘与心得",
+    "modalGear.notesPh": "尺码体感、严寒天气表现、专卖店信息等...",
+    "modalGear.cancel": "取消",
+    "modalGear.save": "保存装备",
+    "modalGear.saveChanges": "保存修改",
+    "modalGear.addInventory": "保存至装备库",
+    "modalGear.addWishlist": "添加至想买清单",
+
+    // Categories
+    "cat.sleep": "睡眠与庇护",
+    "cat.sleep.desc": "睡袋、帐篷庇护所、防潮垫与让野外露宿更安心舒适的装备。",
+    "cat.packs": "背包与背负",
+    "cat.packs.desc": "背负系统、照明头灯、徒步手杖与实用山野工具。",
+    "cat.cooking": "烹饪与水净化",
+    "cat.cooking.desc": "气炉、纯钛锅具、储水水袋与净水过滤系统。",
+    "cat.food": "户外口粮",
+    "cat.food.desc": "高热量脱水冻干正餐、速溶早餐、能量胶与电解质冲剂。",
+    "cat.clothing": "服装与鞋靴",
+    "cat.clothing.desc": "三层穿衣法则、防风防雨硬壳风衣与高保暖中间层。",
+    "cat.personal": "个人随身",
+    "cat.personal.desc": "充电宝、个人卫生清洁与电子数码等贴身备品。",
+
+    // Common
+    "common.items": "件",
+    "weight.notRecorded": "未记录重量",
+    "price.notRecorded": "未记录价格",
+
+    // Toasts
+    "toast.langSwitched": "已切换为<strong>简体中文</strong>。",
+    "toast.unitMetric": "已切换计量单位为<strong>公制 (g / kg)</strong>。",
+    "toast.unitImperial": "已切换计量单位为<strong>英制 (oz / lb)</strong>。",
+    "toast.gearAdded": "已将 <strong>{name}</strong> 添加至装备库。",
+    "toast.gearUpdated": "已更新 <strong>{name}</strong>。",
+    "toast.gearDeleted": "已删除装备。",
+    "toast.packAdded": "已将 <strong>{name}</strong> 加入路线背包。",
+    "toast.packRemoved": "已从背包中移除 <strong>{name}</strong>。",
+    "toast.packCleared": "已清空路线背包。",
+    "toast.trailSaved": "路线已保存。",
+    "toast.mdCopied": "Markdown 清单已复制到剪贴板！",
+    "toast.csvExported": "已导出 LighterPack CSV 文件。",
+    "toast.csvImported": "成功导入 {count} 件装备！",
+    "toast.convertedOwned": "🎉 已将 <strong>{name}</strong> 转为正式已拥有装备！"
+  },
+  en: {
+    // Nav
+    "nav.explore": "Explore Gear",
+    "nav.wishlist": "✨ Wishlist & Trials",
+    "nav.planner": "Pack Planner & Weights",
+    "nav.log": "Trail Log",
+    "nav.about": "About This Kit",
+    "header.newTrail": "+ New Trail",
+    "header.packDetails": "View active pack details and weight breakdown",
+
+    // Hero
+    "hero.tag": "ULTRALIGHT PACK BUILDER · FIELD GEAR ATLAS",
+    "hero.title": "Trail Gear Atlas",
+    "hero.desc": "Precise record of gear weights, purchase records, and pack statuses. Supports worn-weight exclusions, prospective trial loads, and LighterPack CSV sync.",
+    "hero.addGear": "+ Add Gear",
+    "hero.browse": "Explore Gear ↓",
+    "hero.stats": "{items} gear items · {trails} planned trails",
+
+    // Planner Header
+    "planner.kicker": "EXPEDITION PACK BUILDER",
+    "planner.title": "Pack Planner & Weight Analytics",
+    "planner.routeLabel": "ACTIVE ROUTE",
+    "planner.newTrail": "+ New Trail",
+
+    // Banner Actions
+    "banner.edit": "✏️ Edit Details",
+    "banner.markComplete": "✓ Mark as Completed",
+    "banner.revertPlanned": "↩ Revert to Planned",
+    "banner.emptyPack": "Empty Pack",
+
+    // Banner Meta
+    "banner.status.planned": "Planned · Next Destination",
+    "banner.status.in-progress": "In Progress · On Trail",
+    "banner.status.completed": "Completed · Hiked",
+    "banner.days": "{n} Days",
+    "banner.daysTbd": "Days TBD",
+    "banner.targetDate": "Target Date: {date}",
+
+    // 5 Weight Cards
+    "metric.carried.label": "PACK CARRIED LOAD",
+    "metric.carried.sub": "{wt} carried load on back",
+    "metric.carried.wishSub": "<strong>{owned} kg</strong> owned + <strong>{wish} kg</strong> wishlist ({count} items)",
+    "metric.base.label": "BASE WEIGHT (EXCL. CONSUMABLES & WORN)",
+    "metric.base.sub": "{wt} pack base weight",
+    "metric.worn.label": "WORN ON BODY",
+    "metric.worn.sub": "{wt} shoes, clothes & poles",
+    "metric.skinout.label": "SKIN-OUT TOTAL",
+    "metric.skinout.sub": "{wt} carried load + worn on body",
+    "metric.wishlist.label": "WISHLIST TRIAL LOAD",
+    "metric.wishlist.sub": "{count} prospective items on trial",
+
+    // Tiers
+    "tier.empty": "EMPTY PACK",
+    "tier.ultralight": "🟢 ULTRALIGHT (< 10 lb)",
+    "tier.lightweight": "🟡 LIGHTWEIGHT (10 - 20 lb)",
+    "tier.standard": "🟠 STANDARD (20 - 30 lb)",
+    "tier.expedition": "🔴 EXPEDITION (> 30 lb)",
+
+    // Donut & Chart
+    "chart.kicker": "GEAR SYSTEM WEIGHT DISTRIBUTION",
+    "chart.title": "Category Breakdown",
+    "chart.donut": "🍩 Donut Chart",
+    "chart.bar": "📊 Linear Bar",
+    "chart.total": "{wt} Total",
+    "chart.baseWeight": "BASE WEIGHT",
+    "chart.hoverCat": "Hover category slice",
+    "chart.wornTitle": "Worn Weight:",
+    "chart.wornDesc": "Excluded from pack carried load",
+
+    // Missing alert
+    "missing.text": "{count} packed items do not have listed weights and are excluded from total calculation.",
+
+    // Packed Drawer
+    "packed.title": "Packed Gear ({count} items)",
+    "packed.tip": "Mark items as <strong>👕 Worn</strong> to exclude from base weight, or <strong>👥 Shared</strong> to split partner weight.",
+    "packed.browse": "Browse & Add Gear Below ↓",
+    "packed.exportCsv": "📥 Export LighterPack CSV",
+    "packed.importCsv": "📤 Import LighterPack CSV",
+    "packed.viewMd": "📋 View Markdown List",
+    "packed.emptyTitle": "Pack is currently empty",
+    "packed.emptyDesc": "You haven't selected any gear for {name} yet. Browse the inventory below and click \"+ Pack for {name}\" on any item.",
+    "packed.subtotal": "Subtotal: {wt}",
+
+    // Chips
+    "chip.worn": "👕 Worn",
+    "chip.shared": "👥 1/{split} Shared",
+    "chip.wishlist": "✨ Wishlist",
+    "chip.bought": "✓ Mark Bought",
+    "chip.custom": "👤 Custom Gear",
+
+    // Collection Tabs
+    "tab.owned": "Master Inventory",
+    "tab.wishlist": "Wishlist & Trials",
+    "tab.all": "All Items",
+
+    // Wishlist Banner
+    "wishlist.kicker": "PROSPECTIVE GEAR LAB & UPGRADE SIMULATOR",
+    "wishlist.title": "Simulate your pack before buying.",
+    "wishlist.desc": "Items in this list represent prospective gear you are considering. You can pack them directly into your active route (<strong>{trail}</strong>) to test weight impact, compare against existing kit, and convert to Owned with one click once purchased.",
+    "wishlist.stat.count": "Wishlist items",
+    "wishlist.stat.weight": "Total prospective wt",
+    "wishlist.stat.packed": "Tested in active pack",
+    "wishlist.stat.cost": "Est. total investment",
+    "wishlist.btnAdd": "+ Add Wishlist Gear",
+    "wishlist.btnBack": "← Back to Master Inventory",
+
+    // Collection Header
+    "collection.kicker": "EXPLORE THE KIT",
+    "collection.title": "Built for the trail.",
+    "collection.desc": "Browse by system, search for a specific piece, or compare the recorded weight and price across the kit.",
+    "collection.btnAdd": "+ Add Gear Item",
+    "collection.btnReset": "↺ Reset Kit",
+
+    // Toolbar & Filters
+    "search.placeholder": "Search gear by name, brand, or feature...",
+    "search.showing": "SHOWING {shown} OF {total} ITEMS",
+    "status.label": "Status",
+    "sort.label": "Sort",
+    "sort.default": "Default Order",
+    "sort.weightAsc": "Weight: Light to Heavy",
+    "sort.weightDesc": "Weight: Heavy to Light",
+    "sort.priceAsc": "Price: Low to High",
+    "sort.priceDesc": "Price: High to Low",
+    "sort.brandAsc": "Brand: A to Z",
+    "filter.allStatus": "All Statuses",
+    "filter.activeStatus": "Active Kit Only",
+    "filter.wishlistStatus": "✨ Wishlist Only",
+    "filter.allSystems": "All Systems",
+    "filter.reset": "Reset filters",
+    "empty.noMatch": "NO MATCHES FOUND",
+    "empty.title": "Nothing in the kit matches that search.",
+    "empty.desc": "Try a different product name or clear the filters.",
+
+    // Gear Card
+    "card.packAdd": "+ Pack for {trail}",
+    "card.packTest": "+ Test Pack for {trail}",
+    "card.inPack": "in pack",
+    "card.inTrial": "in trial",
+    "card.packedBadgeSingle": "IN ACTIVE PACK",
+    "card.packedBadgeMulti": "{qty} IN PACK",
+    "card.wishlistRibbon": "✨ WISHLIST · PROSPECTIVE",
+    "card.markBought": "✓ Mark Bought",
+    "card.detailsBtn": "Specs & Details",
+    "card.weight": "⚖️ WEIGHT",
+    "card.price": "PRICE",
+
+    // Status Map
+    "status.in_use": "In Use (Active)",
+    "status.wishlist": "✨ Wishlist",
+    "status.owned": "Owned",
+    "status.purchased": "Purchased",
+    "status.gift": "Gift",
+    "status.lost": "Lost",
+    "status.selling": "To Sell",
+    "status.returned": "Returned",
+    "status.older": "Older Gear (Pending)",
+    "status.review": "Needs Details",
+
+    // Trail Log
+    "log.kicker": "EXPEDITION ARCHIVE",
+    "log.title": "Trail Log & Expeditions",
+    "log.desc": "Browse past completed trails and upcoming expeditions. Compare gear choices and packed weight across different terrains.",
+    "log.all": "All Expeditions ({count})",
+    "log.completed": "Completed Hikes ({count})",
+    "log.planned": "Upcoming & Planned ({count})",
+    "log.distance": "Distance",
+    "log.duration": "Duration",
+    "log.daysUnit": "Days",
+    "log.packLoad": "Pack Load",
+    "log.btnActive": "🎒 Currently Active (Pack Gear Below ↓)",
+    "log.btnPack": "🎒 Pack for this Trail ↓",
+    "log.btnWeights": "📊 Weights",
+    "log.btnEdit": "Edit",
+
+    // About
+    "about.kicker": "ABOUT THE RECORD",
+    "about.title": "A living gear list.",
+    "about.p1": "This collection brings together the original hiking inventory, tax invoices and purchase screenshots. Invoice prices use the tax-inclusive line amounts in Australian dollars. Screenshot purchases stay in Chinese yuan; currencies are never converted or compared. Weights are listed or approximate values and may change after an item is weighed at home.",
+    "about.p2": "Product photos show the listed models; colors or revisions may differ from the items owned. Items with missing details stay visible so the record can be completed over time. Older and lost gear is identified separately from the current kit. A receipt records a purchase, not whether a consumable is still in the pack.",
+
+    // Footer
+    "footer.brand": "TRAIL GEAR <em>ATLAS</em>",
+    "footer.updated": "PERSONAL HIKING KIT · UPDATED NOVEMBER 2026",
+    "footer.top": "BACK TO TOP ↑",
+
+    // Sticky Bar
+    "sticky.items": "<strong>{count}</strong> items · <strong>{weight}</strong>",
+    "sticky.newTrail": "+ New Trail",
+    "sticky.viewPack": "View Pack & Weights ↑",
+
+    // Trail Modal
+    "modalTrail.title": "Plan an Expedition",
+    "modalTrail.desc": "Define a route, set target distance, and start packing gears from your inventory.",
+    "modalTrail.name": "Trail / Activity Name *",
+    "modalTrail.namePh": "e.g. Milford Track, Overland Track, Mount Bogong",
+    "modalTrail.dest": "Destination / Region",
+    "modalTrail.destPh": "e.g. Fiordland, New Zealand",
+    "modalTrail.status": "Status",
+    "modalTrail.statusPlanned": "Planned (Upcoming)",
+    "modalTrail.statusProgress": "In Progress",
+    "modalTrail.statusCompleted": "Completed",
+    "modalTrail.dist": "Distance (km)",
+    "modalTrail.duration": "Duration (Days)",
+    "modalTrail.date": "Date / Trip Period",
+    "modalTrail.datePh": "e.g. November 2026",
+    "modalTrail.template": "Gear Pack Starting Setup",
+    "modalTrail.tplEmpty": "Start with empty pack",
+    "modalTrail.tplCopy": "Copy gear pack from active trail",
+    "modalTrail.notes": "Field Notes & Route Description",
+    "modalTrail.notesPh": "Terrain conditions, weather precautions, pass elevation, etc.",
+    "modalTrail.cancel": "Cancel",
+    "modalTrail.submit": "Save & Start Packing Gear ↓",
+
+    // Export Modal
+    "modalExport.title": "Export Pack List",
+    "modalExport.desc": "Share your pack breakdown, weights, and items formatted for your trail notes.",
+    "modalExport.close": "Close",
+    "modalExport.downloadCsv": "📥 Download LighterPack CSV",
+    "modalExport.copyMd": "Copy Markdown",
+
+    // Product Modal
+    "modalProduct.officialResource": "OFFICIAL BRAND RESOURCE",
+    "modalProduct.officialSite": "Official Brand Website",
+    "modalProduct.specsTitle": "Technical Specifications & Parameters",
+    "modalProduct.featuresTitle": "Alpine & Trail Design Features",
+    "modalProduct.notesTitle": "Personal Notes & Field Experience",
+    "modalProduct.prospectiveChip": "✨ PROSPECTIVE GEAR · WISHLIST",
+    "modalProduct.markPurchased": "✓ Mark as Purchased (Convert to Owned)",
+    "modalProduct.metaSize": "Size / Capacity",
+    "modalProduct.metaWeight": "Unit Weight",
+    "modalProduct.metaPrice": "Recorded Price",
+    "modalProduct.metaType": "Gear Type",
+    "modalProduct.metaReceipt": "Receipt / Invoice",
+    "modalProduct.packTag": "EXPEDITION PACK",
+    "modalProduct.btnEdit": "✏️ Edit Gear Item",
+    "modalProduct.btnDelete": "🗑️ Delete Item",
+
+    // Gear Modal
+    "modalGear.addTitle": "Add Gear Item",
+    "modalGear.editTitle": "Edit Gear Item",
+    "modalGear.addWishTitle": "Add Wishlist Item",
+    "modalGear.desc": "Add a piece of gear to your master inventory with weight, price, specs, and brand link.",
+    "modalGear.modeCatalog": "<strong>Mode A</strong> Popular Brands",
+    "modalGear.modeScraper": "<strong>Mode B</strong> Smart Link / Specs",
+    "modalGear.modeManual": "<strong>Manual</strong> Blank Form",
+    "modalGear.catalogKicker": "POPULAR BRAND CATALOG QUICK-FILL",
+    "modalGear.catalogBadge": "210+ Pro Hiking Gear Catalog",
+    "modalGear.catalogSearchPh": "Type brand or model (e.g. ULA Circuit, Portal 2, Mariposa, Lunar Solo, Evernew...)",
+    "modalGear.brandPillsLabel": "Featured Retailers:",
+    "modalGear.autofillBanner": "Autofilled from <strong>{name}</strong>! You can customize weight, price or notes below.",
+    "modalGear.scraperKicker": "NICHE PRODUCT LINK & SPECS SCRAPER",
+    "modalGear.scraperBadge": "Smart Auto-Detect",
+    "modalGear.scraperDesc": "Paste product URL or spec text from niche/cottage brands (e.g. Zpacks, Durston, Garage Grown Gear, REI, brand sites):",
+    "modalGear.scraperUrlPh": "Paste product detail page URL (https://...)",
+    "modalGear.scraperSnippetToggle": "+ Paste specification / weight text (optional)",
+    "modalGear.scraperSnippetPh": "Optional: paste specs text here (e.g. Weight: 28.5 oz / 808 g, Price: $240 USD, Double wall)...",
+    "modalGear.scraperBtn": "⚡ Extract Gear Data",
+    "modalGear.scraperUseData": "✓ Use Extracted Data",
+    "modalGear.manualTitle": "Manual Entry Mode",
+    "modalGear.manualDesc": "Ideal for DIY custom gear, local in-store purchases, vintage items or personal supplies without online links. Fill in fields below.",
+    "modalGear.name": "Product / Item Name *",
+    "modalGear.namePh": "e.g. Hornet Elite OSMO 2P Tent",
+    "modalGear.brand": "Brand / Manufacturer *",
+    "modalGear.brandPh": "e.g. Nemo, Mont, Arc'teryx, Sea to Summit",
+    "modalGear.category": "Gear System / Category *",
+    "modalGear.itemType": "Item Type",
+    "modalGear.itemTypePh": "e.g. tent, sleeping_pad, pack, stove",
+    "modalGear.size": "Size / Capacity (optional)",
+    "modalGear.sizePh": "e.g. Women's S, Regular Wide, 1100ml, 20L",
+    "modalGear.weight": "Unit Weight (grams / g)",
+    "modalGear.price": "Recorded Price",
+    "modalGear.currency": "Currency",
+    "modalGear.status": "Ownership Status *",
+    "modalGear.website": "Official / Store URL (optional)",
+    "modalGear.image": "Product Image URL (optional)",
+    "modalGear.imagePh": "e.g. ./photos/... or https://...",
+    "modalGear.summary": "Summary / One-line Description",
+    "modalGear.summaryPh": "One-sentence technical overview of materials and purpose",
+    "modalGear.specs": "Technical Specifications & Parameters (One per line: Key: Value)",
+    "modalGear.specsPh": "Temperature Rating: Comfort -5°C | Limit -10°C\nInsulation: 850+ Loft Down\nDimensions: 183 x 51 cm\nMaterial: 20D Ripstop Nylon",
+    "modalGear.features": "Alpine & Trail Features (One feature per line)",
+    "modalGear.featuresPh": "Ultralight compact pack size\nMulti-function valve for rapid deflation\nPillow Lock compatible",
+    "modalGear.notes": "Personal Field Notes",
+    "modalGear.notesPh": "Sizing observations, performance in cold weather, etc.",
+    "modalGear.cancel": "Cancel",
+    "modalGear.save": "Save Gear Item",
+    "modalGear.saveChanges": "Save Changes",
+    "modalGear.addInventory": "Save to Inventory",
+    "modalGear.addWishlist": "Add to Wishlist",
+
+    // Categories
+    "cat.sleep": "Sleep & Shelter",
+    "cat.sleep.desc": "Sleeping bags, shelter, mats and the small things that make nights outside easier.",
+    "cat.packs": "Packs & Essentials",
+    "cat.packs.desc": "Carry systems, lighting, trekking poles and useful trail accessories.",
+    "cat.cooking": "Cooking & Hydration",
+    "cat.cooking.desc": "Stove, cookware, water storage and filtration.",
+    "cat.food": "Food & Nutrition",
+    "cat.food.desc": "Backcountry freeze-dried meals, breakfasts, trail desserts, energy gels and electrolyte hydration.",
+    "cat.clothing": "Clothing & Footwear",
+    "cat.clothing.desc": "Layers, weather protection and footwear for changing conditions.",
+    "cat.personal": "Personal Items",
+    "cat.personal.desc": "The personal supplies that still need a little more detail.",
+
+    // Common
+    "common.items": "items",
+    "weight.notRecorded": "Not recorded",
+    "price.notRecorded": "Not recorded",
+
+    // Toasts
+    "toast.langSwitched": "Switched language to <strong>English</strong>.",
+    "toast.unitMetric": "Switched display units to <strong>Metric (g / kg)</strong>.",
+    "toast.unitImperial": "Switched display units to <strong>Imperial (oz / lb)</strong>.",
+    "toast.gearAdded": "Added <strong>{name}</strong> to inventory.",
+    "toast.gearUpdated": "Updated <strong>{name}</strong>.",
+    "toast.gearDeleted": "Item deleted.",
+    "toast.packAdded": "Added <strong>{name}</strong> to pack.",
+    "toast.packRemoved": "Removed <strong>{name}</strong> from pack.",
+    "toast.packCleared": "Pack cleared.",
+    "toast.trailSaved": "Trail saved.",
+    "toast.mdCopied": "Pack summary copied to clipboard!",
+    "toast.csvExported": "LighterPack CSV exported.",
+    "toast.csvImported": "Successfully imported {count} items!",
+    "toast.convertedOwned": "🎉 Converted <strong>{name}</strong> to Owned item!"
+  }
+};
+
+function t(key, params = {}) {
+  const dict = translations[currentLang] || translations["zh"];
+  let str = dict[key] ?? translations["en"]?.[key] ?? key;
+  if (typeof str !== "string") return str;
+  for (const [k, v] of Object.entries(params)) {
+    str = str.replace(new RegExp(`{${k}}`, "g"), String(v));
+  }
+  return str;
+}
+
+function getCategoryDisplayName(catName) {
+  const map = {
+    "Sleep & Shelter": "cat.sleep",
+    "Packs & Essentials": "cat.packs",
+    "Cooking & Hydration": "cat.cooking",
+    "Food & Nutrition": "cat.food",
+    "Clothing & Footwear": "cat.clothing",
+    "Personal Items": "cat.personal"
+  };
+  const key = map[catName];
+  return key ? t(key) : catName;
+}
+
+function getCategoryDescription(catName) {
+  const map = {
+    "Sleep & Shelter": "cat.sleep.desc",
+    "Packs & Essentials": "cat.packs.desc",
+    "Cooking & Hydration": "cat.cooking.desc",
+    "Food & Nutrition": "cat.food.desc",
+    "Clothing & Footwear": "cat.clothing.desc",
+    "Personal Items": "cat.personal.desc"
+  };
+  const key = map[catName];
+  return key ? t(key) : "";
+}
+
+function applyLanguage(lang) {
+  currentLang = lang;
+  localStorage.setItem(LANG_STORAGE_KEY, lang);
+  document.documentElement.lang = lang === "zh" ? "zh-CN" : "en";
+
+  if (elements.btnLangZh && elements.btnLangEn) {
+    elements.btnLangZh.classList.toggle("active", lang === "zh");
+    elements.btnLangEn.classList.toggle("active", lang === "en");
+  }
+
+  // Update static DOM elements marked with data-i18n
+  document.querySelectorAll("[data-i18n]").forEach((el) => {
+    const key = el.getAttribute("data-i18n");
+    const val = t(key);
+    if (val) el.textContent = val;
+  });
+
+  document.querySelectorAll("[data-i18n-html]").forEach((el) => {
+    const key = el.getAttribute("data-i18n-html");
+    const val = t(key);
+    if (val) el.innerHTML = val;
+  });
+
+  document.querySelectorAll("[data-i18n-placeholder]").forEach((el) => {
+    const key = el.getAttribute("data-i18n-placeholder");
+    const val = t(key);
+    if (val) el.setAttribute("placeholder", val);
+  });
+
+  document.querySelectorAll("[data-i18n-title]").forEach((el) => {
+    const key = el.getAttribute("data-i18n-title");
+    const val = t(key);
+    if (val) el.setAttribute("title", val);
+  });
+}
+
 function formatWeight(value, opts = {}) {
-  if (!Number.isFinite(value)) return "Not recorded";
+  if (!Number.isFinite(value)) return t("weight.notRecorded");
 
   if (currentUnit === "imperial") {
     // 1 g = 0.03527396195 oz; 1 lb = 453.59237 g
@@ -424,8 +1158,8 @@ function formatWeight(value, opts = {}) {
 }
 const formatPrice = (item) => {
   if (Number.isFinite(item.unitPriceCny)) return new Intl.NumberFormat("en-AU", { style: "currency", currency: "CNY", currencyDisplay: "code" }).format(item.unitPriceCny);
-  if (Number.isFinite(item.unitPriceAud)) return item.unitPriceAud === 0 && item.statusKey === "gift" ? "Gift" : new Intl.NumberFormat("en-AU", { style: "currency", currency: "AUD" }).format(item.unitPriceAud);
-  return "Not recorded";
+  if (Number.isFinite(item.unitPriceAud)) return item.unitPriceAud === 0 && item.statusKey === "gift" ? t("status.gift") : new Intl.NumberFormat("en-AU", { style: "currency", currency: "AUD" }).format(item.unitPriceAud);
+  return t("price.notRecorded");
 };
 
 const formatEvidence = (entry) => {
@@ -543,10 +1277,10 @@ function updateInventoryStats() {
   const weighted = gear.filter((item) => Number.isFinite(item.unitWeightG)).length;
   if (elements.stats) {
     elements.stats.innerHTML = `
-      <div class="stat"><strong>${gear.length}</strong><span>Logged items</span></div>
-      <div class="stat"><strong>${trails.length}</strong><span>Trails in log</span></div>
-      <div class="stat"><strong>${categories.length}</strong><span>Gear systems</span></div>
-      <div class="stat"><strong>${weighted}</strong><span>Weights recorded</span></div>
+      <div class="stat"><strong>${gear.length}</strong><span>${currentLang === "zh" ? "件收录装备" : "Logged items"}</span></div>
+      <div class="stat"><strong>${trails.length}</strong><span>${currentLang === "zh" ? "条规划路线" : "Trails in log"}</span></div>
+      <div class="stat"><strong>${categories.length}</strong><span>${currentLang === "zh" ? "大装备系统" : "Gear systems"}</span></div>
+      <div class="stat"><strong>${weighted}</strong><span>${currentLang === "zh" ? "件记录克重" : "Weights recorded"}</span></div>
     `;
   }
   const heroItems = document.querySelector("#hero-stat-items");
@@ -955,7 +1689,7 @@ function renderRValueCallout(item) {
 }
 
 function renderModalPackControls(item, trail) {
-  if (!trail) return `<p class="modal-no-trail">No active expedition selected.</p>`;
+  if (!trail) return `<p class="modal-no-trail">${currentLang === "zh" ? "尚未选择活动路线。" : "No active expedition selected."}</p>`;
   const packedQty = trail.pack?.[item.id] || 0;
   const isPacked = packedQty > 0;
   const weight = Number.isFinite(item.unitWeightG) ? item.unitWeightG : null;
@@ -965,25 +1699,25 @@ function renderModalPackControls(item, trail) {
     return `
       <div class="modal-pack-active">
         <div class="modal-pack-status-line">
-          <span class="modal-packed-check">✓ Packed for <strong>${escapeHtml(trail.name)}</strong></span>
-          <span class="modal-packed-weight">${formatWeight(lineWeight)} total</span>
+          <span class="modal-packed-check">${currentLang === "zh" ? `✓ 已放入 <strong>${escapeHtml(trail.name)}</strong>` : `✓ Packed for <strong>${escapeHtml(trail.name)}</strong>`}</span>
+          <span class="modal-packed-weight">${currentLang === "zh" ? `小计 ${formatWeight(lineWeight)}` : `${formatWeight(lineWeight)} total`}</span>
         </div>
         <div class="modal-stepper-wrap">
           <button class="btn-modal-minus" data-id="${escapeHtml(item.id)}" type="button" aria-label="Decrease quantity" title="Decrease packed quantity">−</button>
           <div class="modal-stepper-center">
             <input type="number" class="modal-qty-input" data-id="${escapeHtml(item.id)}" value="${packedQty}" min="1" max="99" aria-label="Packed quantity for ${escapeHtml(item.name || item.itemType)}" />
-            <span class="modal-stepper-unit">in pack</span>
+            <span class="modal-stepper-unit">${currentLang === "zh" ? "件在包内" : "in pack"}</span>
           </div>
           <button class="btn-modal-plus" data-id="${escapeHtml(item.id)}" type="button" aria-label="Increase quantity" title="Increase packed quantity">+</button>
         </div>
-        <button class="btn-modal-remove" data-id="${escapeHtml(item.id)}" type="button">Remove from active pack</button>
+        <button class="btn-modal-remove" data-id="${escapeHtml(item.id)}" type="button">${currentLang === "zh" ? "从当前路线背包中移除" : "Remove from active pack"}</button>
       </div>
     `;
   }
 
   return `
     <button class="btn-modal-pack" data-id="${escapeHtml(item.id)}" type="button">
-      + Pack for ${escapeHtml(trail.name)}
+      ${t("card.packAdd", { trail: escapeHtml(trail.name) })}
     </button>
   `;
 }
@@ -1011,11 +1745,11 @@ function openProductModal(item) {
   const websiteCta = item.websiteUrl ? `
     <div class="modal-website-banner">
       <div class="website-banner-info">
-        <span class="website-banner-label">OFFICIAL BRAND RESOURCE</span>
+        <span class="website-banner-label">${escapeHtml(t("modalProduct.officialResource") || "OFFICIAL BRAND RESOURCE")}</span>
         <span class="website-banner-domain">${escapeHtml(extractDomain(item.websiteUrl))}</span>
       </div>
       <a class="btn-official-website" href="${escapeHtml(item.websiteUrl)}" target="_blank" rel="noopener noreferrer" title="Open official manufacturer website in a new tab">
-        <span>Official Brand Website</span>
+        <span>${escapeHtml(t("modalProduct.officialSite") || "Official Brand Website")}</span>
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
       </a>
     </div>
@@ -1026,7 +1760,7 @@ function openProductModal(item) {
     <div class="modal-specs-section">
       <h4 class="modal-section-title">
         <span class="section-title-icon">⚙️</span>
-        <span>Technical Specifications &amp; Parameters</span>
+        <span>${escapeHtml(t("modalProduct.specsTitle") || "Technical Specifications & Parameters")}</span>
       </h4>
       <div class="specs-table">
         ${specsEntries.map(([key, val]) => `
@@ -1043,7 +1777,7 @@ function openProductModal(item) {
     <div class="modal-features-section">
       <h4 class="modal-section-title">
         <span class="section-title-icon">🏔️</span>
-        <span>Alpine &amp; Trail Design Features</span>
+        <span>${escapeHtml(t("modalProduct.featuresTitle") || "Alpine & Trail Design Features")}</span>
       </h4>
       <ul class="modal-features-list">
         ${item.features.map((feat) => `
@@ -1060,7 +1794,7 @@ function openProductModal(item) {
     <div class="modal-notes-section">
       <h4 class="modal-section-title">
         <span class="section-title-icon">📝</span>
-        <span>Personal Notes &amp; Field Experience</span>
+        <span>${escapeHtml(t("modalProduct.notesTitle") || "Personal Notes & Field Experience")}</span>
       </h4>
       <div class="modal-notes-card">${escapeHtml(item.notes)}</div>
     </div>
@@ -1076,7 +1810,7 @@ function openProductModal(item) {
     const officialUrl = item.websiteUrl || item.imageSourceUrl;
     const photoSource = officialUrl ? `
       <a class="modal-photo-source" href="${escapeHtml(officialUrl)}" target="_blank" rel="noopener noreferrer" title="Official Brand Website: ${escapeHtml(extractDomain(officialUrl))}">
-        Official Brand Source: ${escapeHtml(extractDomain(officialUrl))} ↗
+        ${currentLang === "zh" ? "官方品牌源" : "Official Brand Source"}: ${escapeHtml(extractDomain(officialUrl))} ↗
       </a>
     ` : "";
     mediaMarkup = `
@@ -1089,7 +1823,7 @@ function openProductModal(item) {
     mediaMarkup = `
       <div class="modal-media-wrap modal-no-image">
         <svg viewBox="0 0 180 120" aria-hidden="true"><circle cx="131" cy="35" r="16"/><path d="M8 101 55 47l30 35 19-21 62 40H8Z"/><path d="M8 110h158"/></svg>
-        <span>IMAGE TO ADD</span>
+        <span>${currentLang === "zh" ? "暂无实物图" : "IMAGE TO ADD"}</span>
       </div>
     `;
   }
@@ -1101,20 +1835,20 @@ function openProductModal(item) {
     <div class="product-detail-container" style="--section-color:${category.color}">
       <div class="product-modal-header">
         <div class="product-modal-eyebrow">
-          <span class="product-category-chip">${escapeHtml(item.category)}</span>
-          ${item.size ? `<span class="product-size-chip" title="Size / Capacity">📏 Size: ${escapeHtml(item.size)}</span>` : ""}
-          ${isWishlist ? `<span class="modal-wishlist-chip">✨ PROSPECTIVE GEAR · 想买待购</span><button class="btn-modal-convert-owned" data-convert-id="${escapeHtml(item.id)}" type="button" title="Convert to Owned / In Use kit">✓ Mark as Purchased (转为已拥有)</button>` : ""}
-          <select class="modal-status-select ${statusClass(item)}" data-modal-status-id="${escapeHtml(item.id)}" title="Click to change status (点击切换状态)">
-            <option value="想买" ${statusKey === "wishlist" ? "selected" : ""}>✨ 想买 (Wishlist · 待购入)</option>
-            <option value="使用中" ${statusKey === "in_use" ? "selected" : ""}>使用中</option>
-            <option value="Owned" ${statusKey === "owned" ? "selected" : ""}>Owned (已拥有)</option>
-            <option value="Purchased · in inventory" ${statusKey === "purchased" ? "selected" : ""}>Purchased (已购入)</option>
-            <option value="Gift" ${statusKey === "gift" ? "selected" : ""}>Gift (礼品)</option>
-            <option value="lost" ${statusKey === "lost" ? "selected" : ""}>lost (已丢失 · 灰显)</option>
-            <option value="不想要了准备卖掉" ${statusKey === "selling" ? "selected" : ""}>不想要了准备卖掉 (准备出掉 · 灰显)</option>
-            <option value="退货" ${statusKey === "returned" ? "selected" : ""}>退货 (已退货 · 灰显)</option>
-            <option value="Older gear · ownership to confirm" ${statusKey === "older" ? "selected" : ""}>Older gear (旧款)</option>
-            <option value="Needs details" ${statusKey === "review" ? "selected" : ""}>Needs details (待补充)</option>
+          <span class="product-category-chip">${escapeHtml(getCategoryDisplayName(item.category))}</span>
+          ${item.size ? `<span class="product-size-chip" title="${currentLang === "zh" ? "尺码 / 容量" : "Size / Capacity"}">📏 ${currentLang === "zh" ? "尺码" : "Size"}: ${escapeHtml(item.size)}</span>` : ""}
+          ${isWishlist ? `<span class="modal-wishlist-chip">${t("modalProduct.prospectiveChip")}</span><button class="btn-modal-convert-owned" data-convert-id="${escapeHtml(item.id)}" type="button" title="Convert to Owned / In Use kit">${t("modalProduct.markPurchased")}</button>` : ""}
+          <select class="modal-status-select ${statusClass(item)}" data-modal-status-id="${escapeHtml(item.id)}" title="${currentLang === "zh" ? "点击切换状态" : "Click to change status"}">
+            <option value="想买" ${statusKey === "wishlist" ? "selected" : ""}>${t("status.wishlist")}</option>
+            <option value="使用中" ${statusKey === "in_use" ? "selected" : ""}>${t("status.in_use")}</option>
+            <option value="Owned" ${statusKey === "owned" ? "selected" : ""}>${t("status.owned")}</option>
+            <option value="Purchased · in inventory" ${statusKey === "purchased" ? "selected" : ""}>${t("status.purchased")}</option>
+            <option value="Gift" ${statusKey === "gift" ? "selected" : ""}>${t("status.gift")}</option>
+            <option value="lost" ${statusKey === "lost" ? "selected" : ""}>${t("status.lost")}</option>
+            <option value="不想要了准备卖掉" ${statusKey === "selling" ? "selected" : ""}>${t("status.selling")}</option>
+            <option value="退货" ${statusKey === "returned" ? "selected" : ""}>${t("status.returned")}</option>
+            <option value="Older gear · ownership to confirm" ${statusKey === "older" ? "selected" : ""}>${t("status.older")}</option>
+            <option value="Needs details" ${statusKey === "review" ? "selected" : ""}>${t("status.review")}</option>
           </select>
         </div>
         <div class="product-modal-brand">${escapeHtml(item.brand || "Brand not recorded")}</div>
@@ -1129,31 +1863,31 @@ function openProductModal(item) {
 
           <div class="modal-meta-grid">
             <div class="modal-meta-box">
-              <span class="modal-meta-k">Size / Capacity</span>
-              <strong class="modal-meta-v ${item.size ? "" : "missing"}">${escapeHtml(item.size || "Standard / One Size")}</strong>
+              <span class="modal-meta-k">${t("modalProduct.metaSize")}</span>
+              <strong class="modal-meta-v ${item.size ? "" : "missing"}">${escapeHtml(item.size || (currentLang === "zh" ? "常规 / 均码" : "Standard / One Size"))}</strong>
             </div>
             <div class="modal-meta-box">
-              <span class="modal-meta-k">Unit Weight</span>
+              <span class="modal-meta-k">${t("modalProduct.metaWeight")}</span>
               <strong class="modal-meta-v ${weight === null ? "missing" : ""}">${formatWeight(weight)}</strong>
               ${weight ? `<span class="modal-meta-sub">${((weight * 0.035274).toFixed(1))} oz / ${(weight / 1000).toFixed(2)} kg</span>` : ""}
             </div>
             <div class="modal-meta-box">
-              <span class="modal-meta-k">Recorded Price</span>
+              <span class="modal-meta-k">${t("modalProduct.metaPrice")}</span>
               <strong class="modal-meta-v ${hasPrice ? "" : "missing"}">${formatPrice(item)}</strong>
             </div>
             <div class="modal-meta-box">
-              <span class="modal-meta-k">Gear Type</span>
-              <strong class="modal-meta-v">${escapeHtml(item.itemType || "Gear")}</strong>
+              <span class="modal-meta-k">${t("modalProduct.metaType")}</span>
+              <strong class="modal-meta-v">${escapeHtml(item.itemType || (currentLang === "zh" ? "装备" : "Gear"))}</strong>
             </div>
             <div class="modal-meta-box">
-              <span class="modal-meta-k">Receipt / Invoice</span>
+              <span class="modal-meta-k">${t("modalProduct.metaReceipt")}</span>
               <strong class="modal-meta-v modal-meta-evidence">${escapeHtml((item.invoiceEvidence || []).join(", ") || item.provenance || "Workbook")}</strong>
             </div>
           </div>
 
           <div class="modal-pack-card" id="modal-pack-control-box">
             <div class="modal-pack-card-header">
-              <span class="modal-pack-trail-tag">EXPEDITION PACK</span>
+              <span class="modal-pack-trail-tag">${t("modalProduct.packTag")}</span>
               <strong class="modal-pack-trail-name">${escapeHtml(activeTrail?.name || "Active Trail")}</strong>
             </div>
             <div class="modal-pack-control-inner">
@@ -1163,10 +1897,10 @@ function openProductModal(item) {
 
           <div class="modal-item-manage-bar">
             <button class="btn-manage-edit" data-edit-id="${escapeHtml(item.id)}" type="button" title="Edit gear name, weight, price, and specs">
-              <span class="manage-btn-icon">✏️</span> Edit Gear Item
+              <span class="manage-btn-icon">✏️</span> ${t("modalProduct.btnEdit")}
             </button>
             <button class="btn-manage-delete" data-delete-id="${escapeHtml(item.id)}" type="button" title="Remove this item from your inventory">
-              <span class="manage-btn-icon">🗑️</span> Delete Item
+              <span class="manage-btn-icon">🗑️</span> ${t("modalProduct.btnDelete")}
             </button>
           </div>
         </div>
@@ -1193,24 +1927,24 @@ function closeProductModal() {
 
 function mediaMarkup(item) {
   if (!item.imagePath) {
-    return `<div class="card-media media-placeholder clickable-media" data-detail-id="${escapeHtml(item.id)}" aria-label="Product image not available" title="Click to view specs &amp; official website">
+    return `<div class="card-media media-placeholder clickable-media" data-detail-id="${escapeHtml(item.id)}" aria-label="Product image not available" title="${currentLang === "zh" ? "点击查看参数与官网" : "Click to view specs &amp; official website"}">
       <svg viewBox="0 0 180 120" aria-hidden="true"><circle cx="131" cy="35" r="16"/><path d="M8 101 55 47l30 35 19-21 62 40H8Z"/><path d="M8 110h158"/></svg>
-      <span>IMAGE TO ADD</span>
-      <span class="card-media-hover-hint">Inspect Specs ↗</span>
+      <span>${currentLang === "zh" ? "暂无实物图" : "IMAGE TO ADD"}</span>
+      <span class="card-media-hover-hint">${currentLang === "zh" ? "查看详情 ↗" : "Inspect Specs ↗"}</span>
     </div>`;
   }
   const alt = `${item.brand || ""} ${item.name || item.itemType || "gear"} product photo`.trim();
   const officialUrl = item.websiteUrl || item.imageSourceUrl;
   const domain = extractDomain(officialUrl);
   const credit = officialUrl
-    ? `<a class="photo-source" href="${escapeHtml(officialUrl)}" target="_blank" rel="noopener noreferrer" aria-label="Official website for ${escapeHtml(item.name || item.itemType)}" title="Official Brand Website: ${escapeHtml(domain)}">OFFICIAL SITE ↗</a>`
+    ? `<a class="photo-source" href="${escapeHtml(officialUrl)}" target="_blank" rel="noopener noreferrer" aria-label="Official website for ${escapeHtml(item.name || item.itemType)}" title="Official Brand Website: ${escapeHtml(domain)}">${currentLang === "zh" ? "官方网站 ↗" : "OFFICIAL SITE ↗"}</a>`
     : "";
-  return `<div class="card-media clickable-media" data-detail-id="${escapeHtml(item.id)}" title="Click to view specs &amp; official website"><img class="product-image" src="${escapeHtml(item.imagePath)}" alt="${escapeHtml(alt)}" loading="lazy" decoding="async" />${credit}<span class="card-media-hover-hint">Inspect Specs ↗</span></div>`;
+  return `<div class="card-media clickable-media" data-detail-id="${escapeHtml(item.id)}" title="${currentLang === "zh" ? "点击查看参数与官网" : "Click to view specs &amp; official website"}"><img class="product-image" src="${escapeHtml(item.imagePath)}" alt="${escapeHtml(alt)}" loading="lazy" decoding="async" />${credit}<span class="card-media-hover-hint">${currentLang === "zh" ? "查看详情 ↗" : "Inspect Specs ↗"}</span></div>`;
 }
 
 function renderCard(item, category) {
   const note = item.notes?.trim() ? `<p class="card-note">${escapeHtml(item.notes)}</p>` : "";
-  const quantityLabel = item.status === "Purchased · ownership to confirm" ? "Quantity on receipt" : "Quantity in inventory";
+  const quantityLabel = item.status === "Purchased · ownership to confirm" ? (currentLang === "zh" ? "单据数量" : "Quantity on receipt") : (currentLang === "zh" ? "库存数量" : "Quantity in inventory");
   const quantity = item.quantity && item.quantity !== 1 ? `<div class="item-qty">${quantityLabel}: ${escapeHtml(item.quantity)}</div>` : "";
   const evidence = Array.isArray(item.invoiceEvidence) ? item.invoiceEvidence.filter((source) => source !== "unmatched") : [];
   const source = evidence.length ? `<div class="card-source">${evidence.map(formatEvidence).map(escapeHtml).join(" · ")}</div>` : "";
@@ -1225,7 +1959,7 @@ function renderCard(item, category) {
   const isInactive = isInactiveStatus(item.statusKey);
   const isWishlist = item.statusKey === "wishlist";
   const isCustom = Boolean(item.isCustom || item.id?.startsWith("custom-gear-"));
-  const customBadge = isCustom ? `<span class="item-custom-pill" title="Custom user-added gear item">👤 自建装备</span>` : "";
+  const customBadge = isCustom ? `<span class="item-custom-pill" title="${t("chip.custom")}">${t("chip.custom")}</span>` : "";
 
   let packControl = "";
   if (isPacked) {
@@ -1234,20 +1968,22 @@ function renderCard(item, category) {
       <div class="card-stepper-display">
         <span class="card-stepper-qty-wrap">
           <input type="number" class="card-stepper-input" data-id="${escapeHtml(item.id)}" value="${packedQty}" min="1" max="99" aria-label="Quantity for ${escapeHtml(item.name || item.itemType)}" />
-          <span class="card-stepper-label">${isWishlist ? "in pack (trial)" : "in pack"}</span>
+          <span class="card-stepper-label">${isWishlist ? t("card.inTrial") : t("card.inPack")}</span>
         </span>
         <span class="card-stepper-weight">${formatWeight(lineWeight)}</span>
       </div>
       <button class="card-stepper-btn btn-card-plus" data-id="${escapeHtml(item.id)}" type="button" aria-label="Increase quantity" title="Increase packed quantity">+</button>
     </div>`;
   } else {
+    const trailName = escapeHtml(activeTrail?.name || (currentLang === "zh" ? "路线" : "Trail"));
+    const packText = isWishlist ? t("card.packTest", { trail: trailName }) : t("card.packAdd", { trail: trailName });
     packControl = `<button class="card-pack-btn ${isInactive ? "is-inactive-pack" : ""} ${isWishlist ? "btn-wishlist-pack" : ""}" data-pack-add="${escapeHtml(item.id)}" type="button" aria-pressed="false" ${isInactive ? `title="Item is ${escapeHtml(item.status || "Inactive")}"` : ""}>
-      + ${isWishlist ? "Test Pack (测重)" : "Pack for"} ${escapeHtml(activeTrail?.name || "Trail")} ${isInactive ? `(${escapeHtml(item.status)})` : ""}
+      ${packText} ${isInactive ? `(${escapeHtml(item.status)})` : ""}
     </button>`;
   }
 
   const packedBadge = isPacked
-    ? `<div class="card-packed-badge">✓ ${packedQty > 1 ? `${packedQty} IN PACK` : `IN ACTIVE PACK`}</div>`
+    ? `<div class="card-packed-badge">✓ ${packedQty > 1 ? t("card.packedBadgeMulti", { qty: packedQty }) : t("card.packedBadgeSingle")}</div>`
     : "";
 
   const inactiveBanner = isInactive
@@ -1255,10 +1991,26 @@ function renderCard(item, category) {
     : "";
 
   const wishlistRibbon = isWishlist
-    ? `<div class="card-wishlist-ribbon"><span>✨ WISH LIST · 想买待购</span><button class="btn-card-mark-bought" data-convert-id="${escapeHtml(item.id)}" type="button" title="I purchased this! Move to Owned / In Use kit">✓ Mark Bought (转为已拥有)</button></div>`
+    ? `<div class="card-wishlist-ribbon"><span>${t("card.wishlistRibbon")}</span><button class="btn-card-mark-bought" data-convert-id="${escapeHtml(item.id)}" type="button" title="${t("card.markBought")}">${t("card.markBought")}</button></div>`
     : "";
 
   const specBadge = getCardSpecBadge(item);
+
+  const statusOpts = [
+    { val: "想买", key: "wishlist" },
+    { val: "使用中", key: "in_use" },
+    { val: "Owned", key: "owned" },
+    { val: "Purchased · in inventory", key: "purchased" },
+    { val: "Gift", key: "gift" },
+    { val: "lost", key: "lost" },
+    { val: "不想要了准备卖掉", key: "selling" },
+    { val: "退货", key: "returned" },
+    { val: "Older gear · ownership to confirm", key: "older" },
+    { val: "Needs details", key: "review" },
+  ];
+  const statusOptionsHtml = statusOpts.map((opt) => `
+    <option value="${opt.val}" ${item.statusKey === opt.key ? "selected" : ""}>${t("status." + opt.key)}</option>
+  `).join("");
 
   return `<article class="gear-card ${isPacked ? "is-packed" : ""} ${isInactive ? `is-inactive-status status-${escapeHtml(item.statusKey)}` : ""} ${isWishlist ? "is-wishlist-item" : ""}" id="item-${escapeHtml(item.id)}" style="--section-color:${category.color}">
     ${wishlistRibbon}
@@ -1272,30 +2024,21 @@ function renderCard(item, category) {
         ${item.size ? `<span class="item-size-badge" title="Size / Capacity: ${escapeHtml(item.size)}">${escapeHtml(item.size)}</span>` : ""}
       </div>
       <div class="card-top-actions">
-        <select class="status-quick-select ${statusClass(item)}" data-status-id="${escapeHtml(item.id)}" title="Click to change status (点击切换状态)">
-          <option value="想买" ${item.statusKey === "wishlist" ? "selected" : ""}>✨ 想买 (Wishlist · 待购)</option>
-          <option value="使用中" ${item.statusKey === "in_use" ? "selected" : ""}>使用中</option>
-          <option value="Owned" ${item.statusKey === "owned" ? "selected" : ""}>Owned (已拥有)</option>
-          <option value="Purchased · in inventory" ${item.statusKey === "purchased" ? "selected" : ""}>Purchased (已购入)</option>
-          <option value="Gift" ${item.statusKey === "gift" ? "selected" : ""}>Gift (礼品)</option>
-          <option value="lost" ${item.statusKey === "lost" ? "selected" : ""}>lost (已丢失)</option>
-          <option value="不想要了准备卖掉" ${item.statusKey === "selling" ? "selected" : ""}>不想要了准备卖掉</option>
-          <option value="退货" ${item.statusKey === "returned" ? "selected" : ""}>退货</option>
-          <option value="Older gear · ownership to confirm" ${item.statusKey === "older" ? "selected" : ""}>Older gear (旧款)</option>
-          <option value="Needs details" ${item.statusKey === "review" ? "selected" : ""}>Needs details (待补充)</option>
+        <select class="status-quick-select ${statusClass(item)}" data-status-id="${escapeHtml(item.id)}" title="${currentLang === "zh" ? "点击切换状态" : "Click to change status"}">
+          ${statusOptionsHtml}
         </select>
-        <button class="card-mini-action btn-card-edit" data-edit-id="${escapeHtml(item.id)}" type="button" title="Edit this gear item" aria-label="Edit item">✏️</button>
-        <button class="card-mini-action btn-card-delete" data-delete-id="${escapeHtml(item.id)}" type="button" title="Delete this gear item from inventory" aria-label="Delete item">🗑️</button>
+        <button class="card-mini-action btn-card-edit" data-edit-id="${escapeHtml(item.id)}" type="button" title="${currentLang === "zh" ? "编辑此装备" : "Edit this gear item"}" aria-label="Edit item">✏️</button>
+        <button class="card-mini-action btn-card-delete" data-delete-id="${escapeHtml(item.id)}" type="button" title="${currentLang === "zh" ? "从装备库中删除" : "Delete this gear item from inventory"}" aria-label="Delete item">🗑️</button>
       </div>
     </div>
     <div class="card-brand">${escapeHtml(item.brand || "Brand not recorded")}</div>
-    <h4 class="card-title clickable-title" data-detail-id="${escapeHtml(item.id)}" title="Click to view specs &amp; official website">${escapeHtml(item.name || item.itemType || "Unnamed item")}</h4>
+    <h4 class="card-title clickable-title" data-detail-id="${escapeHtml(item.id)}" title="${currentLang === "zh" ? "点击查看规格与官网链接" : "Click to view specs & official website"}">${escapeHtml(item.name || item.itemType || "Unnamed item")}</h4>
     ${specBadge}
     ${note}
-    <div class="card-metrics"><div class="metric weight-metric"><span class="metric-lbl">⚖️ WEIGHT</span><strong class="metric-val ${weight === null ? "missing" : ""}">${formatWeight(weight)}</strong></div><div class="metric price-metric"><span class="metric-lbl">PRICE</span><strong class="metric-val ${hasPrice ? "" : "missing"}">${formatPrice(item)}</strong></div></div>
+    <div class="card-metrics"><div class="metric weight-metric"><span class="metric-lbl">${t("card.weight")}</span><strong class="metric-val ${weight === null ? "missing" : ""}">${formatWeight(weight)}</strong></div><div class="metric price-metric"><span class="metric-lbl">${t("card.price")}</span><strong class="metric-val ${hasPrice ? "" : "missing"}">${formatPrice(item)}</strong></div></div>
     ${quantity}
-    <button class="card-detail-btn" data-detail-id="${escapeHtml(item.id)}" type="button" title="View technical specs, features, and official brand link">
-      <span>Specs &amp; Details</span>
+    <button class="card-detail-btn" data-detail-id="${escapeHtml(item.id)}" type="button" title="${currentLang === "zh" ? "查看技术规格与官方链接" : "View technical specs, features, and official brand link"}">
+      <span>${t("card.detailsBtn")}</span>
       <span class="detail-link-arrow">↗</span>
     </button>
     ${packControl}
@@ -1378,16 +2121,16 @@ function renderDonutChart(metrics) {
   const C = 2 * Math.PI * 90; // ~565.487
 
   function resetDonutCenter() {
-    if (centerSub) centerSub.textContent = "BASE WEIGHT";
+    if (centerSub) centerSub.textContent = t("chart.baseWeight");
     if (centerWeight) centerWeight.textContent = formatWeight(metrics.baseWeightG);
-    if (centerCat) centerCat.innerHTML = `<span style="opacity:0.75;">●</span> ${formatWeight(metrics.totalPackWeightG)} Carried`;
+    if (centerCat) centerCat.innerHTML = `<span style="opacity:0.75;">●</span> ${formatWeight(metrics.totalPackWeightG)} ${currentLang === "zh" ? "背负" : "Carried"}`;
   }
 
   if (totalW <= 0) {
     svg.innerHTML = `<circle cx="130" cy="130" r="90" fill="transparent" stroke="#e0e7df" stroke-width="32" stroke-dasharray="${C.toFixed(2)} 0"></circle>`;
-    if (centerSub) centerSub.textContent = "EMPTY PACK";
+    if (centerSub) centerSub.textContent = t("tier.empty");
     if (centerWeight) centerWeight.textContent = formatWeight(0);
-    if (centerCat) centerCat.textContent = "0 items packed";
+    if (centerCat) centerCat.textContent = currentLang === "zh" ? "0 件装备已打包" : "0 items packed";
   } else {
     let accumulatedOffset = 0;
     let circlesHtml = `<g transform="rotate(-90 130 130)">`;
@@ -1430,9 +2173,9 @@ function renderDonutChart(metrics) {
         });
         seg.style.strokeWidth = "40px";
         seg.style.opacity = "1";
-        if (centerSub) centerSub.textContent = `${seg.dataset.pct}% OF PACK`;
+        if (centerSub) centerSub.textContent = `${seg.dataset.pct}% ${currentLang === "zh" ? "背负占比" : "OF PACK"}`;
         if (centerWeight) centerWeight.textContent = formatWeight(parseFloat(seg.dataset.weight));
-        if (centerCat) centerCat.innerHTML = `<span style="color:${seg.dataset.color}">●</span> ${seg.dataset.category}`;
+        if (centerCat) centerCat.innerHTML = `<span style="color:${seg.dataset.color}">●</span> ${getCategoryDisplayName(seg.dataset.category)}`;
       });
 
       seg.addEventListener("mouseleave", () => {
@@ -1452,7 +2195,7 @@ function renderDonutChart(metrics) {
       const pct = totalW > 0 ? ((catWeight / totalW) * 100).toFixed(1) : "0.0";
       return `<div class="legend-item" data-category="${escapeHtml(cat.name)}" style="cursor:pointer;">
         <span class="legend-dot" style="background:${cat.color}"></span>
-        <span>${escapeHtml(cat.name)}</span>
+        <span>${escapeHtml(getCategoryDisplayName(cat.name))}</span>
         <strong>${formatWeight(catWeight)}</strong>
         <small style="color:#78887b">(${pct}%)</small>
       </div>`;
@@ -1485,7 +2228,7 @@ function renderDonutChart(metrics) {
 
 function renderCategoryProgressBar(metrics) {
   if (elements.categoryBarTotalLabel) {
-    elements.categoryBarTotalLabel.textContent = `${formatWeight(metrics.totalPackWeightG, { full: true })}`;
+    elements.categoryBarTotalLabel.textContent = `${formatWeight(metrics.totalPackWeightG, { full: true })} ${currentLang === "zh" ? "总重" : "Total"}`;
   }
   if (elements.categoryProgressBar) {
     if (metrics.totalPackWeightG > 0) {
@@ -1493,10 +2236,10 @@ function renderCategoryProgressBar(metrics) {
         const catWeight = metrics.categoryWeights[cat.name] || 0;
         const pct = ((catWeight / metrics.totalPackWeightG) * 100).toFixed(1);
         if (catWeight <= 0) return "";
-        return `<div class="category-segment" style="width:${pct}%; background:${cat.color};" title="${cat.name}: ${formatWeight(catWeight)} (${pct}%)"></div>`;
+        return `<div class="category-segment" style="width:${pct}%; background:${cat.color};" title="${getCategoryDisplayName(cat.name)}: ${formatWeight(catWeight)} (${pct}%)"></div>`;
       }).join("");
     } else {
-      elements.categoryProgressBar.innerHTML = `<div class="category-segment" style="width:100%; background:#d5dcd2;" title="Empty pack"></div>`;
+      elements.categoryProgressBar.innerHTML = `<div class="category-segment" style="width:100%; background:#d5dcd2;" title="${t("tier.empty")}"></div>`;
     }
   }
 
@@ -1504,7 +2247,7 @@ function renderCategoryProgressBar(metrics) {
     elements.categoryBarLegend.innerHTML = categories.map((cat) => {
       const catWeight = metrics.categoryWeights[cat.name] || 0;
       const pct = metrics.totalPackWeightG > 0 ? ((catWeight / metrics.totalPackWeightG) * 100).toFixed(0) : 0;
-      return `<div class="legend-item"><span class="legend-dot" style="background:${cat.color}"></span><span>${cat.name}</span><strong>${formatWeight(catWeight)}</strong> <small style="color:#809083">(${pct}%)</small></div>`;
+      return `<div class="legend-item"><span class="legend-dot" style="background:${cat.color}"></span><span>${getCategoryDisplayName(cat.name)}</span><strong>${formatWeight(catWeight)}</strong> <small style="color:#809083">(${pct}%)</small></div>`;
     }).join("");
   }
 }
@@ -1529,21 +2272,21 @@ function renderPlanner() {
   // 2. Banner
   if (elements.bannerTrailName) {
     elements.bannerTrailName.textContent = trail.name;
-    elements.bannerRegion.textContent = trail.destination || "Expedition Region";
-    elements.bannerDistance.textContent = trail.distanceKm ? `${trail.distanceKm} km` : "Distance TBD";
-    elements.bannerDuration.textContent = trail.durationDays ? `${trail.durationDays} Days` : "Days TBD";
-    elements.bannerDate.textContent = trail.date || "Date not set";
-    elements.bannerNotes.textContent = trail.notes || "No specific field notes recorded for this trail yet.";
+    elements.bannerRegion.textContent = trail.destination || (currentLang === "zh" ? "探险区域" : "Expedition Region");
+    elements.bannerDistance.textContent = trail.distanceKm ? `${trail.distanceKm} km` : (currentLang === "zh" ? "里程待定" : "Distance TBD");
+    elements.bannerDuration.textContent = trail.durationDays ? t("banner.days", { n: trail.durationDays }) : t("banner.daysTbd");
+    elements.bannerDate.textContent = trail.date ? (currentLang === "zh" ? `出行时间：${trail.date}` : `Date: ${trail.date}`) : (currentLang === "zh" ? "时间待定" : "Date not set");
+    elements.bannerNotes.textContent = trail.notes || (currentLang === "zh" ? "该路线暂无备忘记录。" : "No specific field notes recorded for this trail yet.");
 
     const statusMap = {
-      planned: "Planned · Next Destination",
-      "in-progress": "In Progress · On Trail",
-      completed: "Completed · Hiked",
+      planned: t("banner.status.planned"),
+      "in-progress": t("banner.status.in-progress"),
+      completed: t("banner.status.completed"),
     };
     elements.bannerStatusPill.className = `trail-status-pill ${trail.status || "planned"}`;
-    elements.bannerStatusPill.textContent = statusMap[trail.status] || "Planned";
+    elements.bannerStatusPill.textContent = statusMap[trail.status] || t("banner.status.planned");
 
-    elements.btnToggleCompleteTrail.textContent = trail.status === "completed" ? "↩ Revert to Planned" : "✓ Mark as Completed";
+    elements.btnToggleCompleteTrail.textContent = trail.status === "completed" ? t("banner.revertPlanned") : t("banner.markComplete");
   }
 
   // 3. Weight Dashboard (5 Ultralight Metrics)
@@ -1565,14 +2308,18 @@ function renderPlanner() {
     if (isImp) {
       elements.metricTotalG.textContent = totalLb.toFixed(2);
       if (elements.metricTotalUnit) elements.metricTotalUnit.textContent = "lb";
-      elements.metricTotalKg.textContent = `${totalOz.toFixed(1)} oz carried load on back`;
+      elements.metricTotalKg.textContent = t("metric.carried.sub", { wt: `${totalOz.toFixed(1)} oz` });
     } else {
       elements.metricTotalG.textContent = new Intl.NumberFormat("en-AU").format(metrics.totalPackWeightG);
       if (elements.metricTotalUnit) elements.metricTotalUnit.textContent = "g";
       if (metrics.wishlistItemsCount > 0) {
-        elements.metricTotalKg.innerHTML = `<strong>${(metrics.ownedWeightG / 1000).toFixed(2)} kg</strong> owned + <strong>${(metrics.wishlistWeightG / 1000).toFixed(2)} kg</strong> wishlist (${metrics.wishlistItemsCount} items)`;
+        elements.metricTotalKg.innerHTML = t("metric.carried.wishSub", {
+          owned: (metrics.ownedWeightG / 1000).toFixed(2),
+          wish: (metrics.wishlistWeightG / 1000).toFixed(2),
+          count: metrics.wishlistItemsCount
+        });
       } else {
-        elements.metricTotalKg.textContent = `${metrics.totalPackWeightKg.toFixed(2)} kg carried load on back`;
+        elements.metricTotalKg.textContent = t("metric.carried.sub", { wt: `${metrics.totalPackWeightKg.toFixed(2)} kg` });
       }
     }
 
@@ -1580,11 +2327,11 @@ function renderPlanner() {
     if (isImp) {
       elements.metricBaseG.textContent = baseLb.toFixed(2);
       if (elements.metricBaseUnit) elements.metricBaseUnit.textContent = "lb";
-      elements.metricBaseKg.textContent = `${baseOz.toFixed(1)} oz pack base weight`;
+      elements.metricBaseKg.textContent = t("metric.base.sub", { wt: `${baseOz.toFixed(1)} oz` });
     } else {
       elements.metricBaseG.textContent = new Intl.NumberFormat("en-AU").format(metrics.baseWeightG);
       if (elements.metricBaseUnit) elements.metricBaseUnit.textContent = "g";
-      elements.metricBaseKg.textContent = `${metrics.baseWeightKg.toFixed(2)} kg pack base weight`;
+      elements.metricBaseKg.textContent = t("metric.base.sub", { wt: `${metrics.baseWeightKg.toFixed(2)} kg` });
     }
 
     const baseKg = metrics.baseWeightKg;
@@ -1592,16 +2339,16 @@ function renderPlanner() {
     if (tierEl) {
       if (metrics.baseWeightG <= 0) {
         tierEl.className = "base-tier-pill";
-        tierEl.textContent = "EMPTY PACK";
+        tierEl.textContent = t("tier.empty");
       } else if (baseKg < 4.536) {
         tierEl.className = "base-tier-pill ultralight";
-        tierEl.textContent = "🟢 ULTRALIGHT (< 4.5kg)";
+        tierEl.textContent = t("tier.ultralight");
       } else if (baseKg < 9.072) {
         tierEl.className = "base-tier-pill lightweight";
-        tierEl.textContent = "🟡 LIGHTWEIGHT (4.5-9kg)";
+        tierEl.textContent = t("tier.lightweight");
       } else {
         tierEl.className = "base-tier-pill traditional";
-        tierEl.textContent = "⚪ TRADITIONAL (> 9kg)";
+        tierEl.textContent = t("tier.standard");
       }
     }
 
@@ -1610,11 +2357,11 @@ function renderPlanner() {
       if (isImp) {
         elements.metricWornG.textContent = wornLb.toFixed(2);
         if (elements.metricWornUnit) elements.metricWornUnit.textContent = "lb";
-        elements.metricWornSub.textContent = `${wornOz.toFixed(1)} oz shoes, clothes & poles (${metrics.wornItemsCount} items)`;
+        elements.metricWornSub.textContent = t("metric.worn.sub", { wt: `${wornOz.toFixed(1)} oz` }) + (currentLang === "zh" ? ` (${metrics.wornItemsCount} 件)` : ` (${metrics.wornItemsCount} items)`);
       } else {
         elements.metricWornG.textContent = new Intl.NumberFormat("en-AU").format(metrics.wornWeightG);
         if (elements.metricWornUnit) elements.metricWornUnit.textContent = "g";
-        elements.metricWornSub.textContent = `${(metrics.wornWeightG / 1000).toFixed(2)} kg shoes, clothes & poles (${metrics.wornItemsCount} items)`;
+        elements.metricWornSub.textContent = t("metric.worn.sub", { wt: `${(metrics.wornWeightG / 1000).toFixed(2)} kg` }) + (currentLang === "zh" ? ` (${metrics.wornItemsCount} 件)` : ` (${metrics.wornItemsCount} items)`);
       }
     }
 
@@ -1623,11 +2370,11 @@ function renderPlanner() {
       if (isImp) {
         elements.metricSkinoutG.textContent = skinLb.toFixed(2);
         if (elements.metricSkinoutUnit) elements.metricSkinoutUnit.textContent = "lb";
-        elements.metricSkinoutSub.textContent = `${skinOz.toFixed(1)} oz total carried + worn load`;
+        elements.metricSkinoutSub.textContent = t("metric.skinout.sub", { wt: `${skinOz.toFixed(1)} oz` });
       } else {
         elements.metricSkinoutG.textContent = new Intl.NumberFormat("en-AU").format(metrics.skinOutWeightG);
         if (elements.metricSkinoutUnit) elements.metricSkinoutUnit.textContent = "g";
-        elements.metricSkinoutSub.textContent = `${(metrics.skinOutWeightG / 1000).toFixed(2)} kg pack load + worn on body`;
+        elements.metricSkinoutSub.textContent = t("metric.skinout.sub", { wt: `${(metrics.skinOutWeightG / 1000).toFixed(2)} kg` });
       }
     }
 
@@ -1641,8 +2388,8 @@ function renderPlanner() {
         if (elements.metricWishlistUnit) elements.metricWishlistUnit.textContent = "g";
       }
       elements.metricWishlistSummary.textContent = metrics.wishlistItemsCount > 0
-        ? `✨ ${metrics.wishlistItemsCount} prospective item(s) on trial in pack`
-        : "0 prospective items on trial";
+        ? `✨ ${t("metric.wishlist.sub", { count: metrics.wishlistItemsCount })}`
+        : t("metric.wishlist.sub", { count: 0 });
     }
   }
 
@@ -1680,7 +2427,7 @@ function renderPlanner() {
     if (metrics.missingCount > 0) {
       elements.missingWeightsAlert.hidden = false;
       elements.missingWeightsAlert.style.display = "flex";
-      elements.missingWeightsText.textContent = `${metrics.missingCount} packed item${metrics.missingCount > 1 ? "s do" : " does"} not have listed weight recorded and ${metrics.missingCount > 1 ? "are" : "is"} excluded from the total calculation.`;
+      elements.missingWeightsText.textContent = t("missing.text", { count: metrics.missingCount });
     } else {
       elements.missingWeightsAlert.hidden = true;
       elements.missingWeightsAlert.style.display = "none";
@@ -1695,9 +2442,9 @@ function renderPlanner() {
     if (!packedEntries.length) {
       elements.packedItemsList.innerHTML = `<div class="empty-pack">
         <svg viewBox="0 0 24 24" width="48" height="48" fill="none" stroke="#92a294" stroke-width="1.2"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
-        <h4>Pack is currently empty</h4>
-        <p>You haven't selected any gears for ${escapeHtml(trail.name)} yet. Browse the inventory below and click <strong>+ Pack for ${escapeHtml(trail.name)}</strong> on any item.</p>
-        <a class="btn-primary" href="#collection">Browse Gear Collection ↓</a>
+        <h4>${t("packed.emptyTitle")}</h4>
+        <p>${t("packed.emptyDesc", { name: escapeHtml(trail.name) })}</p>
+        <a class="btn-primary" href="#collection">${currentLang === "zh" ? "在下方挑选装备 ↓" : "Browse Gear Collection ↓"}</a>
       </div>`;
     } else {
       let html = "";
@@ -1713,10 +2460,11 @@ function renderPlanner() {
           return acc + (item.unitWeightG * qty) / split;
         }, 0);
 
+        const catCountText = currentLang === "zh" ? `${catItems.length} 件` : `${catItems.length} items`;
         html += `<div class="packed-category-group" style="--group-color:${cat.color}">
           <div class="packed-category-title">
-            <span>${cat.name} (${catItems.length} items)</span>
-            <span>Subtotal: ${formatWeight(catSubtotal)}</span>
+            <span>${getCategoryDisplayName(cat.name)} (${catCountText})</span>
+            <span>${t("packed.subtotal", { wt: formatWeight(catSubtotal) })}</span>
           </div>`;
 
         for (const { item, qty } of catItems) {
@@ -1733,19 +2481,19 @@ function renderPlanner() {
           const fullLineWeight = unitW !== null ? unitW * qty : null;
           const effectiveLineWeight = unitW !== null ? fullLineWeight / splitRatio : null;
 
-          const wishlistChip = isWishlist ? `<span class="packed-wishlist-chip" title="Prospective gear tested in pack">✨ 想买待购</span>` : "";
-          const wornChip = isWorn ? `<span class="packed-worn-chip" title="Worn on body (excluded from backpack weight)">👕 Worn</span>` : "";
-          const sharedChip = isShared ? `<span class="packed-shared-chip" title="Shared with ${splitRatio} teammates">👥 1/${splitRatio} Share</span>` : "";
+          const wishlistChip = isWishlist ? `<span class="packed-wishlist-chip" title="${currentLang === "zh" ? "心愿单装备试装中" : "Prospective gear tested in pack"}">${t("chip.wishlist")}</span>` : "";
+          const wornChip = isWorn ? `<span class="packed-worn-chip" title="${currentLang === "zh" ? "随身穿戴（不计入背负重量）" : "Worn on body (excluded from backpack weight)"}">${t("chip.worn")}</span>` : "";
+          const sharedChip = isShared ? `<span class="packed-shared-chip" title="${currentLang === "zh" ? `与 ${splitRatio} 名队友平摊重量` : `Shared with ${splitRatio} teammates`}">${t("chip.shared", { split: splitRatio })}</span>` : "";
 
           const convertBtn = isWishlist
-            ? `<button class="btn-pack-mark-bought" data-convert-id="${escapeHtml(item.id)}" type="button" title="I purchased this! Move to Owned collection">✓ Bought</button>`
+            ? `<button class="btn-pack-mark-bought" data-convert-id="${escapeHtml(item.id)}" type="button" title="${currentLang === "zh" ? "我已购入此装备！转入我的装备库" : "I purchased this! Move to Owned collection"}">${t("chip.bought")}</button>`
             : "";
 
           html += `<div class="packed-item-row ${isWishlist ? "is-wishlist-packed-row" : ""} ${isWorn ? "is-worn-row" : ""}" data-item-id="${escapeHtml(item.id)}">
             ${thumb}
             <div class="packed-item-details">
               <div class="packed-item-brand">
-                <span>${escapeHtml(item.brand || "Brand not recorded")}</span>
+                <span>${escapeHtml(item.brand || (currentLang === "zh" ? "品牌待补充" : "Brand not recorded"))}</span>
                 ${wishlistChip}
                 ${wornChip}
                 ${sharedChip}
@@ -1754,10 +2502,10 @@ function renderPlanner() {
             </div>
 
             <div class="packed-item-modifiers">
-              <button class="btn-toggle-worn ${isWorn ? "active" : ""}" data-worn-id="${escapeHtml(item.id)}" type="button" title="${isWorn ? "Move to backpack carried load" : "Mark as worn on body (excludes from backpack weight)"}">
-                ${isWorn ? "👕 Worn" : "🎒 In Pack"}
+              <button class="btn-toggle-worn ${isWorn ? "active" : ""}" data-worn-id="${escapeHtml(item.id)}" type="button" title="${isWorn ? (currentLang === "zh" ? "移回背包背负" : "Move to backpack carried load") : (currentLang === "zh" ? "设为随身穿戴（不计入背重）" : "Mark as worn on body (excludes from backpack weight)")}">
+                ${isWorn ? t("chip.worn") : (currentLang === "zh" ? "🎒 上包" : "🎒 In Pack")}
               </button>
-              <button class="btn-toggle-shared ${isShared ? "active" : ""}" data-shared-id="${escapeHtml(item.id)}" type="button" title="Split gear weight with partner (current: 1/${splitRatio})">
+              <button class="btn-toggle-shared ${isShared ? "active" : ""}" data-shared-id="${escapeHtml(item.id)}" type="button" title="${currentLang === "zh" ? `均分队友重量 (当前: 1/${splitRatio})` : `Split gear weight with partner (current: 1/${splitRatio})`}">
                 👥 1/${splitRatio}
               </button>
               ${convertBtn}
@@ -1771,8 +2519,8 @@ function renderPlanner() {
 
             <div class="packed-item-weight">
               ${formatWeight(effectiveLineWeight)}
-              ${isShared ? `<small class="shared-weight-detail">Full: ${formatWeight(fullLineWeight)}</small>` : (qty > 1 && unitW ? `<small>${formatWeight(unitW)} each</small>` : "")}
-              ${isWorn ? `<small class="worn-weight-note">(worn)</small>` : ""}
+              ${isShared ? `<small class="shared-weight-detail">${currentLang === "zh" ? "单件全重" : "Full"}: ${formatWeight(fullLineWeight)}</small>` : (qty > 1 && unitW ? `<small>${formatWeight(unitW)} ${currentLang === "zh" ? "单件" : "each"}</small>` : "")}
+              ${isWorn ? `<small class="worn-weight-note">(${currentLang === "zh" ? "穿戴" : "worn"})</small>` : ""}
             </div>
 
             <button class="packed-item-remove" data-id="${escapeHtml(item.id)}" type="button" aria-label="Remove ${escapeHtml(item.name)} from pack">✕</button>
@@ -1809,9 +2557,9 @@ function renderTrailLog() {
     const metrics = calculatePackMetrics(t);
     const isActive = t.id === activeTrailId;
     const statusMap = {
-      planned: "Planned · Upcoming",
-      "in-progress": "In Progress · Active",
-      completed: "Completed · Hiked",
+      planned: t("banner.status.planned"),
+      "in-progress": t("banner.status.in-progress"),
+      completed: t("banner.status.completed"),
     };
 
     const packedNames = Object.entries(t.pack || {})
@@ -1823,37 +2571,37 @@ function renderTrailLog() {
 
     return `<article class="trail-card ${isActive ? "is-active-trail" : ""}" data-trail-id="${escapeHtml(t.id)}">
       <div class="trail-card-top">
-        <span class="trail-status-pill ${t.status || "planned"}">${statusMap[t.status] || "Planned"}</span>
+        <span class="trail-status-pill ${t.status || "planned"}">${statusMap[t.status] || t("banner.status.planned")}</span>
         <span style="font-size:11px; font-weight:700; color:#78867a;">${escapeHtml(t.date || "")}</span>
       </div>
       <h3>${escapeHtml(t.name)}</h3>
-      <div class="trail-card-region">📍 ${escapeHtml(t.destination || "Expedition route")}</div>
+      <div class="trail-card-region">📍 ${escapeHtml(t.destination || (currentLang === "zh" ? "探险路线" : "Expedition route"))}</div>
       
       <div class="trail-card-metrics">
         <div class="trail-card-metric">
-          <span>Distance</span>
+          <span>${t("log.distance")}</span>
           <strong>${t.distanceKm ? `${t.distanceKm} km` : "—"}</strong>
         </div>
         <div class="trail-card-metric">
-          <span>Duration</span>
-          <strong>${t.durationDays ? `${t.durationDays} Days` : "—"}</strong>
+          <span>${t("log.duration")}</span>
+          <strong>${t.durationDays ? t("banner.days", { n: t.durationDays }) : "—"}</strong>
         </div>
         <div class="trail-card-metric">
-          <span>Pack Load</span>
+          <span>${t("log.packLoad")}</span>
           <strong>${metrics.totalWeightKg.toFixed(2)} kg</strong>
         </div>
       </div>
 
-      <p class="trail-card-notes">${escapeHtml(t.notes || "No notes recorded.")}</p>
+      <p class="trail-card-notes">${escapeHtml(t.notes || (currentLang === "zh" ? "暂无详细记录。" : "No notes recorded."))}</p>
 
-      ${packedNames ? `<div class="trail-card-gear-summary"><span>🎒</span><span>${metrics.totalItems} items (${escapeHtml(packedNames)}...)</span></div>` : ""}
+      ${packedNames ? `<div class="trail-card-gear-summary"><span>🎒</span><span>${metrics.totalItems} ${currentLang === "zh" ? "件装备" : "items"} (${escapeHtml(packedNames)}...)</span></div>` : ""}
 
       <div class="trail-card-actions">
         ${isActive
-          ? `<button class="btn-primary btn-pack-now" data-id="${escapeHtml(t.id)}" type="button">🎒 Currently Active (Pack Gear Below ↓)</button>`
-          : `<button class="btn-primary btn-switch-trail" data-id="${escapeHtml(t.id)}" type="button">🎒 Pack for this Trail ↓</button>`}
-        <button class="btn-secondary btn-view-weights" data-id="${escapeHtml(t.id)}" type="button">📊 Weights</button>
-        <button class="btn-secondary btn-edit-trail-card" data-id="${escapeHtml(t.id)}" type="button">Edit</button>
+          ? `<button class="btn-primary btn-pack-now" data-id="${escapeHtml(t.id)}" type="button">${t("log.btnActive")}</button>`
+          : `<button class="btn-primary btn-switch-trail" data-id="${escapeHtml(t.id)}" type="button">${t("log.btnPack")}</button>`}
+        <button class="btn-secondary btn-view-weights" data-id="${escapeHtml(t.id)}" type="button">${t("log.btnWeights")}</button>
+        <button class="btn-secondary btn-edit-trail-card" data-id="${escapeHtml(t.id)}" type="button">${t("log.btnEdit")}</button>
       </div>
     </article>`;
   }).join("");
@@ -1899,28 +2647,28 @@ function render() {
       if (elements.statWishlistPacked) elements.statWishlistPacked.textContent = packedWishlistCount;
       if (elements.statWishlistCost) elements.statWishlistCost.textContent = `$${new Intl.NumberFormat("en-AU").format(totalWishlistCost)} AUD`;
     }
-    if (elements.collectionKicker) elements.collectionKicker.textContent = "✨ PROSPECTIVE GEAR LAB & UPGRADE SIMULATOR";
-    if (elements.collectionTitle) elements.collectionTitle.textContent = "Wishlist & Trail Weight Trials.";
-    if (elements.collectionDesc) elements.collectionDesc.textContent = "Prospective gear you plan to buy or test. Adjust pack quantities to simulate trail load, compare weight differences, and one-click convert to Owned once purchased.";
+    if (elements.collectionKicker) elements.collectionKicker.textContent = t("wishlist.kicker");
+    if (elements.collectionTitle) elements.collectionTitle.textContent = t("wishlist.title");
+    if (elements.collectionDesc) elements.collectionDesc.textContent = t("wishlist.desc", { trail: activeTrail?.name || "" });
   } else {
     if (elements.wishlistHeroBanner) elements.wishlistHeroBanner.hidden = true;
-    if (elements.collectionKicker) elements.collectionKicker.textContent = currentViewMode === "all" ? "COMPLETE REPERTOIRE" : "MASTER GEAR INVENTORY";
-    if (elements.collectionTitle) elements.collectionTitle.textContent = currentViewMode === "all" ? "All Owned & Planned Gear." : "Built for the trail.";
-    if (elements.collectionDesc) elements.collectionDesc.textContent = currentViewMode === "all" ? "Explore all items in your kit, including currently owned equipment and prospective wishlist candidates." : "Browse by system, search for a specific piece, or compare recorded weight and price across your owned kit.";
+    if (elements.collectionKicker) elements.collectionKicker.textContent = currentViewMode === "all" ? (currentLang === "zh" ? "全套装备总览" : "COMPLETE REPERTOIRE") : t("collection.kicker");
+    if (elements.collectionTitle) elements.collectionTitle.textContent = currentViewMode === "all" ? (currentLang === "zh" ? "全部已拥有与想买装备" : "All Owned & Planned Gear.") : t("collection.title");
+    if (elements.collectionDesc) elements.collectionDesc.textContent = currentViewMode === "all" ? (currentLang === "zh" ? "浏览装备库内全部装备，包含现役已拥有物品及想买候选清单。" : "Explore all items in your kit, including currently owned equipment and prospective wishlist candidates.") : t("collection.desc");
   }
 
   const items = filteredItems();
-  elements.count.textContent = `SHOWING ${items.length} OF ${gear.length} ITEMS`;
+  elements.count.textContent = t("search.showing", { shown: items.length, total: gear.length });
   elements.empty.hidden = items.length !== 0;
   elements.nav.innerHTML = categories.map((category) => {
     const count = items.filter((item) => item.category === category.name).length;
-    return count ? `<a href="#${category.id}">${category.name}<small>${String(count).padStart(2, "0")}</small></a>` : "";
+    return count ? `<a href="#${category.id}">${getCategoryDisplayName(category.name)}<small>${String(count).padStart(2, "0")}</small></a>` : "";
   }).join("");
   elements.sections.innerHTML = categories.map((category, index) => {
     const categoryItems = sortedItems(items.filter((item) => item.category === category.name));
     if (!categoryItems.length) return "";
     return `<section class="gear-section" id="${category.id}" aria-labelledby="${category.id}-title" style="--section-color:${category.color}">
-      <div class="section-heading"><div class="section-heading-left"><span class="section-number">${String(index + 1).padStart(2, "0")}</span><h3 id="${category.id}-title">${category.name}</h3></div><p>${category.description}</p></div>
+      <div class="section-heading"><div class="section-heading-left"><span class="section-number">${String(index + 1).padStart(2, "0")}</span><h3 id="${category.id}-title">${getCategoryDisplayName(category.name)}</h3></div><p>${getCategoryDescription(category.name)}</p></div>
       <div class="gear-grid">${categoryItems.map((item) => renderCard(item, category)).join("")}</div>
     </section>`;
   }).join("");
@@ -1940,7 +2688,7 @@ function openTrailModal(trail = null) {
   if (!elements.trailModal) return;
   elements.trailForm.reset();
   if (trail) {
-    elements.modalTrailTitle.textContent = "Edit Trail Details";
+    elements.modalTrailTitle.textContent = currentLang === "zh" ? "编辑徒步路线" : "Edit Trail Details";
     elements.formTrailId.value = trail.id;
     elements.formTrailName.value = trail.name || "";
     elements.formTrailDestination.value = trail.destination || "";
@@ -1950,13 +2698,13 @@ function openTrailModal(trail = null) {
     elements.formTrailDate.value = trail.date || "";
     elements.formTrailNotes.value = trail.notes || "";
     if (elements.formTemplateRow) elements.formTemplateRow.style.display = "none";
-    if (elements.btnSubmitTrail) elements.btnSubmitTrail.textContent = "Save Changes";
+    if (elements.btnSubmitTrail) elements.btnSubmitTrail.textContent = currentLang === "zh" ? "保存修改" : "Save Changes";
   } else {
-    elements.modalTrailTitle.textContent = "Plan a New Expedition (新建徒步计划)";
+    elements.modalTrailTitle.textContent = t("modalTrail.title");
     elements.formTrailId.value = "";
     elements.formTrailStatus.value = "planned";
     if (elements.formTemplateRow) elements.formTemplateRow.style.display = "block";
-    if (elements.btnSubmitTrail) elements.btnSubmitTrail.textContent = "Save & Start Packing Gear ↓";
+    if (elements.btnSubmitTrail) elements.btnSubmitTrail.textContent = t("modalTrail.submit");
   }
   elements.trailModal.classList.add("open");
   elements.formTrailName.focus();
@@ -2670,7 +3418,7 @@ function openGearModal(item = null, defaultStatus = null) {
   if (item) {
     if (elements.gearEntryModes) elements.gearEntryModes.hidden = true;
     if (elements.catalogQuickfillBox) elements.catalogQuickfillBox.hidden = true;
-    elements.modalGearTitle.textContent = "Edit Gear Item (编辑装备)";
+    elements.modalGearTitle.textContent = t("modalGear.editTitle");
     elements.formGearId.value = item.id;
     elements.formGearName.value = item.name || item.itemType || "";
     elements.formGearBrand.value = item.brand || "";
@@ -2707,7 +3455,7 @@ function openGearModal(item = null, defaultStatus = null) {
 
     elements.formGearFeatures.value = (item.features || []).join("\n");
     elements.formGearNotes.value = item.notes || "";
-    elements.btnSubmitGear.textContent = "Save Changes (保存修改)";
+    elements.btnSubmitGear.textContent = currentLang === "zh" ? "保存修改" : "Save Changes";
   } else {
     if (elements.gearEntryModes) {
       elements.gearEntryModes.hidden = false;
@@ -2731,13 +3479,13 @@ function openGearModal(item = null, defaultStatus = null) {
     if (elements.scraperClearUrlBtn) elements.scraperClearUrlBtn.hidden = true;
 
     const isWishlistAdd = defaultStatus === "想买" || currentViewMode === "wishlist";
-    elements.modalGearTitle.textContent = isWishlistAdd ? "Add Wishlist Item (添加想买装备)" : "Add New Gear Item (新增装备到清单)";
+    elements.modalGearTitle.textContent = isWishlistAdd ? t("modalGear.addWishTitle") : t("modalGear.addTitle");
     elements.formGearId.value = "";
     elements.formGearCurrency.value = "AUD";
     elements.formGearStatus.value = isWishlistAdd ? "想买" : "使用中";
     elements.formGearCategory.value = "Sleep & Shelter";
     if (elements.formGearSize) elements.formGearSize.value = "";
-    elements.btnSubmitGear.textContent = isWishlistAdd ? "Add to Wishlist (添加至想买清单)" : "Add to Inventory (添加至清单)";
+    elements.btnSubmitGear.textContent = isWishlistAdd ? (currentLang === "zh" ? "添加至想买清单" : "Add to Wishlist") : (currentLang === "zh" ? "添加至装备库" : "Add to Inventory");
   }
   elements.gearModal.classList.add("open");
   if (currentEntryMode === "catalog" && elements.catalogSearchInput) {
@@ -2817,6 +3565,7 @@ async function init() {
       }
     }
 
+    applyLanguage(currentLang);
     updateInventoryStats();
     render();
   } catch (error) {
@@ -2825,6 +3574,25 @@ async function init() {
     console.error(error);
   }
 }
+
+// Language Switcher Events
+elements.btnLangZh?.addEventListener("click", () => {
+  if (currentLang !== "zh") {
+    applyLanguage("zh");
+    updateInventoryStats();
+    render();
+    showToast(t("toast.langSwitched"));
+  }
+});
+
+elements.btnLangEn?.addEventListener("click", () => {
+  if (currentLang !== "en") {
+    applyLanguage("en");
+    updateInventoryStats();
+    render();
+    showToast(t("toast.langSwitched"));
+  }
+});
 
 // Event Listeners
 for (const control of [elements.search, elements.status, elements.sort]) control.addEventListener("input", render);

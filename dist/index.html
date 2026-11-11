@@ -19,30 +19,34 @@
           <span class="wordmark-copy">TRAIL GEAR <em>ATLAS</em></span>
         </a>
         <nav class="desktop-nav" aria-label="Main navigation">
-          <a href="#collection">Explore gear</a>
-          <a href="#wishlist" id="nav-wishlist">✨ Wishlist &amp; trials</a>
-          <a href="#trail-planner">Pack planner &amp; weights</a>
-          <a href="#trail-log">Trail log</a>
-          <a href="#about">About this kit</a>
+          <a href="#collection" data-i18n="nav.explore">探索装备</a>
+          <a href="#wishlist" id="nav-wishlist" data-i18n="nav.wishlist">✨ 心愿单与测重</a>
+          <a href="#trail-planner" data-i18n="nav.planner">背包规划与负重</a>
+          <a href="#trail-log" data-i18n="nav.log">路线日志</a>
+          <a href="#about" data-i18n="nav.about">关于本清单</a>
         </nav>
         <div class="header-trail-controls">
+          <div class="lang-toggle-pill" role="group" aria-label="Language selector">
+            <button class="lang-toggle-btn active" id="btn-lang-zh" type="button" data-lang="zh" title="切换至中文">中文</button>
+            <button class="lang-toggle-btn" id="btn-lang-en" type="button" data-lang="en" title="Switch to English">EN</button>
+          </div>
           <div class="unit-toggle-pill" role="group" aria-label="Weight measurement unit switcher">
-            <button class="unit-toggle-btn active" id="btn-unit-metric" type="button" data-unit="metric" title="Metric units (grams and kilograms)">
+            <button class="unit-toggle-btn active" id="btn-unit-metric" type="button" data-unit="metric" title="公制单位 (克 / 千克)">
               g / kg
             </button>
-            <button class="unit-toggle-btn" id="btn-unit-imperial" type="button" data-unit="imperial" title="Imperial units (ounces and pounds)">
+            <button class="unit-toggle-btn" id="btn-unit-imperial" type="button" data-unit="imperial" title="英制单位 (盎司 / 磅)">
               oz / lb
             </button>
           </div>
-          <a class="header-action" href="#trail-planner" id="header-pack-pill" title="View active pack details and weight breakdown">
+          <a class="header-action" href="#trail-planner" id="header-pack-pill" title="查看当前路线背包详情与重量拆解">
             <span class="header-pack-dot"></span>
             <span>🎒 <span id="header-trail-name">Milford Track</span></span>
             <span class="header-pack-divider">·</span>
             <span id="header-pack-weight">0 g</span>
             <span aria-hidden="true">↗</span>
           </a>
-          <button class="header-new-trail-btn" id="header-btn-new-trail" type="button" title="Create a new hiking expedition plan">
-            + New Trail
+          <button class="header-new-trail-btn" id="header-btn-new-trail" type="button" data-i18n="header.newTrail" title="创建新徒步路线计划">
+            + 新建路线
           </button>
         </div>
       </div>
@@ -53,13 +57,13 @@
       <section class="app-compact-hero" aria-label="Expedition status and quick actions">
         <div class="shell hero-compact-inner">
           <div class="hero-brand-summary">
-            <span class="hero-brand-tag">ULTRALIGHT PACK BUILDER · 极简轻量化装备库</span>
+            <span class="hero-brand-tag" data-i18n="hero.tag">极简轻量化装备库 · 背包负重分析</span>
             <h1>Trail Gear Atlas</h1>
-            <p>精确记录每件装备的实际重量、价格与打包状态。支持随身穿戴扣减、心愿单试重与 LighterPack 格式同步。</p>
+            <p data-i18n="hero.desc">精确记录每件装备的实际重量、价格与打包状态。支持随身穿戴扣减、心愿单试重与 LighterPack 格式同步。</p>
           </div>
           <div class="hero-quick-actions">
-            <button class="btn-primary hero-btn-add" id="btn-hero-add-gear" type="button">+ 添加装备 / Add Gear</button>
-            <a class="btn-secondary" href="#collection">浏览装备库 ↓</a>
+            <button class="btn-primary hero-btn-add" id="btn-hero-add-gear" type="button" data-i18n="hero.addGear">+ 添加装备</button>
+            <a class="btn-secondary" href="#collection" data-i18n="hero.browse">浏览装备库 ↓</a>
             <div class="hero-stat-pill" id="hero-stat-summary">
               <strong><span id="hero-stat-items">81</span> 件装备</strong>
               <span>·</span>
@@ -75,15 +79,15 @@
         <div class="shell">
           <div class="planner-header">
             <div>
-              <span class="section-kicker">EXPEDITION PACK BUILDER · 路线打包与负重分析</span>
-              <h2 id="planner-title">路线打包与负重分析</h2>
+              <span class="section-kicker" data-i18n="planner.kicker">路线打包与负重分析</span>
+              <h2 id="planner-title" data-i18n="planner.title">路线打包与负重分析</h2>
             </div>
             <div class="trail-selector-bar">
               <div class="trail-select-wrap">
-                <span>当前路线 / ROUTE</span>
+                <span data-i18n="planner.routeLabel">当前路线</span>
                 <select id="active-trail-select" aria-label="Select active trail to plan pack"></select>
               </div>
-              <button class="btn-primary" id="btn-create-trail" type="button">+ 新建路线</button>
+              <button class="btn-primary" id="btn-create-trail" type="button" data-i18n="planner.newTrail">+ 新建路线</button>
             </div>
           </div>
 
@@ -91,54 +95,54 @@
           <div class="active-trail-banner" id="active-trail-banner">
             <div class="active-trail-info">
               <div class="trail-meta-tags">
-                <span class="trail-status-pill" id="banner-status-pill">Planned · Next Destination</span>
+                <span class="trail-status-pill" id="banner-status-pill">计划中 · 下一站</span>
                 <span id="banner-region">Fiordland National Park, New Zealand</span>
                 <span>•</span>
                 <span id="banner-distance">53.5 km</span>
                 <span>•</span>
-                <span id="banner-duration">4 Days</span>
+                <span id="banner-duration">4 天</span>
                 <span>•</span>
-                <span id="banner-date">Target: Nov 2026</span>
+                <span id="banner-date">出行时间：2026年11月</span>
               </div>
               <h3 id="banner-trail-name">Milford Track</h3>
               <p class="active-trail-notes" id="banner-notes"></p>
             </div>
             <div class="active-trail-actions">
-              <button class="btn-secondary" id="btn-edit-active-trail" type="button">✏️ Edit Details</button>
-              <button class="btn-secondary" id="btn-toggle-complete-trail" type="button">✓ Mark as Completed</button>
-              <button class="btn-secondary" id="btn-clear-pack" type="button">Empty Pack</button>
+              <button class="btn-secondary" id="btn-edit-active-trail" type="button" data-i18n="banner.edit">✏️ 编辑路线</button>
+              <button class="btn-secondary" id="btn-toggle-complete-trail" type="button" data-i18n="banner.markComplete">✓ 标为已完成</button>
+              <button class="btn-secondary" id="btn-clear-pack" type="button" data-i18n="banner.emptyPack">清空背包</button>
             </div>
           </div>
 
           <!-- Weight Dashboard (5-Metric Ultralight Analytics Grid) -->
           <div class="weight-dashboard">
             <div class="weight-card primary">
-              <span class="weight-card-label">PACK CARRIED LOAD · 背负总重</span>
+              <span class="weight-card-label" data-i18n="metric.carried.label">背负总重</span>
               <div class="weight-huge"><span id="metric-total-g">0</span><small id="metric-total-unit">g</small></div>
-              <div class="weight-subtext" id="metric-total-kg">0.00 kg carried load on back</div>
+              <div class="weight-subtext" id="metric-total-kg">0.00 kg 背负行囊实际总重</div>
             </div>
             <div class="weight-card" id="metric-card-base">
-              <span class="weight-card-label">BASE WEIGHT (EXCL. CONSUMABLES &amp; WORN) · 基准重量</span>
+              <span class="weight-card-label" data-i18n="metric.base.label">基准重量 (不含消耗品与穿戴)</span>
               <div class="weight-huge"><span id="metric-base-g">0</span><small id="metric-base-unit">g</small></div>
-              <div class="weight-subtext" id="metric-base-kg">0.00 kg pack base weight</div>
+              <div class="weight-subtext" id="metric-base-kg">0.00 kg 背包基础净重</div>
               <div class="base-tier-badge-wrap" id="metric-base-tier-wrap">
-                <span class="base-tier-pill" id="metric-base-tier">ULTRALIGHT</span>
+                <span class="base-tier-pill" id="metric-base-tier">超轻量</span>
               </div>
             </div>
             <div class="weight-card" id="metric-card-worn">
-              <span class="weight-card-label">WORN ON BODY · 随身穿戴 (非背负)</span>
+              <span class="weight-card-label" data-i18n="metric.worn.label">随身穿戴 (非背负)</span>
               <div class="weight-huge"><span id="metric-worn-g">0</span><small id="metric-worn-unit">g</small></div>
-              <div class="weight-subtext" id="metric-worn-sub">0.00 kg shoes, clothes &amp; poles</div>
+              <div class="weight-subtext" id="metric-worn-sub">0.00 kg 鞋靴、衣物与手杖</div>
             </div>
             <div class="weight-card" id="metric-card-skinout">
-              <span class="weight-card-label">SKIN-OUT TOTAL · 全身行头总重</span>
+              <span class="weight-card-label" data-i18n="metric.skinout.label">全身行头总重</span>
               <div class="weight-huge"><span id="metric-skinout-g">0</span><small id="metric-skinout-unit">g</small></div>
-              <div class="weight-subtext" id="metric-skinout-sub">0.00 kg carried load + worn on body</div>
+              <div class="weight-subtext" id="metric-skinout-sub">0.00 kg 背负总重 + 随身穿戴</div>
             </div>
             <div class="weight-card wishlist-card" id="metric-card-wishlist">
-              <span class="weight-card-label">WISHLIST TRIAL LOAD · 想买试重</span>
+              <span class="weight-card-label" data-i18n="metric.wishlist.label">想买试重</span>
               <div class="weight-huge"><span id="metric-wishlist-g">+0</span><small id="metric-wishlist-unit">g</small></div>
-              <div class="weight-subtext" id="metric-wishlist-summary">0 prospective items on trial</div>
+              <div class="weight-subtext" id="metric-wishlist-summary">0 件心愿单装备在试装</div>
             </div>
           </div>
 
@@ -146,19 +150,19 @@
           <div class="category-analytics-card">
             <div class="analytics-card-header">
               <div class="analytics-title-group">
-                <span class="section-kicker">GEAR SYSTEM WEIGHT DISTRIBUTION · 装备系统重量分布</span>
-                <h3 class="analytics-headline">Category Breakdown</h3>
+                <span class="section-kicker" data-i18n="chart.kicker">装备系统重量分布</span>
+                <h3 class="analytics-headline" data-i18n="chart.title">系统重量拆解</h3>
               </div>
               <div class="analytics-view-controls">
                 <div class="chart-toggle-pill" role="tablist" aria-label="Chart type toggle">
-                  <button class="chart-toggle-btn active" id="btn-chart-donut" type="button" role="tab" aria-selected="true" title="LighterPack-style interactive donut chart">
-                    🍩 Donut Chart
+                  <button class="chart-toggle-btn active" id="btn-chart-donut" type="button" role="tab" aria-selected="true" data-i18n="chart.donut" title="环形分布图">
+                    🍩 环形图
                   </button>
-                  <button class="chart-toggle-btn" id="btn-chart-bar" type="button" role="tab" aria-selected="false" title="Horizontal stacked category bar">
-                    📊 Linear Bar
+                  <button class="chart-toggle-btn" id="btn-chart-bar" type="button" role="tab" aria-selected="false" data-i18n="chart.bar" title="水平堆叠条形图">
+                    📊 堆叠条形图
                   </button>
                 </div>
-                <div class="analytics-total-badge" id="category-bar-total-label">0 g Total</div>
+                <div class="analytics-total-badge" id="category-bar-total-label">0 g 总重</div>
               </div>
             </div>
 
@@ -170,9 +174,9 @@
                     <circle cx="130" cy="130" r="90" fill="transparent" stroke="#e3eae0" stroke-width="32"></circle>
                   </svg>
                   <div class="donut-center-info" id="donut-center-info">
-                    <span class="donut-center-sub">BASE WEIGHT</span>
+                    <span class="donut-center-sub" data-i18n="chart.baseWeight">基准重量</span>
                     <strong class="donut-center-main" id="donut-center-weight">0 g</strong>
-                    <span class="donut-center-cat" id="donut-center-category">Hover category slice</span>
+                    <span class="donut-center-cat" id="donut-center-category" data-i18n="chart.hoverCat">悬停查看各系统</span>
                   </div>
                 </div>
                 <div class="donut-legend-wrap">
@@ -180,8 +184,8 @@
                   <div class="donut-worn-callout" id="donut-worn-callout">
                     <span class="callout-icon">👕</span>
                     <div class="callout-text">
-                      <strong>Worn Weight: <span id="donut-worn-val">0 g</span></strong>
-                      <span>Excluded from pack carried load (<span id="donut-worn-count">0</span> items)</span>
+                      <strong><span data-i18n="chart.wornTitle">穿戴重量：</span><span id="donut-worn-val">0 g</span></strong>
+                      <span><span data-i18n="chart.wornDesc">不计入背负重量</span> (<span id="donut-worn-count">0</span> 件)</span>
                     </div>
                   </div>
                 </div>
@@ -198,29 +202,29 @@
           <!-- Missing weights alert -->
           <div class="missing-weights-alert" id="missing-weights-alert" hidden>
             <span aria-hidden="true">⚠️</span>
-            <span id="missing-weights-text">2 packed items do not have listed weights and are not included in the totals.</span>
+            <span id="missing-weights-text">2 件已打包装备未记录重量，未计入总重。</span>
           </div>
 
           <!-- Packed Items Drawer -->
           <div class="packed-items-wrap">
             <div class="packed-items-header">
               <div>
-                <h4 id="packed-items-title">Packed Gear (<span id="packed-items-count">0</span> items)</h4>
+                <h4 id="packed-items-title">打包清单 (<span id="packed-items-count">0</span> 件)</h4>
                 <div class="packed-header-sub">
-                  <span>Mark items as <strong>👕 Worn</strong> to exclude from base weight, or <strong>👥 Shared</strong> to split partner weight.</span>
+                  <span data-i18n-html="packed.tip">点击 <strong>👕 穿戴</strong> 可从基重中扣除，点击 <strong>👥 分摊</strong> 可均分队友重量。</span>
                 </div>
               </div>
               <div class="packed-header-actions">
-                <a class="btn-primary" href="#collection">Browse &amp; Add Gear Below ↓</a>
-                <button class="btn-secondary" id="btn-export-csv" type="button" title="Export pack to standard LighterPack CSV format">
-                  📥 Export LighterPack CSV
+                <a class="btn-primary" href="#collection" data-i18n="packed.browse">在下方挑选添加 ↓</a>
+                <button class="btn-secondary" id="btn-export-csv" type="button" data-i18n="packed.exportCsv" title="Export pack to standard LighterPack CSV format">
+                  📥 导出 LighterPack CSV
                 </button>
-                <label class="btn-secondary btn-file-label" id="lbl-import-csv" title="Import LighterPack CSV into this pack">
-                  📤 Import LighterPack CSV
+                <label class="btn-secondary btn-file-label" id="lbl-import-csv" data-i18n="packed.importCsv" title="Import LighterPack CSV into this pack">
+                  📤 导入 LighterPack CSV
                   <input type="file" id="csv-file-input" accept=".csv,text/csv" style="display:none;" />
                 </label>
-                <button class="btn-secondary" id="btn-export-pack" type="button" title="View formatted Markdown / text summary">
-                  📋 View Markdown List
+                <button class="btn-secondary" id="btn-export-pack" type="button" data-i18n="packed.viewMd" title="View formatted Markdown / text summary">
+                  📋 查看 Markdown 清单
                 </button>
               </div>
             </div>
@@ -235,17 +239,17 @@
           <div class="view-mode-tabs" role="tablist" aria-label="Kit views">
             <button class="view-tab-btn active" id="tab-view-owned" role="tab" aria-selected="true" data-view="owned">
               <span class="tab-icon">📦</span>
-              <span>Master Inventory (我的装备库)</span>
+              <span data-i18n="tab.owned">我的装备库</span>
               <span class="tab-badge" id="badge-count-owned">77</span>
             </button>
             <button class="view-tab-btn" id="tab-view-wishlist" role="tab" aria-selected="false" data-view="wishlist">
               <span class="tab-icon">✨</span>
-              <span>Wishlist &amp; Trials (想买清单与测重)</span>
+              <span data-i18n="tab.wishlist">想买清单与测重</span>
               <span class="tab-badge badge-wishlist" id="badge-count-wishlist">4</span>
             </button>
             <button class="view-tab-btn" id="tab-view-all" role="tab" aria-selected="false" data-view="all">
               <span class="tab-icon">🌐</span>
-              <span>All Items (全部装备)</span>
+              <span data-i18n="tab.all">全部装备</span>
               <span class="tab-badge" id="badge-count-all">81</span>
             </button>
           </div>
@@ -255,61 +259,63 @@
             <div class="wishlist-hero-main">
               <div class="wishlist-hero-kicker">
                 <span class="sparkle-dot"></span>
-                <span>PROSPECTIVE GEAR LAB &amp; UPGRADE SIMULATOR · 想买心愿单与换装测重</span>
+                <span data-i18n="wishlist.kicker">想买心愿单与换装测重</span>
               </div>
-              <h3>Simulate your pack before buying.</h3>
-              <p>Items in this list represent prospective gear you are considering. You can pack them directly into your active route (<strong><span id="wishlist-active-trail-name">Milford Track</span></strong>) to test weight impact, compare against existing kit, and convert to Owned with one click once purchased.</p>
+              <h3 data-i18n="wishlist.title">购买前先测算负重</h3>
+              <p id="wishlist-hero-desc">此处的装备为你正在考虑入手的心愿单。你可以直接将它们打包加入当前路线（<strong><span id="wishlist-active-trail-name">Milford Track</span></strong>）测算减重效果，与既有装备横向比对，购买后可一键转入已拥有装备库。</p>
             </div>
             <div class="wishlist-hero-stats">
               <div class="wishlist-stat-box">
                 <span class="wishlist-stat-num" id="stat-wishlist-count">4</span>
-                <span class="wishlist-stat-lbl">Wishlist items</span>
+                <span class="wishlist-stat-lbl" data-i18n="wishlist.stat.count">心愿装备</span>
               </div>
               <div class="wishlist-stat-box">
                 <span class="wishlist-stat-num" id="stat-wishlist-weight">2,167 g</span>
-                <span class="wishlist-stat-lbl">Total prospective wt</span>
+                <span class="wishlist-stat-lbl" data-i18n="wishlist.stat.weight">潜在增重</span>
               </div>
               <div class="wishlist-stat-box">
                 <span class="wishlist-stat-num" id="stat-wishlist-packed">1</span>
-                <span class="wishlist-stat-lbl">Tested in active pack</span>
+                <span class="wishlist-stat-lbl" data-i18n="wishlist.stat.packed">当前路线上包测试</span>
               </div>
               <div class="wishlist-stat-box">
                 <span class="wishlist-stat-num" id="stat-wishlist-cost">$1,898 AUD</span>
-                <span class="wishlist-stat-lbl">Est. total investment</span>
+                <span class="wishlist-stat-lbl" data-i18n="wishlist.stat.cost">预计总投入</span>
               </div>
             </div>
             <div class="wishlist-hero-actions">
-              <button class="btn-primary btn-add-wishlist" id="btn-add-wishlist-gear" type="button">+ Add Wishlist Gear (添加想买装备)</button>
-              <button class="btn-secondary" id="btn-view-owned-kit" type="button">← Back to Master Inventory (返回已拥有装备)</button>
+              <button class="btn-primary btn-add-wishlist" id="btn-add-wishlist-gear" type="button" data-i18n="wishlist.btnAdd">+ 添加想买装备</button>
+              <button class="btn-secondary" id="btn-view-owned-kit" type="button" data-i18n="wishlist.btnBack">← 返回我的装备库</button>
             </div>
           </div>
 
           <div class="collection-heading" id="collection-heading-main-wrap">
             <div class="collection-heading-main">
-              <span class="section-kicker" id="collection-kicker">EXPLORE THE KIT</span>
-              <h2 id="collection-title">Built for the trail.</h2>
-              <p id="collection-desc">Browse by system, search for a specific piece, or compare the recorded weight and price across the kit.</p>
+              <span class="section-kicker" id="collection-kicker" data-i18n="collection.kicker">全套装备总览</span>
+              <h2 id="collection-title" data-i18n="collection.title">山野行囊细目</h2>
+              <p id="collection-desc" data-i18n="collection.desc">按系统浏览、搜索单品，或对比整套装备的克重与入手开销。</p>
             </div>
             <div class="collection-heading-actions">
-              <button class="btn-primary btn-add-gear" id="btn-add-gear" type="button" title="Add a new gear item to your inventory">+ Add Gear Item</button>
-              <button class="btn-secondary" id="btn-reset-inventory" type="button" title="Reset gear inventory to original 77 items">↺ Reset Kit</button>
+              <button class="btn-primary btn-add-gear" id="btn-add-gear" type="button" data-i18n="collection.btnAdd" title="添加新装备到装备库">+ 添加装备</button>
+              <button class="btn-secondary" id="btn-reset-inventory" type="button" data-i18n="collection.btnReset" title="重置装备库为初始状态">↺ 重置装备库</button>
             </div>
           </div>
 
           <div class="toolbar" role="search">
             <label class="search-field" for="gear-search">
               <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 5 5"/></svg>
-              <input id="gear-search" type="search" placeholder="Search brand, product or notes" autocomplete="off" />
+              <input id="gear-search" type="search" data-i18n-placeholder="search.placeholder" placeholder="按装备名称、品牌或特点搜索..." autocomplete="off" />
             </label>
-            <label class="select-field" for="status-filter"><span>Status</span><select id="status-filter"><option value="all">All items (全部)</option><option value="active">Active kit (仅现役可用)</option><option value="wishlist">✨ 想买待购 (Wishlist only)</option><option value="in_use">使用中 (In Use)</option><option value="owned">Owned (已拥有)</option><option value="purchased">Purchased (已购入)</option><option value="gift">Gift (礼品)</option><option value="lost">lost (已丢失)</option><option value="selling">不想要了准备卖掉</option><option value="returned">退货 (已退货)</option><option value="older">Older gear (旧款)</option><option value="review">Needs details (待补充)</option></select></label>
-            <label class="select-field" for="sort-order"><span>Sort</span><select id="sort-order"><option value="original">Grouped by gear type</option><option value="weight-asc">Lightest first</option><option value="weight-desc">Heaviest first</option><option value="price-asc">Lowest price by currency</option><option value="price-desc">Highest price by currency</option></select></label>
-            <button class="toolbar-add-btn" id="btn-toolbar-add-gear" type="button" title="Add a new gear item to inventory">+ Add Item</button>
+            <label class="select-field" for="status-filter"><span data-i18n="status.label">状态</span><select id="status-filter"><option value="all" data-i18n="filter.allStatus">全部状态</option><option value="active" data-i18n="filter.activeStatus">仅现役可用</option><option value="wishlist" data-i18n="filter.wishlistStatus">✨ 仅想买心愿</option><option value="in_use" data-i18n="status.in_use">使用中 (现役)</option><option value="owned" data-i18n="status.owned">已拥有</option><option value="purchased" data-i18n="status.purchased">已购入</option><option value="gift" data-i18n="status.gift">礼品</option><option value="lost" data-i18n="status.lost">已丢失</option><option value="selling" data-i18n="status.selling">准备出掉</option><option value="returned" data-i18n="status.returned">已退货</option><option value="older" data-i18n="status.older">旧款 / 待确认</option><option value="review" data-i18n="status.review">需补充信息</option></select></label>
+            <label class="select-field" for="sort-order"><span data-i18n="sort.label">排序</span><select id="sort-order"><option value="original" data-i18n="sort.default">默认排序</option><option value="weight-asc" data-i18n="sort.weightAsc">重量：由轻到重</option><option value="weight-desc" data-i18n="sort.weightDesc">重量：由重到轻</option><option value="price-asc" data-i18n="sort.priceAsc">价格：由低到高</option><option value="price-desc" data-i18n="sort.priceDesc">价格：由高到低</option></select></label>
+            <button class="toolbar-add-btn" id="btn-toolbar-add-gear" type="button" data-i18n="hero.addGear" title="添加新装备">+ 添加装备</button>
           </div>
 
           <nav class="category-nav" id="category-nav" aria-label="Gear categories"></nav>
           <div class="result-count" id="result-count" aria-live="polite"></div>
           <div id="gear-sections"></div>
-          <div class="empty-state" id="empty-state" hidden><span>NO MATCHES FOUND</span><h3>Nothing in the kit matches that search.</h3><p>Try a different product name or clear the filters.</p><button id="reset-filters" type="button">Clear filters</button></div>
+          <div class="empty-state" id="empty-state" hidden><span data-i18n="empty.noMatch">未找到匹配项</span><h3 data-i18n="empty.title">装备库中没有找到符合搜索条件的物品。</h3><p data-i18n="empty.desc">请尝试调整搜索关键词或重置筛选条件。</p><button id="reset-filters" type="button" data-i18n="filter.reset">重置筛选</button></div>
+        </div>
+      </section>
         </div>
       </section>
 
@@ -318,17 +324,17 @@
         <div class="shell">
           <div class="trail-log-header">
             <div>
-              <span class="section-kicker">TRAIL ARCHIVE &amp; FIELD LOG</span>
-              <h2 id="log-title">Trails recorded &amp; planned.</h2>
-              <p>Log past wilderness expeditions, preserve what gear you carried and what it weighed, and manage your upcoming trail aspirations.</p>
+              <span class="section-kicker" data-i18n="log.kicker">徒步纪事</span>
+              <h2 id="log-title" data-i18n="log.title">路线日志与规划</h2>
+              <p data-i18n="log.desc">查看历史完成徒步路线与未来探险计划，对比每次出行的实际打包装备与背负重量。</p>
             </div>
-            <button class="btn-primary" id="btn-log-new-trail" type="button">+ Record a Trail</button>
+            <button class="btn-primary" id="btn-log-new-trail" type="button" data-i18n="planner.newTrail">+ 新建路线</button>
           </div>
 
           <div class="trail-log-filters">
-            <button class="log-filter-btn active" data-filter="all" type="button">All Expeditions (<span id="count-all-trails">0</span>)</button>
-            <button class="log-filter-btn" data-filter="completed" type="button">Completed Hikes (<span id="count-completed-trails">0</span>)</button>
-            <button class="log-filter-btn" data-filter="planned" type="button">Upcoming &amp; Planned (<span id="count-planned-trails">0</span>)</button>
+            <button class="log-filter-btn active" data-filter="all" type="button" id="btn-filter-all-trails">全部路线 (<span id="count-all-trails">0</span>)</button>
+            <button class="log-filter-btn" data-filter="completed" type="button" id="btn-filter-completed-trails">已完成徒步 (<span id="count-completed-trails">0</span>)</button>
+            <button class="log-filter-btn" data-filter="planned" type="button" id="btn-filter-planned-trails">计划中 / 即将出发 (<span id="count-planned-trails">0</span>)</button>
           </div>
 
           <div class="trail-cards-grid" id="trail-log-grid"></div>
@@ -337,79 +343,82 @@
 
       <section class="about" id="about" aria-labelledby="about-title">
         <div class="shell about-inner">
-          <div><span class="section-kicker">ABOUT THE RECORD</span><h2 id="about-title">A living gear list.</h2></div>
-          <div class="about-copy"><p>This collection brings together the original hiking inventory, tax invoices and purchase screenshots. Invoice prices use the tax-inclusive line amounts in Australian dollars. Screenshot purchases stay in Chinese yuan; currencies are never converted or compared. Weights are listed or approximate values and may change after an item is weighed at home.</p><p>Product photos show the listed models; colors or revisions may differ from the items owned. Items with missing details stay visible so the record can be completed over time. Older and lost gear is identified separately from the current kit. A receipt records a purchase, not whether a consumable is still in the pack.</p></div>
+          <div><span class="section-kicker" data-i18n="about.kicker">关于本清单</span><h2 id="about-title" data-i18n="about.title">一份不断演进的装备档案</h2></div>
+          <div class="about-copy">
+            <p data-i18n="about.p1">本清单汇总了真实的户外徒步装备、采购凭证与购买截图。发票价格以包含消费税的澳币金额记录；国内电商截图按人民币记录，币种之间不做折算。装备重量为标称或实测重量，在家使用电子秤复测后会持续校准更新。</p>
+            <p data-i18n="about.p2">产品展示图尽可能呈现对应型号，实际颜色或年份版本可能与实物稍有差异。缺失细节的装备仍保留展示，以便后续补齐档案。早期淘汰或遗失的装备单独标注区分。凭证仅记录购买事实，并不代表消耗品仍在背包中。</p>
+          </div>
         </div>
       </section>
     </main>
 
-    <footer class="site-footer"><div class="shell footer-inner"><span class="footer-brand">TRAIL GEAR <em>ATLAS</em></span><span>PERSONAL HIKING KIT · UPDATED NOVEMBER 2026</span><a href="#top">BACK TO TOP ↑</a></div></footer>
+    <footer class="site-footer"><div class="shell footer-inner"><span class="footer-brand" data-i18n-html="footer.brand">TRAIL GEAR <em>ATLAS</em></span><span data-i18n="footer.updated">个人徒步装备档案 · 更新于 2026 年 11 月</span><a href="#top" data-i18n="footer.top">返回顶部 ↑</a></div></footer>
 
     <!-- Sticky Quick-Pack Floating Bar -->
     <div class="sticky-pack-bar hidden" id="sticky-pack-bar">
       <div class="sticky-pack-info">
         <span class="sticky-pack-trail">🎒 <span id="sticky-trail-name">Milford Track</span></span>
-        <span class="sticky-pack-stats"><strong id="sticky-item-count">0</strong> items · <strong id="sticky-weight">0 g</strong></span>
+        <span class="sticky-pack-stats"><strong id="sticky-item-count">0</strong> 件装备 · <strong id="sticky-weight">0 g</strong></span>
       </div>
       <div class="sticky-pack-actions">
-        <button class="btn-sticky-new" id="sticky-btn-new-trail" type="button" title="Plan a new expedition track">+ New Trail</button>
-        <a class="sticky-pack-link" href="#trail-planner">View Pack &amp; Weights ↑</a>
+        <button class="btn-sticky-new" id="sticky-btn-new-trail" type="button" data-i18n="header.newTrail" title="规划新徒步路线">+ 新建路线</button>
+        <a class="sticky-pack-link" href="#trail-planner" data-i18n="sticky.viewPack">查看背包与负重 ↑</a>
       </div>
     </div>
 
     <!-- Modal: Create / Edit Trail -->
     <div class="modal-overlay" id="trail-modal" role="dialog" aria-modal="true" aria-labelledby="modal-trail-title">
       <div class="modal-box">
-        <button class="modal-close-btn" id="modal-trail-close" type="button" aria-label="Close dialog">✕</button>
-        <h3 id="modal-trail-title">Plan an Expedition</h3>
-        <p class="modal-desc">Define a route, set target distance, and start packing gears from your inventory.</p>
+        <button class="modal-close-btn" id="modal-trail-close" type="button" aria-label="关闭对话框">✕</button>
+        <h3 id="modal-trail-title" data-i18n="modalTrail.title">规划徒步路线</h3>
+        <p class="modal-desc" data-i18n="modalTrail.desc">设定路线名称、目标里程与行程天数，随后从装备库中挑选行囊。</p>
 
         <form id="trail-form">
           <input type="hidden" id="form-trail-id" value="" />
           <div class="form-grid">
             <div class="form-field full">
-              <label for="form-trail-name">Trail / Activity Name *</label>
-              <input type="text" id="form-trail-name" required placeholder="e.g. Milford Track, Overland Track, Mount Bogong" />
+              <label for="form-trail-name" data-i18n="modalTrail.name">路线 / 活动名称 *</label>
+              <input type="text" id="form-trail-name" required data-i18n-placeholder="modalTrail.namePh" placeholder="例如：Milford Track, Overland Track, Mount Bogong" />
             </div>
             <div class="form-field">
-              <label for="form-trail-destination">Destination / Region</label>
-              <input type="text" id="form-trail-destination" placeholder="e.g. Fiordland, New Zealand" />
+              <label for="form-trail-destination" data-i18n="modalTrail.dest">目的地 / 地区</label>
+              <input type="text" id="form-trail-destination" data-i18n-placeholder="modalTrail.destPh" placeholder="例如：Fiordland, New Zealand" />
             </div>
             <div class="form-field">
-              <label for="form-trail-status">Status</label>
+              <label for="form-trail-status" data-i18n="modalTrail.status">状态</label>
               <select id="form-trail-status">
-                <option value="planned">Planned (下一站 / 计划中)</option>
-                <option value="in-progress">In Progress (进行中)</option>
-                <option value="completed">Completed (已完成)</option>
+                <option value="planned" data-i18n="modalTrail.statusPlanned">计划中 (下一站)</option>
+                <option value="in-progress" data-i18n="modalTrail.statusProgress">进行中</option>
+                <option value="completed" data-i18n="modalTrail.statusCompleted">已完成</option>
               </select>
             </div>
             <div class="form-field">
-              <label for="form-trail-distance">Distance (km)</label>
-              <input type="number" id="form-trail-distance" step="0.1" placeholder="e.g. 53.5" />
+              <label for="form-trail-distance" data-i18n="modalTrail.dist">总里程 (km)</label>
+              <input type="number" id="form-trail-distance" step="0.1" placeholder="例如：53.5" />
             </div>
             <div class="form-field">
-              <label for="form-trail-duration">Duration (Days)</label>
-              <input type="number" id="form-trail-duration" step="1" placeholder="e.g. 4" />
+              <label for="form-trail-duration" data-i18n="modalTrail.duration">行程天数 (天)</label>
+              <input type="number" id="form-trail-duration" step="1" placeholder="例如：4" />
             </div>
             <div class="form-field full">
-              <label for="form-trail-date">Date / Trip Period</label>
-              <input type="text" id="form-trail-date" placeholder="e.g. November 2026, or Oct 2026" />
+              <label for="form-trail-date" data-i18n="modalTrail.date">出行时间</label>
+              <input type="text" id="form-trail-date" data-i18n-placeholder="modalTrail.datePh" placeholder="例如：2026 年 11 月" />
             </div>
             <div class="form-field full" id="form-template-row">
-              <label for="form-trail-template">Gear Pack Starting Setup (装备初始搭配)</label>
+              <label for="form-trail-template" data-i18n="modalTrail.template">装备初始搭配</label>
               <select id="form-trail-template">
-                <option value="empty">Start with empty pack (从零自选装备)</option>
-                <option value="copy-active">Copy gear pack from active trail (复制当前路线装备搭配)</option>
+                <option value="empty" data-i18n="modalTrail.tplEmpty">从零自选装备</option>
+                <option value="copy-active" data-i18n="modalTrail.tplCopy">复制当前路线装备搭配</option>
               </select>
             </div>
             <div class="form-field full">
-              <label for="form-trail-notes">Field Notes &amp; Route Description</label>
-              <textarea id="form-trail-notes" rows="3" placeholder="Terrain conditions, weather precautions, pass elevation, etc."></textarea>
+              <label for="form-trail-notes" data-i18n="modalTrail.notes">路线说明与注意事项</label>
+              <textarea id="form-trail-notes" rows="3" data-i18n-placeholder="modalTrail.notesPh" placeholder="地形路况、天气预警、垭口海拔、行前备忘等..."></textarea>
             </div>
           </div>
           <div class="modal-actions">
-            <button class="btn-secondary" type="button" id="modal-trail-cancel">Cancel</button>
-            <button class="btn-primary" type="submit" id="btn-submit-trail">Save &amp; Start Packing Gear ↓</button>
+            <button class="btn-secondary" type="button" id="modal-trail-cancel" data-i18n="modalTrail.cancel">取消</button>
+            <button class="btn-primary" type="submit" id="btn-submit-trail" data-i18n="modalTrail.submit">保存并开始打包 ↓</button>
           </div>
         </form>
       </div>
@@ -418,16 +427,16 @@
     <!-- Modal: Export Pack List -->
     <div class="modal-overlay" id="export-modal" role="dialog" aria-modal="true" aria-labelledby="modal-export-title">
       <div class="modal-box">
-        <button class="modal-close-btn" id="modal-export-close" type="button" aria-label="Close dialog">✕</button>
-        <h3 id="modal-export-title">Export Pack List</h3>
-        <p class="modal-desc">Share your pack breakdown, weights, and items formatted for your trail notes.</p>
+        <button class="modal-close-btn" id="modal-export-close" type="button" aria-label="关闭对话框">✕</button>
+        <h3 id="modal-export-title" data-i18n="modalExport.title">导出打包清单</h3>
+        <p class="modal-desc" data-i18n="modalExport.desc">复制格式化的装备负重清单，分享给队友或保存至出行笔记。</p>
         <div class="form-field full">
           <textarea id="export-text-area" rows="12" readonly style="font-family:monospace; font-size:12px; line-height:1.5;"></textarea>
         </div>
         <div class="modal-actions">
-          <button class="btn-secondary" type="button" id="modal-export-close-btn">Close</button>
-          <button class="btn-secondary" type="button" id="btn-export-csv-modal">📥 Download LighterPack CSV</button>
-          <button class="btn-primary" type="button" id="btn-copy-export">Copy Markdown</button>
+          <button class="btn-secondary" type="button" id="modal-export-close-btn" data-i18n="modalExport.close">关闭</button>
+          <button class="btn-secondary" type="button" id="btn-export-csv-modal" data-i18n="modalExport.downloadCsv">📥 下载 LighterPack CSV</button>
+          <button class="btn-primary" type="button" id="btn-copy-export" data-i18n="modalExport.copyMd">复制 Markdown 文本</button>
         </div>
       </div>
     </div>
@@ -443,9 +452,9 @@
     <!-- Modal: Add / Edit Gear Item in Master Inventory -->
     <div class="modal-overlay" id="gear-modal" role="dialog" aria-modal="true" aria-labelledby="modal-gear-title">
       <div class="modal-box gear-modal-box">
-        <button class="modal-close-btn" id="modal-gear-close" type="button" aria-label="Close dialog">✕</button>
-        <h3 id="modal-gear-title">Add Gear Item</h3>
-        <p class="modal-desc">Add a piece of gear to your master inventory with weight, price, specs, and brand link.</p>
+        <button class="modal-close-btn" id="modal-gear-close" type="button" aria-label="关闭对话框">✕</button>
+        <h3 id="modal-gear-title" data-i18n="modalGear.addTitle">添加装备</h3>
+        <p class="modal-desc" data-i18n="modalGear.desc">记录装备的重量、价格、技术规格与官方链接。</p>
 
         <!-- 3-Tier Gear Entry Modes (方案A/方案B/手动自建) -->
         <div class="gear-entry-modes" id="gear-entry-modes">
@@ -453,15 +462,15 @@
             <div class="entry-mode-segmented" role="tablist" aria-label="Gear Entry Modes">
               <button type="button" class="entry-mode-tab active" data-mode="catalog" id="tab-mode-catalog" role="tab" aria-selected="true">
                 <span class="mode-tab-icon">⚡</span>
-                <span class="mode-tab-text"><strong>方案 A</strong> 热门大牌速选</span>
+                <span class="mode-tab-text" data-i18n-html="modalGear.modeCatalog"><strong>方案 A</strong> 热门大牌速选</span>
               </button>
               <button type="button" class="entry-mode-tab" data-mode="scraper" id="tab-mode-scraper" role="tab" aria-selected="false">
                 <span class="mode-tab-icon">🔗</span>
-                <span class="mode-tab-text"><strong>方案 B</strong> 小众网址/规格抓取</span>
+                <span class="mode-tab-text" data-i18n-html="modalGear.modeScraper"><strong>方案 B</strong> 网址/规格智能抓取</span>
               </button>
               <button type="button" class="entry-mode-tab" data-mode="manual" id="tab-mode-manual" role="tab" aria-selected="false">
                 <span class="mode-tab-icon">✍️</span>
-                <span class="mode-tab-text"><strong>手动新建</strong> 空白建档</span>
+                <span class="mode-tab-text" data-i18n-html="modalGear.modeManual"><strong>手动新建</strong> 空白建档</span>
               </button>
             </div>
           </div>
@@ -470,17 +479,17 @@
           <div class="entry-mode-panel active" id="panel-mode-catalog" role="tabpanel" aria-labelledby="tab-mode-catalog">
             <div class="catalog-quickfill-box" id="catalog-quickfill-box">
               <div class="catalog-quickfill-header">
-                <span class="catalog-kicker">✨ POPULAR BRAND CATALOG · 热门品牌库秒级速填</span>
-                <span class="catalog-badge">210+ 专业徒步装备库 (K2 · Paddy Pallin · Backpacking Light)</span>
+                <span class="catalog-kicker" data-i18n="modalGear.catalogKicker">热门品牌装备库秒级速填</span>
+                <span class="catalog-badge" data-i18n="modalGear.catalogBadge">210+ 专业徒步装备库 (K2 · Paddy Pallin · Backpacking Light)</span>
               </div>
               <div class="catalog-search-wrap">
                 <svg viewBox="0 0 24 24" aria-hidden="true" width="16" height="16" fill="none" stroke="#718274" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.35-4.35"></path></svg>
-                <input type="text" id="catalog-search-input" placeholder="输入品牌或型号（如 ULA Circuit, Portal 2, Mariposa, Lunar Solo, Evernew, Torrid...）" autocomplete="off" />
+                <input type="text" id="catalog-search-input" data-i18n-placeholder="modalGear.catalogSearchPh" placeholder="输入品牌或型号（如 ULA Circuit, Portal 2, Mariposa, Lunar Solo, Evernew, Torrid...）" autocomplete="off" />
                 <button type="button" id="catalog-clear-btn" hidden aria-label="Clear catalog search">✕</button>
               </div>
               <!-- Brand quick pills -->
               <div class="catalog-brand-pills" id="catalog-brand-pills">
-                <span class="brand-pills-label">户外专卖推荐:</span>
+                <span class="brand-pills-label" data-i18n="modalGear.brandPillsLabel">户外专卖推荐:</span>
                 <button type="button" class="brand-pill retailer-brand-pill" data-brand="Backpacking Light">🏪 Backpacking Light</button>
                 <button type="button" class="brand-pill retailer-brand-pill" data-brand="K2 Base Camp">🏪 K2 Base Camp</button>
                 <button type="button" class="brand-pill retailer-brand-pill" data-brand="Paddy Pallin">🏪 Paddy Pallin</button>
@@ -512,24 +521,24 @@
           <div class="entry-mode-panel" id="panel-mode-scraper" role="tabpanel" aria-labelledby="tab-mode-scraper" hidden>
             <div class="scraper-box">
               <div class="scraper-header">
-                <span class="catalog-kicker">🔗 NICHE PRODUCT LINK &amp; SPECS SCRAPER · 小众网站与规格抓取</span>
-                <span class="catalog-badge">Smart Auto-Detect</span>
+                <span class="catalog-kicker" data-i18n="modalGear.scraperKicker">小众网站与规格抓取</span>
+                <span class="catalog-badge" data-i18n="modalGear.scraperBadge">智能自动识别</span>
               </div>
-              <p class="scraper-desc">粘贴小众品牌/独立电商（如 Zpacks, Durston, Garage Grown Gear, REI, 品牌官网等）的商品链接或参数文本：</p>
+              <p class="scraper-desc" data-i18n="modalGear.scraperDesc">粘贴小众品牌/独立电商（如 Zpacks, Durston, Garage Grown Gear, REI, 品牌官网等）的商品链接或参数文本：</p>
               <div class="scraper-input-group">
                 <div class="scraper-url-wrap">
                   <svg viewBox="0 0 24 24" aria-hidden="true" width="16" height="16" fill="none" stroke="#607665" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
-                  <input type="url" id="scraper-url-input" placeholder="粘贴商品详情页网址 (https://...)" autocomplete="off" />
+                  <input type="url" id="scraper-url-input" data-i18n-placeholder="modalGear.scraperUrlPh" placeholder="粘贴商品详情页网址 (https://...)" autocomplete="off" />
                   <button type="button" id="scraper-clear-url-btn" hidden aria-label="Clear URL">✕</button>
                 </div>
                 <div class="scraper-snippet-toggle-wrap">
-                  <button type="button" class="btn-text-toggle" id="btn-toggle-snippet">+ 展开粘贴规格/重量文本 (选填)</button>
+                  <button type="button" class="btn-text-toggle" id="btn-toggle-snippet" data-i18n="modalGear.scraperSnippetToggle">+ 展开粘贴规格/重量文本 (选填)</button>
                 </div>
                 <div class="scraper-snippet-wrap" id="scraper-snippet-wrap" hidden>
-                  <textarea id="scraper-text-input" rows="2" placeholder="可选：在此粘贴商品规格文本 (例如: Weight: 28.5 oz / 808 g, Price: $240 USD, Double wall)..."></textarea>
+                  <textarea id="scraper-text-input" rows="2" data-i18n-placeholder="modalGear.scraperSnippetPh" placeholder="可选：在此粘贴商品规格文本 (例如: Weight: 28.5 oz / 808 g, Price: $240 USD, Double wall)..."></textarea>
                 </div>
                 <div class="scraper-actions">
-                  <button type="button" class="btn-primary btn-scrape-exec" id="btn-do-scrape">⚡ 智能解析并提取数据</button>
+                  <button type="button" class="btn-primary btn-scrape-exec" id="btn-do-scrape" data-i18n="modalGear.scraperBtn">⚡ 智能解析并提取数据</button>
                   <span class="scraper-status" id="scraper-status-indicator" hidden></span>
                 </div>
               </div>
@@ -551,7 +560,7 @@
                   </div>
                   <div class="scraper-preview-url" id="scraper-preview-url"></div>
                 </div>
-                <button type="button" class="btn-primary btn-apply-scraper" id="btn-apply-scraper">✓ 填入表单</button>
+                <button type="button" class="btn-primary btn-apply-scraper" id="btn-apply-scraper" data-i18n="modalGear.scraperUseData">✓ 填入表单</button>
               </div>
             </div>
           </div>
@@ -561,8 +570,8 @@
             <div class="manual-guide-box">
               <span class="manual-guide-icon">✍️</span>
               <div class="manual-guide-text">
-                <strong>自由手动录入模式</strong>
-                <p>适合 DIY 自制装备、实体店自购、旧款绝版或无需网购链接的个人户外物品。请直接在下方表单中填写各项参数。</p>
+                <strong data-i18n="modalGear.manualTitle">自由手动录入模式</strong>
+                <p data-i18n="modalGear.manualDesc">适合 DIY 自制装备、实体店自购、旧款绝版或无需网购链接的个人户外物品。请直接在下方表单中填写各项参数。</p>
               </div>
             </div>
           </div>
@@ -572,49 +581,49 @@
           <input type="hidden" id="form-gear-id" value="" />
           <div class="form-grid">
             <div class="form-field full">
-              <label for="form-gear-name">Product / Item Name *</label>
-              <input type="text" id="form-gear-name" required placeholder="e.g. Aeros Ultralight Pillow, WindMaster Stove, Beta LT Jacket" />
+              <label for="form-gear-name" data-i18n="modalGear.name">装备名称 *</label>
+              <input type="text" id="form-gear-name" required data-i18n-placeholder="modalGear.namePh" placeholder="例如：Hornet Elite OSMO 2P Tent" />
             </div>
 
             <div class="form-field">
-              <label for="form-gear-brand">Brand / Manufacturer</label>
-              <input type="text" id="form-gear-brand" placeholder="e.g. Sea to Summit, Patagonia, Mont, Soto, Black Diamond" />
+              <label for="form-gear-brand" data-i18n="modalGear.brand">品牌 / 制造方 *</label>
+              <input type="text" id="form-gear-brand" required data-i18n-placeholder="modalGear.brandPh" placeholder="例如：Nemo, Mont, Arc'teryx, Sea to Summit" />
             </div>
 
             <div class="form-field">
-              <label for="form-gear-category">Gear System / Category *</label>
+              <label for="form-gear-category" data-i18n="modalGear.category">所属系统 *</label>
               <select id="form-gear-category" required>
-                <option value="Sleep & Shelter">Sleep &amp; Shelter</option>
-                <option value="Packs & Essentials">Packs &amp; Essentials</option>
-                <option value="Cooking & Hydration">Cooking &amp; Hydration</option>
-                <option value="Food & Nutrition">Food &amp; Nutrition</option>
-                <option value="Clothing & Footwear">Clothing &amp; Footwear</option>
-                <option value="Personal Items">Personal Items</option>
+                <option value="Sleep & Shelter" data-i18n="cat.sleep">睡眠与庇护</option>
+                <option value="Packs & Essentials" data-i18n="cat.packs">背包与背负</option>
+                <option value="Cooking & Hydration" data-i18n="cat.cooking">烹饪与水净化</option>
+                <option value="Food & Nutrition" data-i18n="cat.food">户外口粮</option>
+                <option value="Clothing & Footwear" data-i18n="cat.clothing">服装与鞋靴</option>
+                <option value="Personal Items" data-i18n="cat.personal">个人随身</option>
               </select>
             </div>
 
             <div class="form-field">
-              <label for="form-gear-type">Item Type</label>
-              <input type="text" id="form-gear-type" placeholder="e.g. pillow, sleep bag, tent, stove, hard shell, socks" />
+              <label for="form-gear-type" data-i18n="modalGear.itemType">物品类型</label>
+              <input type="text" id="form-gear-type" data-i18n-placeholder="modalGear.itemTypePh" placeholder="例如：tent, sleeping_pad, pack, stove" />
             </div>
 
             <div class="form-field">
-              <label for="form-gear-size">Size / 尺码 &amp; Capacity</label>
-              <input type="text" id="form-gear-size" placeholder="e.g. Women's S, Regular Wide, 1100ml, 20L, One Size" />
+              <label for="form-gear-size" data-i18n="modalGear.size">尺码 / 容量 (选填)</label>
+              <input type="text" id="form-gear-size" data-i18n-placeholder="modalGear.sizePh" placeholder="例如：Women's S, Regular Wide, 1100ml, 20L" />
             </div>
 
             <div class="form-field">
-              <label for="form-gear-weight">Unit Weight (Grams)</label>
-              <input type="number" id="form-gear-weight" step="0.1" min="0" placeholder="e.g. 60, 1270, 86" />
+              <label for="form-gear-weight" data-i18n="modalGear.weight">单件重量 (克 / g)</label>
+              <input type="number" id="form-gear-weight" step="0.1" min="0" placeholder="例如：60, 1270, 86" />
             </div>
 
             <div class="form-field">
-              <label for="form-gear-price">Recorded Price</label>
-              <input type="number" id="form-gear-price" step="0.01" min="0" placeholder="e.g. 49.95" />
+              <label for="form-gear-price" data-i18n="modalGear.price">记录价格</label>
+              <input type="number" id="form-gear-price" step="0.01" min="0" placeholder="例如：49.95" />
             </div>
 
             <div class="form-field">
-              <label for="form-gear-currency">Currency</label>
+              <label for="form-gear-currency" data-i18n="modalGear.currency">币种</label>
               <select id="form-gear-currency">
                 <option value="AUD">AUD ($)</option>
                 <option value="CNY">CNY (¥)</option>
@@ -622,55 +631,55 @@
             </div>
 
             <div class="form-field">
-              <label for="form-gear-status">Ownership Status (装备状态) *</label>
+              <label for="form-gear-status" data-i18n="modalGear.status">装备状态 *</label>
               <select id="form-gear-status">
-                <option value="使用中">使用中 (In Use · 现役)</option>
-                <option value="想买">✨ 想买 (Wishlist · 待购入)</option>
-                <option value="Owned">Owned (已拥有)</option>
-                <option value="Purchased · in inventory">Purchased (已购入)</option>
-                <option value="Gift">Gift (礼品)</option>
-                <option value="lost">lost (已丢失 · 灰显)</option>
-                <option value="不想要了准备卖掉">不想要了准备卖掉 (准备出掉 · 灰显)</option>
-                <option value="退货">退货 (已退货 · 灰显)</option>
-                <option value="Older gear · ownership to confirm">Older gear (旧款/待确认)</option>
-                <option value="Needs details">Needs details (需补充信息)</option>
+                <option value="使用中" data-i18n="status.in_use">使用中 (现役)</option>
+                <option value="想买" data-i18n="status.wishlist">✨ 想买 (心愿单)</option>
+                <option value="Owned" data-i18n="status.owned">已拥有</option>
+                <option value="Purchased · in inventory" data-i18n="status.purchased">已购入</option>
+                <option value="Gift" data-i18n="status.gift">礼品</option>
+                <option value="lost" data-i18n="status.lost">已丢失</option>
+                <option value="不想要了准备卖掉" data-i18n="status.selling">准备出掉</option>
+                <option value="退货" data-i18n="status.returned">已退货</option>
+                <option value="Older gear · ownership to confirm" data-i18n="status.older">旧款 / 待确认</option>
+                <option value="Needs details" data-i18n="status.review">需补充信息</option>
               </select>
             </div>
 
             <div class="form-field full">
-              <label for="form-gear-website">Official Brand Product URL</label>
-              <input type="url" id="form-gear-website" placeholder="https://www.brand.com/products/your-gear" />
+              <label for="form-gear-website" data-i18n="modalGear.website">官网 / 购买链接 (选填)</label>
+              <input type="url" id="form-gear-website" placeholder="https://www.brand.com/products/..." />
             </div>
 
             <div class="form-field full">
-              <label for="form-gear-image">Product Image URL / Relative Path</label>
-              <input type="text" id="form-gear-image" placeholder="e.g. /images/your-photo.webp or https://image-url..." />
+              <label for="form-gear-image" data-i18n="modalGear.image">商品图片链接 (选填)</label>
+              <input type="text" id="form-gear-image" data-i18n-placeholder="modalGear.imagePh" placeholder="例如：./photos/... 或 https://..." />
             </div>
 
             <div class="form-field full">
-              <label for="form-gear-summary">Technical Summary</label>
-              <input type="text" id="form-gear-summary" placeholder="One-sentence technical overview of materials and purpose" />
+              <label for="form-gear-summary" data-i18n="modalGear.summary">一句话特点介绍</label>
+              <input type="text" id="form-gear-summary" data-i18n-placeholder="modalGear.summaryPh" placeholder="材料与用途的一句话技术概括" />
             </div>
 
             <div class="form-field full">
-              <label for="form-gear-specs">Technical Specifications &amp; Parameters (One per line: Key: Value)</label>
-              <textarea id="form-gear-specs" rows="4" placeholder="Temperature Rating: Comfort -5°C | Limit -10°C&#10;Insulation: 850+ Loft Down&#10;Dimensions: 183 x 51 cm&#10;Material: 20D Ripstop Nylon"></textarea>
+              <label for="form-gear-specs" data-i18n="modalGear.specs">技术规格与参数 (每行一条: 键: 值)</label>
+              <textarea id="form-gear-specs" rows="4" data-i18n-placeholder="modalGear.specsPh" placeholder="温标：舒适 -5°C | 极限 -10°C&#10;填充：850+ 蓬松度羽绒&#10;展开尺寸：183 x 51 cm&#10;面料：20D 防撕裂尼龙"></textarea>
             </div>
 
             <div class="form-field full">
-              <label for="form-gear-features">Alpine &amp; Trail Features (One feature per line)</label>
-              <textarea id="form-gear-features" rows="3" placeholder="Ultralight compact pack size&#10;Multi-function valve for rapid deflation&#10;Pillow Lock compatible"></textarea>
+              <label for="form-gear-features" data-i18n="modalGear.features">设计亮点与特性 (每行一条)</label>
+              <textarea id="form-gear-features" rows="3" data-i18n-placeholder="modalGear.featuresPh" placeholder="超轻紧凑收纳体积&#10;多功能气阀快速排气&#10;兼容防滑枕头锁"></textarea>
             </div>
 
             <div class="form-field full">
-              <label for="form-gear-notes">Personal Field Notes</label>
-              <textarea id="form-gear-notes" rows="2" placeholder="Sizing observations, performance in cold weather, etc."></textarea>
+              <label for="form-gear-notes" data-i18n="modalGear.notes">实测备忘与心得</label>
+              <textarea id="form-gear-notes" rows="2" data-i18n-placeholder="modalGear.notesPh" placeholder="尺码体感、严寒天气表现、专卖店信息等..."></textarea>
             </div>
           </div>
 
           <div class="modal-actions">
-            <button class="btn-secondary" type="button" id="modal-gear-cancel">Cancel</button>
-            <button class="btn-primary" type="submit" id="btn-submit-gear">Save to Inventory</button>
+            <button class="btn-secondary" type="button" id="modal-gear-cancel" data-i18n="modalGear.cancel">取消</button>
+            <button class="btn-primary" type="submit" id="btn-submit-gear" data-i18n="modalGear.addInventory">保存至装备库</button>
           </div>
         </form>
       </div>
