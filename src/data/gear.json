@@ -2716,5 +2716,48 @@
     ],
     "notes": "Compact lightweight 3-season mat for fast summer & shoulder season tramping.",
     "invoiceEvidence": []
+  },
+  {
+    "id": "wishlist-05",
+    "name": "Nemo Hornet 2P Elite OSMO™ Ultralight Backpacking Tent",
+    "brand": "NEMO Equipment",
+    "category": "Sleep & Shelter",
+    "itemType": "tent",
+    "size": "2-Person Ultralight",
+    "unitWeightG": 935,
+    "unitPriceAud": 999.95,
+    "unitPriceCny": null,
+    "quantity": 1,
+    "status": "想买",
+    "websiteUrl": "https://www.backpackinglight.com.au/nemo-hornet-elite-osmo-2p-tent.html",
+    "imagePath": "https://www.nemoequipment.com/cdn/shop/files/Hornet_Elite_OSMO_2P_Angle_Hero_2048x.jpg",
+    "imageSourceUrl": "https://www.backpackinglight.com.au/nemo-hornet-elite-osmo-2p-tent.html",
+    "imageMatchQuality": "exact",
+    "summary": "NEMO's pinnacle ultralight 2-person semi-freestanding shelter available at Backpacking Light Australia. Features 100% recycled OSMO™ poly-nylon fabric with 3x less wet-stretch and 4x longer water repellency, dual doors, and dual vestibules at an astounding 935g packed weight.",
+    "specs": {
+      "Capacity": "2 Person",
+      "Regular Price": "$999.95 AUD",
+      "Packed Weight": "935 g (2 lb 1 oz)",
+      "Minimum Trail Weight": "779 g (1 lb 11 oz)",
+      "Floor Area": "2.5 m² (27.3 sq ft)",
+      "Floor Dimensions": "216 x 128 / 107 cm (85 x 50 / 42 in)",
+      "Vestibule Area": "0.6 m² + 0.6 m² (6.2 + 6.2 sq ft)",
+      "Peak Height": "94 cm (37 in)",
+      "Poles": "1 Hubbed DAC Featherlite NFL 8.7mm Aluminum",
+      "Fly Fabric": "OSMO™ Ripstop (1200 mm, 100% recycled yarns, PFAS-free)",
+      "Floor Fabric": "OSMO™ Ripstop (1200 mm)",
+      "Canopy": "10D Nylon Ripstop & No-See-Um Mesh",
+      "Retailer Source": "Backpacking Light Australia (Melbourne, VIC)"
+    },
+    "features": [
+      "Proprietary OSMO™ fabric stretches 3x less when wet and provides 4x longer water repellency",
+      "Patent-pending Flybar™ volumizing pole clip creates extra headspace and distributes fly tension evenly",
+      "Two doors and two generous vestibules ensure individual gear storage and easy entry/exit",
+      "Nightlight Pocket™ diffuses headlamp light into a warm 360-degree overhead lantern glow",
+      "Divvy Cube™ stuff sack allows splitting tent weight with your hiking partner",
+      "Gatekeeper™ one-handed tie-backs make holding tent doors open effortless"
+    ],
+    "notes": "Available at Backpacking Light Australia (Regular price: $999.95 AUD). Sub-1kg double-wall 2-person shelter candidate for multi-day expeditions.",
+    "invoiceEvidence": []
   }
 ]

@@ -2085,15 +2085,19 @@ function sortedItems(items) {
 
 function filteredItems() {
   const query = elements.search.value.trim().toLowerCase();
+  const queryTokens = query.split(/\s+/).filter(Boolean);
   const status = elements.status.value;
   return gear.filter((item) => {
     const isWishlist = item.statusKey === "wishlist";
 
-    // View mode separation ("放在另外一个页面或者你设计一下")
-    if (currentViewMode === "owned") {
-      if (isWishlist) return false;
-    } else if (currentViewMode === "wishlist") {
-      if (!isWishlist) return false;
+    // View mode separation:
+    // When no search query is typed, maintain clean separation between Owned and Wishlist.
+    // When a specific search query is typed, search across kit items so users can find matching gear immediately!
+    if (!queryTokens.length) {
+      if (currentViewMode === "owned" && isWishlist) return false;
+      if (currentViewMode === "wishlist" && !isWishlist) return false;
+    } else {
+      if (currentViewMode === "wishlist" && !isWishlist) return false;
     }
 
     if (status !== "all") {
@@ -2105,8 +2109,12 @@ function filteredItems() {
         return false;
       }
     }
-    if (!query) return true;
-    return [item.brand, item.name, item.itemType, item.notes, item.category, item.provenance, item.status, ...(item.invoiceEvidence || [])].some((value) => String(value || "").toLowerCase().includes(query));
+    if (!queryTokens.length) return true;
+    const searchableText = [item.brand, item.name, item.itemType, item.notes, item.category, item.provenance, item.status, ...(item.invoiceEvidence || [])]
+      .filter(Boolean)
+      .join(" ")
+      .toLowerCase();
+    return queryTokens.every((token) => searchableText.includes(token));
   });
 }
 
@@ -2659,7 +2667,66 @@ function render() {
 
   const items = filteredItems();
   elements.count.textContent = t("search.showing", { shown: items.length, total: gear.length });
-  elements.empty.hidden = items.length !== 0;
+  
+  if (items.length === 0 && elements.empty) {
+    const rawQuery = (elements.search?.value || "").trim().toLowerCase();
+    const queryTokens = rawQuery.split(/\s+/).filter(Boolean);
+    const catalogMatches = queryTokens.length && popularCatalog.length
+      ? popularCatalog.filter((item) => {
+          const text = `${item.brand || ""} ${item.name || ""} ${item.category || ""} ${(item.retailers || []).join(" ")}`.toLowerCase();
+          return queryTokens.every((token) => text.includes(token));
+        }).slice(0, 4)
+      : [];
+
+    if (catalogMatches.length > 0) {
+      elements.empty.innerHTML = `
+        <span class="empty-badge" style="display:inline-block; padding:4px 10px; background:#eaf5ec; color:#235d39; border-radius:999px; font-size:11px; font-weight:700; margin-bottom:8px;">💡 ${currentLang === "zh" ? "在热门候选库中发现装备" : "Found in Popular Gear Catalog"}</span>
+        <h3>${currentLang === "zh" ? `您的装备库暂未添加，但预置候选库（包含 Backpacking Light · K2 · Paddy Pallin）为您找到了 ${catalogMatches.length} 件相关装备：` : `Not yet in your kit, but ${catalogMatches.length} matching item(s) found in preloaded catalog:`}</h3>
+        <div class="empty-catalog-suggestions" style="display:flex; flex-direction:column; gap:8px; margin:14px auto 18px; max-width:640px; text-align:left;">
+          ${catalogMatches.map((catItem) => `
+            <div class="empty-catalog-card" style="display:flex; align-items:center; justify-content:space-between; gap:12px; background:#fff; padding:10px 14px; border:1px solid #d9e2da; border-radius:10px; box-shadow:0 1px 3px rgba(0,0,0,0.04);">
+              <div style="display:flex; align-items:center; gap:10px; min-width:0;">
+                ${catItem.imagePath ? `<img src="${escapeHtml(catItem.imagePath)}" style="width:40px; height:40px; object-fit:cover; border-radius:6px; border:1px solid #e0e7df;" alt="${escapeHtml(catItem.name)}" onerror="this.style.display='none'" />` : `<div style="width:40px; height:40px; border-radius:6px; background:#f0f4f1; display:grid; place-items:center; font-size:16px;">⛺</div>`}
+                <div style="min-width:0;">
+                  <strong style="display:block; font-size:13px; color:#17342e; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${escapeHtml(catItem.name)}</strong>
+                  <span style="font-size:11px; color:#627265;">${escapeHtml(catItem.brand)} · ${catItem.unitWeightG ? formatWeight(catItem.unitWeightG) : ""} ${catItem.unitPriceAud ? `· A$${catItem.unitPriceAud}` : ""} · 🏪 ${(catItem.retailers || []).join(" · ")}</span>
+                </div>
+              </div>
+              <button type="button" class="btn-primary btn-empty-quickfill" data-cat-id="${escapeHtml(catItem.id)}" style="flex-shrink:0; font-size:12px; padding:6px 12px;">
+                ${currentLang === "zh" ? "+ 一键填入" : "+ Quick-Add"}
+              </button>
+            </div>
+          `).join("")}
+        </div>
+        <button id="reset-filters" type="button">${t("filter.reset")}</button>
+      `;
+      elements.empty.hidden = false;
+      elements.empty.querySelector("#reset-filters")?.addEventListener("click", () => {
+        elements.search.value = "";
+        elements.status.value = "all";
+        elements.sort.value = "original";
+        render();
+        elements.search.focus();
+      });
+    } else {
+      elements.empty.innerHTML = `
+        <span data-i18n="empty.noMatch">${t("empty.noMatch")}</span>
+        <h3 data-i18n="empty.title">${t("empty.title")}</h3>
+        <p data-i18n="empty.desc">${t("empty.desc")}</p>
+        <button id="reset-filters" type="button" data-i18n="filter.reset">${t("filter.reset")}</button>
+      `;
+      elements.empty.hidden = false;
+      elements.empty.querySelector("#reset-filters")?.addEventListener("click", () => {
+        elements.search.value = "";
+        elements.status.value = "all";
+        elements.sort.value = "original";
+        render();
+        elements.search.focus();
+      });
+    }
+  } else if (elements.empty) {
+    elements.empty.hidden = true;
+  }
   elements.nav.innerHTML = categories.map((category) => {
     const count = items.filter((item) => item.category === category.name).length;
     return count ? `<a href="#${category.id}">${getCategoryDisplayName(category.name)}<small>${String(count).padStart(2, "0")}</small></a>` : "";
@@ -3295,9 +3362,10 @@ function initCatalogSearch() {
     const catalog = await loadPopularCatalog();
     if (!catalog.length) return;
 
+    const queryTokens = query.split(/\s+/).filter(Boolean);
     const matches = catalog.filter((item) => {
       const text = `${item.brand || ""} ${item.name || ""} ${item.category || ""} ${item.itemType || ""} ${(item.retailers || []).join(" ")}`.toLowerCase();
-      return text.includes(query);
+      return queryTokens.every((token) => text.includes(token));
     }).slice(0, 12);
 
     if (!matches.length) {
@@ -3555,6 +3623,7 @@ async function init() {
     initGearEntryModes();
     initScraper();
     initCatalogSearch();
+    loadPopularCatalog().catch(() => {});
 
     if (window.location.hash === "#wishlist") {
       currentViewMode = "wishlist";
@@ -3639,6 +3708,39 @@ document.addEventListener("change", (e) => {
 });
 
 document.addEventListener("click", (e) => {
+  // Quick fill from empty state catalog suggestion
+  const quickFillBtn = e.target.closest(".btn-empty-quickfill");
+  if (quickFillBtn) {
+    const catId = quickFillBtn.dataset.catId;
+    const catItem = popularCatalog.find((c) => c.id === catId);
+    if (catItem) {
+      openGearModal(null);
+      elements.formGearName.value = catItem.name || "";
+      elements.formGearBrand.value = catItem.brand || "";
+      if (catItem.category && elements.formGearCategory) elements.formGearCategory.value = catItem.category;
+      elements.formGearType.value = catItem.itemType || "";
+      elements.formGearWeight.value = Number.isFinite(catItem.unitWeightG) ? catItem.unitWeightG : "";
+      if (Number.isFinite(catItem.unitPriceAud)) {
+        elements.formGearPrice.value = catItem.unitPriceAud;
+        elements.formGearCurrency.value = "AUD";
+      }
+      elements.formGearWebsite.value = catItem.websiteUrl || "";
+      elements.formGearImage.value = catItem.imagePath || "";
+      elements.formGearSummary.value = catItem.summary || "";
+      if (catItem.specs && elements.formGearSpecs) {
+        elements.formGearSpecs.value = Object.entries(catItem.specs).map(([k, v]) => `${k}: ${v}`).join("\n");
+      }
+      if (catItem.features && elements.formGearFeatures) {
+        elements.formGearFeatures.value = catItem.features.join("\n");
+      }
+      if (catItem.retailers && catItem.retailers.length && elements.formGearNotes) {
+        elements.formGearNotes.value = `Stocked at ${catItem.retailers.join(" & ")}`;
+      }
+      showToast(`✨ Auto-filled <strong>${escapeHtml(catItem.name)}</strong> from catalog!`);
+    }
+    return;
+  }
+
   // 00. Prevent modal opening when clicking on status quick-select
   if (e.target.closest(".status-quick-select") || e.target.closest(".modal-status-select")) {
     return;

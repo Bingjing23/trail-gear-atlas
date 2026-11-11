@@ -528,6 +528,87 @@ try {
 
   recordTest("Language selection persists in localStorage across full page reload", persistPassed, `Lang: "${reloadedLang}", Cat: "${reloadedFirstCat}", Btn: "${reloadedBtnText}"`);
 
+  // -------------------------------------------------------------
+  // TEST 10: Nemo Hornet 2P Elite OSMO™ Verification & Search
+  // -------------------------------------------------------------
+  console.log("\n--- TEST 10: Nemo Hornet 2P Elite OSMO™ Verification ---");
+
+  // 1. Search in Main Toolbar
+  await evalInPage(`
+    (function() {
+      const searchInput = document.querySelector("#gear-search");
+      searchInput.value = "Hornet Elite";
+      searchInput.dispatchEvent(new Event("input", { bubbles: true }));
+    })()
+  `);
+  await new Promise((r) => setTimeout(r, 400));
+
+  const hornetCardTitle = await evalInPage(`
+    document.querySelector("#item-wishlist-05 .card-title")?.textContent.trim()
+  `);
+  const hornetPriceText = await evalInPage(`
+    document.querySelector("#item-wishlist-05 .price-metric .metric-val")?.textContent.trim()
+  `);
+  const hornetWeightText = await evalInPage(`
+    document.querySelector("#item-wishlist-05 .weight-metric .metric-val")?.textContent.trim()
+  `);
+
+  recordTest("Main page search for 'Hornet Elite' finds Nemo Hornet 2P Elite OSMO card", Boolean(hornetCardTitle?.includes("Hornet") && hornetPriceText?.includes("999.95")), `Title: "${hornetCardTitle}", Price: "${hornetPriceText}", Weight: "${hornetWeightText}"`);
+
+  // 2. Open Product Modal & inspect specs & Backpacking Light links
+  await evalInPage(`
+    (function() {
+      const btn = document.querySelector("#item-wishlist-05 .card-detail-btn");
+      if (btn) btn.click();
+    })()
+  `);
+  await new Promise((r) => setTimeout(r, 400));
+
+  const modalTitle = await evalInPage(`document.querySelector("#modal-product-title")?.textContent.trim()`);
+  const modalSpecsText = await evalInPage(`document.querySelector(".modal-specs-section")?.textContent.trim()`);
+  const modalOfficialSite = await evalInPage(`document.querySelector(".btn-official-website")?.getAttribute("href")`);
+
+  recordTest("Hornet Elite modal displays $999.95 AUD regular price, 935g weight & Backpacking Light URL", Boolean(modalTitle?.includes("Hornet 2P Elite") && modalSpecsText?.includes("999.95") && modalOfficialSite?.includes("backpackinglight.com.au")), `Title: "${modalTitle}", Link: "${modalOfficialSite}"`);
+
+  // Capture screenshot of Nemo Hornet 2P Elite OSMO detail modal
+  const hornetScreenshot = await send("Page.captureScreenshot", { format: "png" });
+  const hornetPath = path.join(ARTIFACT_DIR, "nemo-hornet-elite-bpl-preview.png");
+  fs.writeFileSync(hornetPath, Buffer.from(hornetScreenshot.data, "base64"));
+  console.log(`[Screenshot] Saved Nemo Hornet Elite modal preview to ${hornetPath}`);
+
+  // Close product modal
+  await evalInPage(`document.querySelector("#modal-close")?.click()`);
+  await new Promise((r) => setTimeout(r, 200));
+
+  // 3. Verify in Catalog Quickfill Modal
+  await evalInPage(`document.querySelector("#btn-toolbar-add-gear")?.click()`);
+  await new Promise((r) => setTimeout(r, 300));
+
+  await evalInPage(`
+    (function() {
+      const catInput = document.querySelector("#catalog-search-input");
+      catInput.value = "Hornet Elite";
+      catInput.dispatchEvent(new Event("input", { bubbles: true }));
+    })()
+  `);
+  await new Promise((r) => setTimeout(r, 400));
+
+  const catSuggestionTitle = await evalInPage(`
+    document.querySelector("#catalog-suggestions .catalog-suggestion-name")?.textContent.trim()
+  `);
+  const catSuggestionPrice = await evalInPage(`
+    document.querySelector("#catalog-suggestions .catalog-suggestion-price")?.textContent.trim()
+  `);
+  const catSuggestionRetailer = await evalInPage(`
+    document.querySelector("#catalog-suggestions .catalog-suggestion-retailer")?.textContent.trim()
+  `);
+
+  recordTest("Popular catalog search matches Nemo Hornet Elite with Backpacking Light badge & $999.95 price", Boolean(catSuggestionTitle?.includes("Hornet 2P Elite") && catSuggestionPrice?.includes("999.95") && catSuggestionRetailer?.includes("Backpacking Light")), `Name: "${catSuggestionTitle}", Price: "${catSuggestionPrice}", Retailer: "${catSuggestionRetailer}"`);
+
+  // Close gear modal
+  await evalInPage(`document.querySelector("#gear-modal-close")?.click()`);
+  await new Promise((r) => setTimeout(r, 200));
+
 } catch (err) {
   console.error("Test Suite Runtime Error:", err);
   process.exitCode = 1;
