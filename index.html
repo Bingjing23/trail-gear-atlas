@@ -393,7 +393,7 @@
     <!-- Modal: Create / Edit Trail -->
     <div class="modal-overlay" id="trail-modal" role="dialog" aria-modal="true" aria-labelledby="modal-trail-title">
       <div class="modal-box">
-        <button class="modal-close-btn" id="modal-trail-close" type="button" aria-label="关闭对话框">✕</button>
+        <button class="modal-close-btn" id="modal-trail-close" type="button" data-i18n-aria-label="modal.close" aria-label="关闭对话框">✕</button>
         <h3 id="modal-trail-title" data-i18n="modalTrail.title">规划徒步路线</h3>
         <p class="modal-desc" data-i18n="modalTrail.desc">设定路线名称、目标里程与行程天数，随后从装备库中挑选行囊。</p>
 
@@ -418,11 +418,11 @@
             </div>
             <div class="form-field">
               <label for="form-trail-distance" data-i18n="modalTrail.dist">总里程 (km)</label>
-              <input type="number" id="form-trail-distance" step="0.1" placeholder="例如：53.5" />
+              <input type="number" id="form-trail-distance" step="0.1" data-i18n-placeholder="modalTrail.distPh" placeholder="例如：53.5" />
             </div>
             <div class="form-field">
               <label for="form-trail-duration" data-i18n="modalTrail.duration">行程天数 (天)</label>
-              <input type="number" id="form-trail-duration" step="1" placeholder="例如：4" />
+              <input type="number" id="form-trail-duration" step="1" data-i18n-placeholder="modalTrail.durationPh" placeholder="例如：4" />
             </div>
             <div class="form-field full">
               <label for="form-trail-date" data-i18n="modalTrail.date">出行时间</label>
@@ -451,7 +451,7 @@
     <!-- Modal: Export Pack List -->
     <div class="modal-overlay" id="export-modal" role="dialog" aria-modal="true" aria-labelledby="modal-export-title">
       <div class="modal-box">
-        <button class="modal-close-btn" id="modal-export-close" type="button" aria-label="关闭对话框">✕</button>
+        <button class="modal-close-btn" id="modal-export-close" type="button" data-i18n-aria-label="modal.close" aria-label="关闭对话框">✕</button>
         <h3 id="modal-export-title" data-i18n="modalExport.title">导出打包清单</h3>
         <p class="modal-desc" data-i18n="modalExport.desc">复制格式化的装备负重清单，分享给队友或保存至出行笔记。</p>
         <div class="form-field full">
@@ -468,7 +468,7 @@
     <!-- Modal: Product Details, Technical Specs & Official Link -->
     <div class="modal-overlay" id="product-modal" role="dialog" aria-modal="true" aria-labelledby="modal-product-title">
       <div class="modal-box product-modal-box">
-        <button class="modal-close-btn" id="modal-product-close" type="button" aria-label="Close dialog">✕</button>
+        <button class="modal-close-btn" id="modal-product-close" type="button" data-i18n-aria-label="modal.close" aria-label="Close dialog">✕</button>
         <div id="product-modal-content"></div>
       </div>
     </div>
@@ -476,7 +476,7 @@
     <!-- Modal: Add / Edit Gear Item in Master Inventory -->
     <div class="modal-overlay" id="gear-modal" role="dialog" aria-modal="true" aria-labelledby="modal-gear-title">
       <div class="modal-box gear-modal-box">
-        <button class="modal-close-btn" id="modal-gear-close" type="button" aria-label="关闭对话框">✕</button>
+        <button class="modal-close-btn" id="modal-gear-close" type="button" data-i18n-aria-label="modal.close" aria-label="关闭对话框">✕</button>
         <h3 id="modal-gear-title" data-i18n="modalGear.addTitle">添加装备</h3>
         <p class="modal-desc" data-i18n="modalGear.desc">记录装备的重量、价格、技术规格与官方链接。</p>
 
@@ -536,7 +536,7 @@
               <div class="catalog-suggestions-dropdown" id="catalog-suggestions" hidden></div>
               <div class="catalog-autofilled-banner" id="catalog-autofilled-banner" hidden>
                 <span class="autofill-check">✓</span>
-                <span>已从 <strong><span id="autofilled-item-name"></span></strong> 自动回填！可在下方继续调整尺码、价格或实测备注。</span>
+                <span id="autofilled-banner-text" data-i18n-html="modalGear.autofillBanner">已从 <strong><span id="autofilled-item-name"></span></strong> 自动回填！可在下方继续调整尺码、价格或实测备注。</span>
               </div>
             </div>
           </div>
@@ -574,11 +574,11 @@
                   <div class="scraper-preview-placeholder" id="scraper-preview-ph">GEAR</div>
                 </div>
                 <div class="scraper-preview-info">
-                  <div class="scraper-preview-title" id="scraper-preview-name">Product Name</div>
+                  <div class="scraper-preview-title" id="scraper-preview-name" data-i18n="modalGear.scraperItemName">Product Name</div>
                   <div class="scraper-preview-meta">
-                    <span class="scraper-preview-brand" id="scraper-preview-brand">Brand</span>
+                    <span class="scraper-preview-brand" id="scraper-preview-brand" data-i18n="modalGear.scraperBrand">Brand</span>
                     <span>•</span>
-                    <span class="scraper-preview-cat" id="scraper-preview-cat">Category</span>
+                    <span class="scraper-preview-cat" id="scraper-preview-cat" data-i18n="modalGear.scraperCat">Category</span>
                     <span class="scraper-preview-weight" id="scraper-preview-weight">⚖️ -- g</span>
                     <span class="scraper-preview-price" id="scraper-preview-price"></span>
                   </div>
@@ -638,12 +638,12 @@
 
             <div class="form-field">
               <label for="form-gear-weight" data-i18n="modalGear.weight">单件重量 (克 / g)</label>
-              <input type="number" id="form-gear-weight" step="0.1" min="0" placeholder="例如：60, 1270, 86" />
+              <input type="number" id="form-gear-weight" step="0.1" min="0" data-i18n-placeholder="modalGear.weightPh" placeholder="例如：60, 1270, 86" />
             </div>
 
             <div class="form-field">
               <label for="form-gear-price" data-i18n="modalGear.price">记录价格</label>
-              <input type="number" id="form-gear-price" step="0.01" min="0" placeholder="例如：49.95" />
+              <input type="number" id="form-gear-price" step="0.01" min="0" data-i18n-placeholder="modalGear.pricePh" placeholder="例如：49.95" />
             </div>
 
             <div class="form-field">
@@ -687,8 +687,8 @@
               </div>
               <div class="image-preview-thumbnail-wrap" id="gear-image-preview-wrap" hidden>
                 <img id="gear-image-preview-img" class="preview-thumbnail-img" src="" alt="Preview" />
-                <span class="preview-image-note" id="preview-image-note">已压缩为轻量本地照片</span>
-                <button type="button" class="btn-remove-preview-image" id="btn-remove-preview-image" title="移除图片">✕</button>
+                <span class="preview-image-note" id="preview-image-note" data-i18n="modalGear.photoCompressed">已压缩为轻量本地照片</span>
+                <button type="button" class="btn-remove-preview-image" id="btn-remove-preview-image" data-i18n-title="modalGear.removePhoto" title="移除图片">✕</button>
               </div>
             </div>
 
@@ -724,7 +724,7 @@
     <!-- New User Onboarding Modal -->
     <div class="modal-overlay" id="onboarding-modal">
       <div class="onboarding-modal-box">
-        <button class="modal-close-btn" id="modal-onboarding-close" type="button" aria-label="关闭对话框">✕</button>
+        <button class="modal-close-btn" id="modal-onboarding-close" type="button" data-i18n-aria-label="modal.close" aria-label="关闭对话框">✕</button>
         <div class="onboarding-header">
           <div class="onboarding-icon">🧭</div>
           <h3 data-i18n="onboarding.title">欢迎来到 Trail Gear Atlas</h3>
