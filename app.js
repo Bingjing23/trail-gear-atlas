@@ -88,6 +88,34 @@ let currentUnit = localStorage.getItem(UNIT_STORAGE_KEY) || "metric"; // "metric
 let currentChartType = localStorage.getItem(CHART_TYPE_STORAGE_KEY) || "donut"; // "donut" | "bar"
 let currentLang = localStorage.getItem(LANG_STORAGE_KEY) || (navigator.language?.toLowerCase().startsWith("zh") ? "zh" : "en"); // "zh" | "en"
 
+const curatedMilfordPack = {
+  "packs-essentials-11": 1,
+  "sleep-shelter-01": 1,
+  "sleep-shelter-02": 1,
+  "sleep-shelter-03": 1,
+  "cooking-hydration-43": 1,
+  "cooking-hydration-44": 1,
+  "cooking-hydration-45": 1,
+  "cooking-hydration-55": 1,
+  "cooking-hydration-56": 2,
+  "cooking-hydration-61": 2,
+  "cooking-hydration-65": 1,
+  "packs-essentials-08": 1,
+  "clothing-footwear-20": 1,
+  "clothing-footwear-35": 1,
+  "wishlist-03": 1,
+};
+
+const curatedMilfordWorn = {
+  "clothing-footwear-20": true,
+  "clothing-footwear-35": true,
+  "packs-essentials-08": true,
+};
+
+const curatedMilfordShared = {
+  "sleep-shelter-01": 2,
+};
+
 const defaultTrails = [
   {
     id: "milford-track",
@@ -98,31 +126,9 @@ const defaultTrails = [
     date: "Target: November 2026 (Next Destination)",
     status: "planned",
     notes: "New Zealand's premier Great Walk. 4 days / 3 nights hut-to-hut across Mackinnon Pass (1,154m). High rainfall zone; waterproof gear is non-negotiable.",
-    pack: {
-      "packs-essentials-11": 1,
-      "sleep-shelter-01": 1,
-      "sleep-shelter-02": 1,
-      "sleep-shelter-03": 1,
-      "cooking-hydration-43": 1,
-      "cooking-hydration-44": 1,
-      "cooking-hydration-45": 1,
-      "cooking-hydration-55": 1,
-      "cooking-hydration-56": 2,
-      "cooking-hydration-61": 2,
-      "cooking-hydration-65": 1,
-      "packs-essentials-08": 1,
-      "clothing-footwear-20": 1,
-      "clothing-footwear-35": 1,
-      "wishlist-03": 1,
-    },
-    worn: {
-      "clothing-footwear-20": true, // Hoka Speedgoat 5 worn on feet
-      "clothing-footwear-35": true, // Patagonia sun shirt worn on body
-      "packs-essentials-08": true,  // Trekking poles in hands
-    },
-    shared: {
-      "sleep-shelter-01": 2, // Nemo Hornet OSMO 2P tent split 1/2 with partner
-    },
+    pack: {},
+    worn: {},
+    shared: {},
   },
   {
     id: "overland-track",
@@ -133,26 +139,9 @@ const defaultTrails = [
     date: "Target: March 2027",
     status: "planned",
     notes: "Iconic alpine Tasmanian wilderness. Self-sufficient expedition through glacially carved valleys, ancient rainforests and button grass plains.",
-    pack: {
-      "packs-essentials-11": 1,
-      "sleep-shelter-01": 1,
-      "sleep-shelter-52": 1,
-      "cooking-hydration-43": 1,
-      "cooking-hydration-71": 1,
-      "cooking-hydration-45": 1,
-      "packs-essentials-08": 1,
-      "clothing-footwear-20": 1,
-      "clothing-footwear-19": 1,
-    },
-    worn: {
-      "clothing-footwear-20": true,
-      "clothing-footwear-19": true,
-      "packs-essentials-08": true,
-    },
-    shared: {
-      "sleep-shelter-01": 2,
-      "cooking-hydration-43": 2,
-    },
+    pack: {},
+    worn: {},
+    shared: {},
   },
   {
     id: "mount-barney",
@@ -163,17 +152,8 @@ const defaultTrails = [
     date: "Completed · October 2026",
     status: "completed",
     notes: "Demanding Class 5 rock scramble up South Ridge. Super lightweight alpine day-pack setup was essential for agility.",
-    pack: {
-      "packs-essentials-73": 1,
-      "packs-essentials-10": 1,
-      "packs-essentials-08": 1,
-      "clothing-footwear-75": 1,
-      "personal-items-74": 1,
-    },
-    worn: {
-      "clothing-footwear-75": true,
-      "packs-essentials-08": true,
-    },
+    pack: {},
+    worn: {},
     shared: {},
   },
 ];
@@ -767,7 +747,7 @@ const translations = {
     "onboarding.chooseStarter": "选择如何开启您的装备库：",
     "onboarding.optCuratedTitle": "经典精选库起步 (82件常用尖货)",
     "onboarding.optCuratedDesc": "内置澳洲三大专业店与经典UL热门装备，适合快速挑选与增删",
-    "onboarding.optBlankTitle": "从零建立全新空白库 (0件开始)",
+    "onboarding.optBlankTitle": "从零建立全新空白库 (0件开始 · 默认)",
     "onboarding.optBlankDesc": "干干净净，通过214+热门装备库或自定义录入，打造专属私享库",
     "onboarding.optImportTitle": "导入已有备份 / 表格 (.json / .csv)",
     "onboarding.optImportDesc": "导入之前导出的 Gear Atlas 完整备份或 LighterPack CSV 表格",
@@ -1132,7 +1112,7 @@ const translations = {
     "onboarding.chooseStarter": "Choose how to start your gear library:",
     "onboarding.optCuratedTitle": "Classic Curated Starter Kit (82 items)",
     "onboarding.optCuratedDesc": "Loaded with top gear from Paddy Pallin, K2 & BPL. Ideal for quick customization",
-    "onboarding.optBlankTitle": "Start Fresh Blank Slate (0 items)",
+    "onboarding.optBlankTitle": "Start Fresh Blank Slate (0 items · Default)",
     "onboarding.optBlankDesc": "Clean slate. Build your dream kit from our 214+ catalog or custom items",
     "onboarding.optImportTitle": "Import Existing Backup / Sheet (.json / .csv)",
     "onboarding.optImportDesc": "Import a previously exported Gear Atlas backup or LighterPack CSV file",
@@ -1573,10 +1553,10 @@ function isConsumable(item) {
   return consumableTypes.has(type);
 }
 
-const INVENTORY_STORAGE_KEY = "trail_gear_atlas_inventory_v6";
-const TRAILS_STORAGE_KEY = "trail_gear_atlas_trails_v6";
-const ACTIVE_TRAIL_KEY = "trail_gear_active_trail_id_v6";
-const VIEW_MODE_KEY = "trail_gear_view_mode_v6";
+const INVENTORY_STORAGE_KEY = "trail_gear_atlas_inventory_v7";
+const TRAILS_STORAGE_KEY = "trail_gear_atlas_trails_v7";
+const ACTIVE_TRAIL_KEY = "trail_gear_active_trail_id_v7";
+const VIEW_MODE_KEY = "trail_gear_view_mode_v7";
 
 let defaultInventory = [];
 let gear = [];
@@ -1589,7 +1569,7 @@ let currentViewMode = (typeof window !== "undefined" && window.location.hash ===
 
 function loadInventory(defaultData) {
   try {
-    const raw = localStorage.getItem(INVENTORY_STORAGE_KEY) || localStorage.getItem("trail_gear_atlas_inventory_v5") || localStorage.getItem("trail_gear_atlas_inventory_v4");
+    const raw = localStorage.getItem(INVENTORY_STORAGE_KEY);
     if (raw !== null) {
       const parsed = JSON.parse(raw);
       if (Array.isArray(parsed)) {
@@ -1626,8 +1606,6 @@ function loadInventory(defaultData) {
               websiteUrl: def.websiteUrl || userItem.websiteUrl,
               statusKey: normalizeStatus(userItem.status || def.status),
             });
-          } else {
-            defaultItemsMerged.push({ ...def, statusKey: normalizeStatus(def.status) });
           }
         }
 
@@ -1640,7 +1618,8 @@ function loadInventory(defaultData) {
   } catch (error) {
     console.warn("Failed to parse inventory from localStorage", error);
   }
-  gear = JSON.parse(JSON.stringify(defaultData)).map((item) => ({ ...item, statusKey: normalizeStatus(item.status) }));
+  // Brand new visitor starts with clean empty slate (0 items)
+  gear = [];
   saveInventory();
 }
 
@@ -1672,23 +1651,18 @@ function updateInventoryStats() {
 
 function loadTrails() {
   try {
-    const raw = localStorage.getItem(TRAILS_STORAGE_KEY) || localStorage.getItem(STORAGE_KEY) || localStorage.getItem("trail_gear_atlas_trails_v5") || localStorage.getItem("trail_gear_atlas_trails_v4");
+    const raw = localStorage.getItem(TRAILS_STORAGE_KEY);
     if (raw) {
       const parsed = JSON.parse(raw);
       if (Array.isArray(parsed) && parsed.length > 0) {
         trails = parsed.map((t) => {
-          const matchedDefault = defaultTrails.find((def) => def.id === t.id);
           return {
             ...t,
-            pack: t.pack || (matchedDefault?.pack ? { ...matchedDefault.pack } : {}),
-            worn: t.worn || (matchedDefault?.worn ? { ...matchedDefault.worn } : {}),
-            shared: t.shared || (matchedDefault?.shared ? { ...matchedDefault.shared } : {}),
+            pack: t.pack || {},
+            worn: t.worn || {},
+            shared: t.shared || {},
           };
         });
-        const milford = trails.find((t) => t.id === "milford-track");
-        if (milford && milford.pack && !("wishlist-03" in milford.pack)) {
-          milford.pack["wishlist-03"] = 1;
-        }
         const savedActive = localStorage.getItem(ACTIVE_TRAIL_KEY);
         activeTrailId = (savedActive && trails.some(t => t.id === savedActive)) ? savedActive : (trails[0]?.id || "milford-track");
         saveTrails();
@@ -3102,8 +3076,41 @@ function render() {
   elements.count.textContent = t("search.showing", { shown: items.length, total: gear.length });
   
   if (items.length === 0 && elements.empty) {
-    const rawQuery = (elements.search?.value || "").trim().toLowerCase();
-    const queryTokens = rawQuery.split(/\s+/).filter(Boolean);
+    if (gear.length === 0) {
+      elements.empty.innerHTML = `
+        <div class="empty-state-card" style="padding:44px 24px; text-align:center; max-width:620px; margin:24px auto; background:#ffffff; border:1.5px dashed #b8c9bc; border-radius:18px; box-shadow:0 4px 20px rgba(0,0,0,0.03);">
+          <div style="font-size:46px; line-height:1; margin-bottom:14px;">🎒</div>
+          <span class="empty-badge" style="display:inline-block; padding:4px 12px; background:#eaf5ec; color:#235d39; border-radius:999px; font-size:12px; font-weight:700; margin-bottom:12px;">
+            ${currentLang === "zh" ? "全新空白装备库" : "Clean Slate Ready"}
+          </span>
+          <h3 style="font-size:22px; font-weight:800; color:#17342e; margin:0 0 10px; letter-spacing:-0.02em;">
+            ${currentLang === "zh" ? "您的专属徒步装备库目前为空" : "Your Expedition Gear Kit is Currently Empty"}
+          </h3>
+          <p style="font-size:14px; color:#556658; line-height:1.6; margin:0 auto 24px; max-width:480px;">
+            ${currentLang === "zh"
+              ? "新用户初始状态为 0 件装备。您可以添加私享装备、从内置 214+ 件经典装备库中挑选录入，或直接导入已有备份表格。"
+              : "Initial inventory starts at 0 items. Begin by adding personal gear, selecting from our 214+ item curated catalog, or importing an existing backup spreadsheet."}
+          </p>
+          <div style="display:flex; flex-wrap:wrap; gap:12px; justify-content:center;">
+            <button type="button" class="btn-primary" id="btn-empty-add-gear" style="padding:10px 20px; font-size:13px; font-weight:700;">
+              ${currentLang === "zh" ? "+ 添加第一件装备" : "+ Add First Gear Item"}
+            </button>
+            <button type="button" class="btn-secondary" id="btn-empty-load-curated" style="padding:10px 18px; font-size:13px; font-weight:600;">
+              ${currentLang === "zh" ? "🎒 载入精选装备模板 (82件)" : "🎒 Load Curated Template (82 items)"}
+            </button>
+            <button type="button" class="btn-secondary" id="btn-empty-import" style="padding:10px 18px; font-size:13px; font-weight:600;">
+              ${currentLang === "zh" ? "📥 导入备份 / CSV" : "📥 Import Backup / CSV"}
+            </button>
+          </div>
+        </div>
+      `;
+      elements.empty.hidden = false;
+      elements.empty.querySelector("#btn-empty-add-gear")?.addEventListener("click", () => openGearModal(null));
+      elements.empty.querySelector("#btn-empty-load-curated")?.addEventListener("click", () => loadCuratedStarterKit());
+      elements.empty.querySelector("#btn-empty-import")?.addEventListener("click", () => elements.globalBackupFileInput?.click());
+    } else {
+      const rawQuery = (elements.search?.value || "").trim().toLowerCase();
+      const queryTokens = rawQuery.split(/\s+/).filter(Boolean);
     const catalogMatches = queryTokens.length && popularCatalog.length
       ? popularCatalog.filter((item) => {
           const text = `${item.brand || ""} ${item.name || ""} ${item.category || ""} ${(item.retailers || []).join(" ")}`.toLowerCase();
@@ -3157,7 +3164,8 @@ function render() {
         elements.search.focus();
       });
     }
-  } else if (elements.empty) {
+  }
+} else if (elements.empty) {
     elements.empty.hidden = true;
   }
   elements.nav.innerHTML = categories.map((category) => {
@@ -3671,6 +3679,10 @@ function openExportModal() {
     text += `装备总数: ${metrics.totalItems} 件\n`;
     text += `--------------------------------------------------\n\n`;
 
+    if (!metrics.totalItems) {
+      text += `*（该路线目前暂无打包装备。请在下方装备库中点击「加入背包」开始打包）*\n\n`;
+    }
+
     for (const cat of categories) {
       const catItems = Object.entries(trail.pack || {})
         .filter(([_, qty]) => qty > 0)
@@ -3718,6 +3730,10 @@ function openExportModal() {
     text += `SKIN-OUT TOTAL LOAD: ${formatWeight(metrics.skinOutWeightG, { full: true })}\n`;
     text += `TOTAL ITEMS: ${metrics.totalItems}\n`;
     text += `--------------------------------------------------\n\n`;
+
+    if (!metrics.totalItems) {
+      text += `*(No items currently packed for this expedition. Select gear items below to begin packing)*\n\n`;
+    }
 
     for (const cat of categories) {
       const catItems = Object.entries(trail.pack || {})
@@ -5312,6 +5328,8 @@ elements.btnMenuStartBlank?.addEventListener("click", () => {
     : "Are you sure you want to clear your gear library and start blank? (We recommend exporting a backup first)";
   if (window.confirm(confirmMsg)) {
     gear = [];
+    trails.forEach((t) => { t.pack = {}; t.worn = {}; t.shared = {}; });
+    saveTrails();
     saveInventory();
     render();
     updateInventoryStats();
@@ -5320,19 +5338,35 @@ elements.btnMenuStartBlank?.addEventListener("click", () => {
   }
 });
 
+function loadCuratedStarterKit() {
+  gear = JSON.parse(JSON.stringify(defaultInventory)).map((item) => ({
+    ...item,
+    statusKey: normalizeStatus(item.status)
+  }));
+  const milford = trails.find((t) => t.id === "milford-track");
+  if (milford && (!milford.pack || Object.keys(milford.pack).length === 0)) {
+    milford.pack = { ...curatedMilfordPack };
+    milford.worn = { ...curatedMilfordWorn };
+    milford.shared = { ...curatedMilfordShared };
+    saveTrails();
+  }
+  saveInventory();
+  render();
+  updateInventoryStats();
+  updateUserProfileUI();
+  showToast(currentLang === "zh"
+    ? "已为您载入 82 件精选装备模板！您可以随意增删与微调。"
+    : "Loaded 82-item curated starter kit! You can customize and adjust freely.");
+}
+
 // Restore Starter Kit (82 items)
 elements.btnMenuRestoreStarter?.addEventListener("click", () => {
   if (elements.userProfileDropdown) elements.userProfileDropdown.hidden = true;
   const confirmMsg = currentLang === "zh"
-    ? "确定要恢复包含 82 件常用装备的经典精选库吗？"
-    : "Restore the classic 82-item curated starter kit?";
+    ? "确定要载入包含 82 件常用装备的经典精选库模板吗？"
+    : "Load the classic 82-item curated starter kit template?";
   if (window.confirm(confirmMsg)) {
-    gear = JSON.parse(JSON.stringify(defaultInventory));
-    saveInventory();
-    render();
-    updateInventoryStats();
-    updateUserProfileUI();
-    showToast(t("toast.starterRestored"));
+    loadCuratedStarterKit();
   }
 });
 
@@ -5361,7 +5395,7 @@ elements.onboardingForm?.addEventListener("submit", (e) => {
   const name = elements.onboardingInputName?.value.trim();
   if (!name) return;
 
-  const starterMode = document.querySelector('input[name="onboarding-starter"]:checked')?.value || "curated";
+  const starterMode = document.querySelector('input[name="onboarding-starter"]:checked')?.value || "blank";
   const newProfile = {
     name: name,
     onboarded: true,
@@ -5372,10 +5406,14 @@ elements.onboardingForm?.addEventListener("submit", (e) => {
 
   if (starterMode === "blank") {
     gear = [];
+    trails.forEach((t) => { t.pack = {}; t.worn = {}; t.shared = {}; });
+    saveTrails();
     saveInventory();
     render();
     updateInventoryStats();
-    showToast(t("toast.blankKitCreated"));
+    showToast(currentLang === "zh"
+      ? `Hi ${name}！已为您开启专属全新空白装备库，开始录入装备吧。`
+      : `Hi ${name}! Fresh blank gear kit ready. Start adding your gear.`);
   } else if (starterMode === "import") {
     const importFile = elements.onboardingFileInput?.files?.[0];
     if (importFile) {
@@ -5385,13 +5423,7 @@ elements.onboardingForm?.addEventListener("submit", (e) => {
     }
   } else {
     // Curated starter kit
-    if (gear.length === 0 && defaultInventory.length > 0) {
-      gear = JSON.parse(JSON.stringify(defaultInventory));
-      saveInventory();
-      render();
-      updateInventoryStats();
-    }
-    showToast(currentLang === "zh" ? `Hi ${name}！已为您载入 82 件经典精选装备。` : `Hi ${name}! Curated starter kit loaded.`);
+    loadCuratedStarterKit();
   }
 
   closeOnboardingModal();
@@ -5457,6 +5489,7 @@ window.closeExportModal = closeExportModal;
 window.openGearModal = openGearModal;
 window.closeGearModal = closeGearModal;
 window.popularCatalog = popularCatalog;
+window.loadCuratedStarterKit = loadCuratedStarterKit;
 
 Object.defineProperty(window, "gear", {
   get: () => gear,
