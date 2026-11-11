@@ -398,6 +398,64 @@ try {
   fs.writeFileSync(modalPath, Buffer.from(modalScreenshot.data, "base64"));
   console.log(`[Screenshot] Saved catalog modal preview to ${modalPath}`);
 
+  // -------------------------------------------------------------
+  // TEST 8: Backpacking Light Australia Ultralight Catalog Search
+  // -------------------------------------------------------------
+  console.log("\n--- TEST 8: Backpacking Light Australia Catalog Search ---");
+  // Search "Backpacking Light"
+  await evalInPage(`
+    (function() {
+      const input = document.querySelector("#catalog-search-input");
+      input.value = "Backpacking Light";
+      input.dispatchEvent(new Event("input", { bubbles: true }));
+    })()
+  `);
+  await new Promise((r) => setTimeout(r, 400));
+
+  const bplResultsCount = await evalInPage(`
+    document.querySelectorAll("#catalog-suggestions .catalog-suggestion-item").length
+  `);
+  const hasBplBadge = await evalInPage(`
+    Array.from(document.querySelectorAll("#catalog-suggestions .catalog-suggestion-retailer")).some(el => el.textContent.includes("Backpacking Light"))
+  `);
+  recordTest("Search 'Backpacking Light' returns ultralight items with BPL badge", bplResultsCount > 0 && hasBplBadge, `Count: ${bplResultsCount}, Badge visible: ${hasBplBadge}`);
+
+  // Search "ULA Circuit"
+  await evalInPage(`
+    (function() {
+      const input = document.querySelector("#catalog-search-input");
+      input.value = "Circuit";
+      input.dispatchEvent(new Event("input", { bubbles: true }));
+    })()
+  `);
+  await new Promise((r) => setTimeout(r, 400));
+
+  const circuitTitle = await evalInPage(`
+    document.querySelector("#catalog-suggestions .catalog-suggestion-name")?.textContent
+  `);
+  recordTest("Search 'Circuit' returns ULA Circuit Backpack", circuitTitle?.includes("Circuit"), `Title: "${circuitTitle}"`);
+
+  // Click on ULA Circuit to test autofill
+  await evalInPage(`
+    (function() {
+      const firstItem = document.querySelector("#catalog-suggestions .catalog-suggestion-item");
+      if (firstItem) firstItem.click();
+    })()
+  `);
+  await new Promise((r) => setTimeout(r, 400));
+
+  const ulaName = await evalInPage(`document.querySelector("#form-gear-name").value`);
+  const ulaWeight = await evalInPage(`document.querySelector("#form-gear-weight").value`);
+  const ulaPrice = await evalInPage(`document.querySelector("#form-gear-price").value`);
+  const ulaNotes = await evalInPage(`document.querySelector("#form-gear-notes").value`);
+  recordTest("ULA Circuit autofills 1048g, $549 AUD & Backpacking Light note", ulaName.includes("Circuit") && ulaWeight === "1048" && ulaPrice === "549" && ulaNotes.includes("Backpacking Light"), `Name: "${ulaName}", W: ${ulaWeight}g, $: ${ulaPrice}, Notes: "${ulaNotes}"`);
+
+  // Capture screenshot of Backpacking Light autofilled modal
+  const bplScreenshot = await send("Page.captureScreenshot", { format: "png" });
+  const bplPath = path.join(ARTIFACT_DIR, "bpl-catalog-autofill-preview.png");
+  fs.writeFileSync(bplPath, Buffer.from(bplScreenshot.data, "base64"));
+  console.log(`[Screenshot] Saved BPL catalog modal preview to ${bplPath}`);
+
   // Close modal
   await evalInPage(`document.querySelector("#gear-modal-close")?.click()`);
   await new Promise((r) => setTimeout(r, 200));
